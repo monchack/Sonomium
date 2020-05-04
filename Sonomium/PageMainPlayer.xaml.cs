@@ -113,5 +113,12 @@ namespace Sonomium
 
             }
         }
+
+        private void AlbumImages_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (albumImages.SelectedItem == null) return;
+            string s = artistList.SelectedItem.ToString() + "\" " + "album " + "\"" + albumImages.SelectedItem.ToString();
+            mainWindow.setSelectedAlbum(s);
+        }
     }
 }

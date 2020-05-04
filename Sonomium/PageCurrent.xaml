@@ -9,6 +9,7 @@
       Title="PageCurrent">
 
     <Grid>
-        
+        <Image HorizontalAlignment="Left" Height="171" Margin="0,10,0,0" VerticalAlignment="Top" Width="140pt"/>
+
     </Grid>
 </Page>

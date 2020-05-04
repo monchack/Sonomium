@@ -22,6 +22,7 @@ namespace Sonomium
     {
         private NavigationService navigation;
         private string ipServer = "192.168.0.51";
+        private string selectedAlbum = "";
 
         public MainWindow()
         {
@@ -32,6 +33,8 @@ namespace Sonomium
 
         public void setIp(string ip) { ipServer = ip; }
         public string getIp() { return ipServer; }
+        public void setSelectedAlbum(string album) { selectedAlbum = album; }
+        public string getSelectedAlbum() { return selectedAlbum; }
 
         public string sendMpd(string command, bool wait = true)
         {

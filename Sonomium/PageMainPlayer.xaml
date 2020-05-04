@@ -9,15 +9,50 @@
       Loaded="Page_Loaded"
       Title="PageMainPlayer">
 
+    <Page.Resources>
+
+        <Style x:Key="myStyle1"
+           TargetType="{x:Type ListBoxItem}">
+
+            <Setter Property="Template">
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter />
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background"  Value="Transparent" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="Transparent" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+            </Setter>
+
+        </Style>
+
+    </Page.Resources>
+
     <Grid>
         <TextBlock HorizontalAlignment="Left" Margin="20,20,0,0" TextWrapping="Wrap"
                    Text="Main" VerticalAlignment="Top"/>
         <ListBox x:Name="artistList" HorizontalAlignment="Left" Height="365" Margin="10,0,0,0" VerticalAlignment="Top" Width="282" FontFamily="Segoe UI" FontSize="14pt" BorderThickness="0" SelectionChanged="ArtistList_SelectionChanged" />
-        <ListBox Name="albumImages" Height="365" Margin="297,0,4,0" VerticalAlignment="Top" ScrollViewer.HorizontalScrollBarVisibility="Disabled"  BorderThickness="0" >
-            <ItemsControl.ItemTemplate>
+
+        <ListBox x:Name="albumImages" Height="365" Margin="297,0,4,0" VerticalAlignment="Top" ScrollViewer.HorizontalScrollBarVisibility="Disabled"  BorderThickness="0"  SelectionChanged="AlbumImages_SelectionChanged"  ItemContainerStyle="{StaticResource myStyle1}" >
+            
+            <ItemsControl.ItemTemplate >
+
                 <DataTemplate>
                         <StackPanel Margin="5 6 7 7" Width="140pt" Background="White"  >
-                            <Rectangle RadiusX="4pt" RadiusY="4pt" Width="140pt" Height="140pt">
+                            <Rectangle RadiusX="4pt" RadiusY="4pt" Width="140pt" Height="140pt" >
                                 <Rectangle.Effect>
                                     <DropShadowEffect Color="#D0D0D0" BlurRadius="2" ShadowDepth="4" Direction="315" />
                                 </Rectangle.Effect>
@@ -27,7 +62,6 @@
                             </Rectangle>
                             <TextBlock FontSize="9pt" Height="22pt" Foreground="#404040" Text="{Binding AlbumTitle}" TextWrapping = "Wrap" />
                         </StackPanel>
-                   
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
 
@@ -37,21 +71,6 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
-            <ItemsControl.ItemContainerStyle>
-                <Style TargetType="ListBoxItem" >
-                    <Setter Property="OverridesDefaultStyle" Value="True" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type ContentControl}">
-                                <Border Background="{TemplateBinding Background}" >
-                                    <ContentPresenter />
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter Property="Focusable" Value="False"/>
-                </Style>
-            </ItemsControl.ItemContainerStyle>
         </ListBox>
     </Grid>
 </Page>
