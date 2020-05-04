@@ -1,0 +1,57 @@
+﻿<Page x:Class="Sonomium.PageMainPlayer"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Sonomium"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Loaded="Page_Loaded"
+      Title="PageMainPlayer">
+
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="20,20,0,0" TextWrapping="Wrap"
+                   Text="Main" VerticalAlignment="Top"/>
+        <ListBox x:Name="artistList" HorizontalAlignment="Left" Height="365" Margin="10,0,0,0" VerticalAlignment="Top" Width="282" FontFamily="Segoe UI" FontSize="14pt" BorderThickness="0" SelectionChanged="ArtistList_SelectionChanged" />
+        <ListBox Name="albumImages" Height="365" Margin="297,0,4,0" VerticalAlignment="Top" ScrollViewer.HorizontalScrollBarVisibility="Disabled"  BorderThickness="0" >
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                        <StackPanel Margin="5 6 7 7" Width="140pt" Background="White"  >
+                            <Rectangle RadiusX="4pt" RadiusY="4pt" Width="140pt" Height="140pt">
+                                <Rectangle.Effect>
+                                    <DropShadowEffect Color="#D0D0D0" BlurRadius="2" ShadowDepth="4" Direction="315" />
+                                </Rectangle.Effect>
+                                <Rectangle.Fill>
+                                    <ImageBrush ImageSource="{Binding AlbumImage}"  />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <TextBlock FontSize="9pt" Height="22pt" Foreground="#404040" Text="{Binding AlbumTitle}" TextWrapping = "Wrap" />
+                        </StackPanel>
+                   
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ListBoxItem" >
+                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ContentControl}">
+                                <Border Background="{TemplateBinding Background}" >
+                                    <ContentPresenter />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Focusable" Value="False"/>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ListBox>
+    </Grid>
+</Page>
