@@ -23,6 +23,8 @@ namespace Sonomium
         private NavigationService navigation;
         private string ipServer = "192.168.0.51";
         private string selectedAlbum = "";
+        private string selectedArtist = "";
+        private BitmapImage selectedAlbumImage;
 
         public MainWindow()
         {
@@ -35,6 +37,10 @@ namespace Sonomium
         public string getIp() { return ipServer; }
         public void setSelectedAlbum(string album) { selectedAlbum = album; }
         public string getSelectedAlbum() { return selectedAlbum; }
+        public void setSelectedArtist(string artist) { selectedArtist = artist; }
+        public string getSelectedArtist() { return selectedArtist; }
+        public void setSelectedAlbumImage(BitmapImage image) { selectedAlbumImage = image; }
+        public BitmapImage getSelectedAlbumImage() { return selectedAlbumImage; }
 
         public string sendMpd(string command, bool wait = true)
         {
@@ -96,7 +102,7 @@ namespace Sonomium
 
         private void Button_Current_Click(object sender, RoutedEventArgs e)
         {
-            navigation.Navigate(new PageCurrent());
+            navigation.Navigate(new PageCurrent(this));
             buttonMain.BorderBrush = Brushes.Transparent;
             buttonCurrent.BorderBrush = Brushes.Black;
             buttonSettings.BorderBrush = Brushes.Transparent;

@@ -14,6 +14,10 @@
                    Text="Settings" VerticalAlignment="Top" FontFamily="Segoe UI" FontSize="14pt" />
         <TextBlock HorizontalAlignment="Left" Margin="20,66,0,0" TextWrapping="Wrap"
             Text="IP address" VerticalAlignment="Top" FontFamily="Segoe UI" FontSize="14pt" />
-        <TextBox x:Name="ipBox" FontFamily="Segoe UI" FontSize="14pt" HorizontalAlignment="Left" Height="47" Margin="127,66,0,0" TextWrapping="Wrap" Text="192.168.0.51" VerticalAlignment="Top" Width="198" TextChanged="IpBox_TextChanged"/>
+        <TextBox x:Name="ipBox" FontFamily="Segoe UI" FontSize="14pt" HorizontalAlignment="Left" Height="20pt" Margin="127,66,0,0" TextWrapping="Wrap" Text="192.168.0.51" VerticalAlignment="Top"  VerticalContentAlignment="Center" Width="198" TextChanged="IpBox_TextChanged"/>
+        <TextBlock HorizontalAlignment="Left" Margin="20,120,0,0" TextWrapping="Wrap"
+            Text="Icon size" VerticalAlignment="Top" FontFamily="Segoe UI" FontSize="14pt" />
+        <RadioButton Content="Large" HorizontalAlignment="Left" Margin="127,125,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" />
+        <Button Content="Reset Albumart Cache" HorizontalAlignment="Left" Height="46" Margin="20,182,0,0" VerticalAlignment="Top" Width="233" FontFamily="Segoe UI" FontSize="14pt" />
     </Grid>
 </Page>

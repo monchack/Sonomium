@@ -57,6 +57,20 @@ namespace Sonomium
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             update_album_list();
+            if (mainWindow != null)
+            {
+                string s = mainWindow.getSelectedArtist();
+                for (int i = 0; i < artistList.Items.Count; ++i)
+                {
+                    var v = artistList.Items.GetItemAt(i);
+                    if (v.ToString() == s)
+                    {
+                        artistList.SelectedIndex = i;
+                        artistList.ScrollIntoView(v);
+                        break;
+                    }
+                }
+            }
         }
 
         private BitmapImage getAlbumImage(string uri)
@@ -82,6 +96,8 @@ namespace Sonomium
         {
             albumList.Clear();
             albumImages.Items.Clear();
+
+            mainWindow.setSelectedArtist(artistList.SelectedItem.ToString());
 
             string album = mainWindow.sendMpd("find albumartist " + "\"" + artistList.SelectedItem.ToString() + "\"");
             StringReader sr = new StringReader(album);
@@ -109,8 +125,6 @@ namespace Sonomium
                         nextAlbum = "";
                     }
                 }
-
-
             }
         }
 
@@ -119,6 +133,7 @@ namespace Sonomium
             if (albumImages.SelectedItem == null) return;
             CardItem ci = (CardItem)albumImages.SelectedItem;
             string s = artistList.SelectedItem.ToString() + "\" " + "album " + "\"" + ci.AlbumTitle;
+            mainWindow.setSelectedAlbumImage(ci.AlbumImage);
             mainWindow.setSelectedAlbum(s);
         }
     }
