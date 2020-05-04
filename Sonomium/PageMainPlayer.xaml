@@ -11,7 +11,7 @@
 
     <Page.Resources>
 
-        <Style x:Key="myStyle1"
+        <Style x:Key="listbox_style"
            TargetType="{x:Type ListBoxItem}">
 
             <Setter Property="Template">
@@ -46,7 +46,7 @@
                    Text="Main" VerticalAlignment="Top"/>
         <ListBox x:Name="artistList" HorizontalAlignment="Left" Height="365" Margin="10,0,0,0" VerticalAlignment="Top" Width="282" FontFamily="Segoe UI" FontSize="14pt" BorderThickness="0" SelectionChanged="ArtistList_SelectionChanged" />
 
-        <ListBox x:Name="albumImages" Height="365" Margin="297,0,4,0" VerticalAlignment="Top" ScrollViewer.HorizontalScrollBarVisibility="Disabled"  BorderThickness="0"  SelectionChanged="AlbumImages_SelectionChanged"  ItemContainerStyle="{StaticResource myStyle1}" >
+        <ListBox x:Name="albumImages" Height="365" Margin="297,0,4,0" VerticalAlignment="Top" ScrollViewer.HorizontalScrollBarVisibility="Disabled"  BorderThickness="0"  SelectionChanged="AlbumImages_SelectionChanged"  ItemContainerStyle="{StaticResource listbox_style}" >
             
             <ItemsControl.ItemTemplate >
 

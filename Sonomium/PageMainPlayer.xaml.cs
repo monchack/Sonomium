@@ -117,7 +117,8 @@ namespace Sonomium
         private void AlbumImages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (albumImages.SelectedItem == null) return;
-            string s = artistList.SelectedItem.ToString() + "\" " + "album " + "\"" + albumImages.SelectedItem.ToString();
+            CardItem ci = (CardItem)albumImages.SelectedItem;
+            string s = artistList.SelectedItem.ToString() + "\" " + "album " + "\"" + ci.AlbumTitle;
             mainWindow.setSelectedAlbum(s);
         }
     }
