@@ -23,6 +23,7 @@ namespace Sonomium
     {
         private MainWindow mainWindow;
         private List<string> albumList;
+        private List<int> albumTimeList;
 
         public class CardItem
         {
@@ -35,6 +36,7 @@ namespace Sonomium
             InitializeComponent();
             mainWindow = _mainWindow;
             albumList = new List<string>();
+            albumTimeList = new List<int>();
         }
 
         private void update_album_list()
@@ -59,7 +61,7 @@ namespace Sonomium
             update_album_list();
             if (mainWindow != null)
             {
-                string s = mainWindow.getSelectedArtist();
+                string s = mainWindow.getCursoredArtist();
                 for (int i = 0; i < artistList.Items.Count; ++i)
                 {
                     var v = artistList.Items.GetItemAt(i);
@@ -96,8 +98,7 @@ namespace Sonomium
         {
             albumList.Clear();
             albumImages.Items.Clear();
-
-            mainWindow.setSelectedArtist(artistList.SelectedItem.ToString());
+            mainWindow.setCursoredArtist(artistList.SelectedItem.ToString());
 
             string album = mainWindow.sendMpd("find albumartist " + "\"" + artistList.SelectedItem.ToString() + "\"");
             StringReader sr = new StringReader(album);
@@ -111,9 +112,8 @@ namespace Sonomium
                     if (newItem == "") newItem = "(Unknown)";
                     if (!albumList.Contains(newItem))
                     {
-                        albumList.Add(newItem);// WriteLine(line);
-
-                        nextAlbum = newItem; ///////////////
+                        albumList.Add(newItem);
+                        nextAlbum = newItem;
                     }
                 }
                 if (line.Contains("file: "))
@@ -125,16 +125,30 @@ namespace Sonomium
                         nextAlbum = "";
                     }
                 }
+                if (line.Contains("Time: "))
+                {
+                    string s = line.Replace("Time: ", "");
+                    int n = Int32.Parse(s);
+                    albumTimeList.Add(n);
+                   // TimeSpan ts = new TimeSpan(0,0,n);
+                    //albumTimeList.Add(s.ToLowerInvariant)
+                }
             }
         }
 
         private void AlbumImages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (albumImages.SelectedItem == null) return;
+
+            string artist = artistList.SelectedItem.ToString();
+            mainWindow.setSelectedArtist(artist);
+
             CardItem ci = (CardItem)albumImages.SelectedItem;
             string s = artistList.SelectedItem.ToString() + "\" " + "album " + "\"" + ci.AlbumTitle;
             mainWindow.setSelectedAlbumImage(ci.AlbumImage);
             mainWindow.setSelectedAlbum(s);
+
+            mainWindow.addSelectedAlbuomToQue();
         }
     }
 }

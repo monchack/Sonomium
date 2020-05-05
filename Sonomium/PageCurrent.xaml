@@ -10,13 +10,14 @@
 
     <Grid>
         <Image x:Name="albumImage" HorizontalAlignment="Left" Height="171" Margin="0,10,0,0" VerticalAlignment="Top" Width="140pt"/>
-        <ListView x:Name="trackList" HorizontalAlignment="Left" Height="388" Margin="187,10,0,0" VerticalAlignment="Top" Width="603"  SelectedValuePath="TrackFile" FontFamily="Segoe UI" FontSize="14pt"   Loaded="Page_Loaded" >
+        <ListView x:Name="trackList" HorizontalAlignment="Left" Height="388" Margin="187,10,0,0" VerticalAlignment="Top" Width="603"  SelectedValuePath="TrackFile" BorderThickness="0" FontFamily="Segoe UI" FontSize="14pt"   Loaded="Page_Loaded" >
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Path=TrackStatus}" Width="20pt" FontFamily="Segoe MDL2 Assets" FontSize="8pt" VerticalAlignment="Center" />
                         <TextBlock Text="{Binding Path=TrackTitle}" Width="120pt" />
-                            <TextBlock Text="{Binding Path=TrackDuration}" HorizontalAlignment="Right" />
+                        <TextBlock Text="{Binding Path=TrackDuration}" TextAlignment="Right" Width="100pt" FontSize="10pt"  Foreground="#808080" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                        <TextBlock Text="" HorizontalAlignment="Stretch" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

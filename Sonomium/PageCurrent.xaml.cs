@@ -90,7 +90,8 @@ namespace Sonomium
                 TimeSpan ts = new TimeSpan(0,0,n);
                 if (n > 3600) duration = ts.ToString(@"h\:mm\:ss");
                 else duration = ts.ToString(@"m\:ss");
-                string st = "\uF5B0";
+                //string st = "\uF5B0"; // PlaySolid
+                string st = "\uEC4F"; // MusicNote
                 trackList.Items.Add(new TrackInfo() { TrackTitle = title, TrackDuration = duration, TrackFile=file, TrackStatus=st });
             }
         }
