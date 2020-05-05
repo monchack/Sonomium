@@ -24,11 +24,17 @@ namespace Sonomium
     public partial class PageCurrent : Page
     {
         private MainWindow mainWindow;
+        private List<string> trackTitleList;
+        private List<int> trackTimeList;
+        private List<string> trackFileList;
 
         public PageCurrent(MainWindow _mainWindow)
         {
             InitializeComponent();
             mainWindow = _mainWindow;
+            trackTitleList = new List<string>();
+            trackFileList = new List<string>();
+            trackTimeList = new List<int>();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -43,31 +49,36 @@ namespace Sonomium
             albumImage.Source = mainWindow.getSelectedAlbumImage();
 
             string line;
-            int i = 1;
-            string title = "";
-            string file = "";
+            int i = 0;
             while ((line = sr.ReadLine()) != null)
             {
                 if (line.Contains("file: "))
                 {
-                    file = line.Replace("file: ", "");
-                    if (title != "")
-                    {
-                        trackList.Items.Add(new { Text = title, Value = file, });
-                    }
-                    title = "Track " + i.ToString();
+                    string file = line.Replace("file: ", "");
+                    trackFileList.Add(file);
+                    trackTimeList.Add(-1); // 仮の登録
+                    string title = "Track " + (i+1).ToString();
+                    trackTitleList.Add(title); // 仮の登録
                     ++i;
+                }
+                if (line.Contains("Time: "))
+                {
+                    string time = line.Replace("Time: ", "");
+                    int n = Int32.Parse(time);
+                    trackTimeList[i-1] = n;
                 }
                 if (line.Contains("Title:"))
                 {
-                    title = line.Replace("Title: ", "");
+                    string title = line.Replace("Title: ", "");
+                    trackTitleList[i - 1] = title;
                 }
             }
-            if (title != "")
+            for (i = 0; i < trackFileList.Count; ++i)
             {
+                string title = trackTitleList[i];
+                string file = trackFileList[i];
                 trackList.Items.Add(new { Text = title, Value = file, });
             }
-
         }
     }
 }
