@@ -28,6 +28,14 @@ namespace Sonomium
         private List<int> trackTimeList;
         private List<string> trackFileList;
 
+        public class TrackInfo
+        {
+            public string TrackTitle { get; set; }
+            public string TrackDuration { get; set; }
+            public string TrackFile { get; set; }
+            public string TrackStatus { get; set; }
+        }
+
         public PageCurrent(MainWindow _mainWindow)
         {
             InitializeComponent();
@@ -77,7 +85,13 @@ namespace Sonomium
             {
                 string title = trackTitleList[i];
                 string file = trackFileList[i];
-                trackList.Items.Add(new { Text = title, Value = file, });
+                string duration;
+                int n = trackTimeList[i];
+                TimeSpan ts = new TimeSpan(0,0,n);
+                if (n > 3600) duration = ts.ToString(@"h\:mm\:ss");
+                else duration = ts.ToString(@"m\:ss");
+                string st = "\uF5B0";
+                trackList.Items.Add(new TrackInfo() { TrackTitle = title, TrackDuration = duration, TrackFile=file, TrackStatus=st });
             }
         }
     }
