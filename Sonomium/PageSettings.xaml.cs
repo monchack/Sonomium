@@ -42,6 +42,7 @@ namespace Sonomium
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (mainWindow != null) ipBox.Text = mainWindow.getIp();
+            string s = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         }
     }
 }

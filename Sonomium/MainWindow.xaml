@@ -10,29 +10,33 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30pt"/>
             <RowDefinition/>
-            <RowDefinition Height="36pt"/>
+            <RowDefinition Height="40pt"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Background="#F0F0F0" Margin="0,0,0,0">
+        <StackPanel Grid.Row="0"  Orientation="Horizontal" Background="#F0F0F0" Margin="0,0,0,0">
             <Button x:Name="buttonMain" Content="MAIN" Margin="20,0,20,0" Width="85" BorderThickness="0,0,0,4" BorderBrush="Transparent" Background="Transparent" FontSize="12pt" FontFamily="Segoe UI Semibold" Click="Button_Main_Click" Foreground="#404040" />
             <Button x:Name="buttonCurrent" Content="TRACKS" Margin="20,0,20,0"  BorderThickness="0,0,0,4" BorderBrush="Transparent" Background="Transparent" FontSize="12pt" FontFamily="Segoe UI Semibold" Click="Button_Current_Click" Foreground="#404040" />
             <Button x:Name="buttonSettings" Content="SETTINGS" Margin="20,0,20,0" Width="85" BorderThickness="0,0,0,4" BorderBrush="Transparent" Background="Transparent" FontSize="12pt" FontFamily="Segoe UI Semibold" Click="Button_Settings_Click" Foreground="#404040" />
         </StackPanel>
-        <Frame Grid.Row="1" NavigationUIVisibility="Hidden" Name="mainFrame" Margin="0,0,0,45" />
-        <StackPanel Orientation="Horizontal" Background="#F0F0F0" Grid.Row="2">
-            <Button Name="prevButton" Content="9" HorizontalAlignment="Left" Background="Transparent" FontSize="12pt"
-                    Grid.Row="2" VerticalAlignment="Center" BorderThickness="0" FontFamily="Webdings"
+        <Frame Grid.Row="1" NavigationUIVisibility="Hidden" Name="mainFrame" Margin="0,0,0,0" />
+        <Grid Grid.Row="2">
+            <DockPanel  Background="#F0F0F0">
+                <Button Name="prevButton" Content="9" HorizontalAlignment="Left" Background="Transparent" FontSize="14pt"
+                    VerticalAlignment="Stretch" BorderThickness="0" FontFamily="Webdings"
                     Width="50" Click="PrevButton_Click" />
-            <Button Name="playButton" Content="&#xF5B0;" HorizontalAlignment="Left" Background="Transparent" FontSize="16pt" BorderThickness="0"
-                    VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Click="PlayButton_Click" />
-            <Button Name="pauseButton" Content="&#xEDB4;" HorizontalAlignment="Left" Background="Transparent" FontSize="16pt" BorderThickness="0"
-                    VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Click="PauseButton_Click" />            
-            <Button Name="nextButton" Content=":" HorizontalAlignment="Left"
-                    VerticalAlignment="Center" Width="50" Background="Transparent" BorderThickness="0" FontSize="12pt" FontFamily="Webdings" Click="NextButton_Click" />
-            <StackPanel Orientation="Vertical" Width="641" VerticalAlignment="Center" >
-                <TextBlock x:Name="CurrentTitle"   HorizontalAlignment="Center" Foreground="#808080" />
-                <TextBlock x:Name="CurrentAlbum"   HorizontalAlignment="Center" Foreground="#808080" />
-                <TextBlock x:Name="CurrentArtist"  HorizontalAlignment="Center" Foreground="#808080" />
-            </StackPanel>
-            </StackPanel>
+                <Button Name="playButton" Content="&#xF5B0;" HorizontalAlignment="Left" Background="Transparent" FontSize="18pt" BorderThickness="0"
+                    Width="28pt"  VerticalAlignment="Stretch" FontFamily="Segoe MDL2 Assets" Click="PlayButton_Click" />
+                <Button Name="pauseButton" Content="&#xEDB4;" HorizontalAlignment="Left" Background="Transparent" FontSize="18pt" BorderThickness="0"
+                    Width="28pt"  VerticalAlignment="Stretch" FontFamily="Segoe MDL2 Assets" Click="PauseButton_Click" />
+                <Button Name="nextButton" Content=":" HorizontalAlignment="Left"
+                    VerticalAlignment="Stretch" Width="50" Background="Transparent" BorderThickness="0" FontSize="14pt" FontFamily="Webdings" Click="NextButton_Click" />
+
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                        <TextBlock x:Name="CurrentTitle"   HorizontalAlignment="Center" Foreground="#808080" />
+                        <TextBlock x:Name="CurrentAlbum"   HorizontalAlignment="Center" Foreground="#808080" />
+                        <TextBlock x:Name="CurrentArtist"  HorizontalAlignment="Center" Foreground="#808080" />
+                    </StackPanel>
+            </DockPanel>
+
+        </Grid>
     </Grid>
 </Window>

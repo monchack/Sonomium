@@ -44,9 +44,9 @@
     <Grid>
         <TextBlock HorizontalAlignment="Left" Margin="20,20,0,0" TextWrapping="Wrap"
                    Text="Main" VerticalAlignment="Top"/>
-        <ListBox x:Name="artistList" HorizontalAlignment="Left" Height="365" Margin="10,0,0,0" VerticalAlignment="Top" Width="282" FontFamily="Segoe UI" FontSize="14pt" BorderThickness="0" SelectionChanged="ArtistList_SelectionChanged" />
+        <ListBox x:Name="artistList" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="10,0,0,0"  Width="282" FontFamily="Segoe UI" FontSize="14pt" BorderThickness="0" SelectionChanged="ArtistList_SelectionChanged" />
 
-        <ListBox x:Name="albumImages" Height="365" Margin="297,0,4,0" VerticalAlignment="Top" ScrollViewer.HorizontalScrollBarVisibility="Disabled"  BorderThickness="0"  SelectionChanged="AlbumImages_SelectionChanged"  ItemContainerStyle="{StaticResource listbox_style}" >
+        <ListBox x:Name="albumImages" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="297,0,4,0"  ScrollViewer.HorizontalScrollBarVisibility="Disabled"  BorderThickness="0"  SelectionChanged="AlbumImages_SelectionChanged"  ItemContainerStyle="{StaticResource listbox_style}" >
             
             <ItemsControl.ItemTemplate >
 
