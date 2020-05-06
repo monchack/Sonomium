@@ -41,6 +41,15 @@ namespace Sonomium
             public string trackType { get; set; }
         };
 
+        class SonomiumSettings
+        {
+            public string ipServer { get; set; }
+            public string cursoredArtist { get; set; }
+            public int windowWidth { get; set; }
+            public int windowHeight { get; set; }
+            public int windowState { get; set; }
+        };
+
         public MainWindow()
         {
             InitializeComponent();
@@ -58,6 +67,13 @@ namespace Sonomium
         public BitmapImage getSelectedAlbumImage() { return selectedAlbumImage; }
         public void setCursoredArtist(string artist) { cursoredArtist = artist; }
         public string getCursoredArtist() { return cursoredArtist; }
+
+        public string GetProfileFilePathAndName()
+        {
+            string s = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            s += "\\Sonomium\\profile.json";
+            return s;
+        }
 
         public string sendMpd(string command, bool wait = true)
         {
@@ -188,9 +204,6 @@ namespace Sonomium
         {
             string s = GetRestApi(getIp(), "getstate");
             VolumioState vs = JsonSerializer.Deserialize<VolumioState>(s);
-            System.Text.Json.JsonDocument volumioState = JsonDocument.Parse(s);
-            //if (vs.status == "play") { playPauseButton.Content = "\uf5b0\uedb4"; }
-            //if (vs.status == "stop") { playPauseButton.Content = "\uf5b0\uedb4"; }
             CurrentArtist.Text = vs.artist;
             CurrentTitle.Text = vs.title;
             CurrentAlbum.Text = vs.album;
@@ -200,22 +213,6 @@ namespace Sonomium
         public void addSelectedAlbuomToQue()
         {
             string line;
-            int qued = 0;
-
-            string currentQue = GetRestApi(getIp(), "getQueue");
-            StringReader srQue = new StringReader(currentQue);
-            while ((line = srQue.ReadLine()) != null)
-            {
-                if (line.Contains("uri\":"))
-                {
-                    ++qued;
-                }
-            }
-
-            
-            //string s = getSelectedAlbum();
-            //string s = artistList.SelectedItem.ToString() + "\" " + "album " + "\"" + ci.AlbumTitle;
-            //string track = sendMpd("find albumartist " + "\"" + s + "\"");
 
             // artist と album 情報から、トラックを抽出してキューに積む
             string s = "find albumartist " + "\"" + getSelectedArtist() + "\"" + " album " + "\"" + getSelectedAlbum() + "\"";
@@ -241,7 +238,6 @@ namespace Sonomium
             postData += "]";
             PostRestApi(getIp(), "addPlay", postData);
 
-            Thread.Sleep(300);
             UpdatePlayerUI();
         }
 
@@ -292,6 +288,54 @@ namespace Sonomium
         {
             GetRestApi(getIp(), "commands/?cmd=prev");
             UpdatePlayerUI();
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            //save
+            SonomiumSettings a = new SonomiumSettings { ipServer = this.ipServer, cursoredArtist = this.cursoredArtist };
+            a.windowWidth = (int)this.Width;
+            a.windowHeight = (int)this.Height;
+            a.windowState = (int)this.WindowState;
+
+            string jsonString;
+            jsonString = JsonSerializer.Serialize(a);
+            string s = GetProfileFilePathAndName();
+
+            string path = System.IO.Path.GetDirectoryName(s);
+            if (!File.Exists(path))
+            {
+                Directory.CreateDirectory(System.IO.Path.GetDirectoryName(s)); //must be path including file name
+            }
+            try
+            {
+                File.WriteAllText(s, jsonString);
+                
+            }
+            catch
+            {
+            }
+        }
+
+        private void Window_SourceInitialized(object sender, EventArgs e)
+        {
+            string s = GetProfileFilePathAndName();
+            string jsonString;
+
+            try
+            {
+                jsonString = File.ReadAllText(s);
+                SonomiumSettings ss = JsonSerializer.Deserialize<SonomiumSettings>(jsonString);
+                Application.Current.MainWindow.WindowState = (System.Windows.WindowState)ss.windowState;
+                Application.Current.MainWindow.Height = ss.windowHeight;
+                Application.Current.MainWindow.Width = ss.windowWidth;
+                if (ss.ipServer != "") setIp(ss.ipServer);
+                if (ss.cursoredArtist != "") setCursoredArtist(ss.cursoredArtist);
+            }
+            catch
+            {
+
+            }
         }
     }
 }
