@@ -16,6 +16,8 @@ using System.Windows.Shapes;
 using System.IO;
 using System.Threading;
 
+using System.Text.Json;
+
 namespace Sonomium
 {
     /// <summary>
@@ -29,6 +31,15 @@ namespace Sonomium
         private string selectedArtist = "";
         private string cursoredArtist = "";
         private BitmapImage selectedAlbumImage;
+
+        class VolumioState
+        {
+            public string status { get; set; }
+            public string artist { get; set; }
+            public string album { get; set; }
+            public string title { get; set; }
+            public string trackType { get; set; }
+        };
 
         public MainWindow()
         {
@@ -172,6 +183,19 @@ namespace Sonomium
             return resp;
         }
 
+
+        public void UpdatePlayerUI()
+        {
+            string s = GetRestApi(getIp(), "getstate");
+            VolumioState vs = JsonSerializer.Deserialize<VolumioState>(s);
+            System.Text.Json.JsonDocument volumioState = JsonDocument.Parse(s);
+            //if (vs.status == "play") { playPauseButton.Content = "\uf5b0\uedb4"; }
+            //if (vs.status == "stop") { playPauseButton.Content = "\uf5b0\uedb4"; }
+            CurrentArtist.Text = vs.artist;
+            CurrentTitle.Text = vs.album;
+
+        }
+
         public void addSelectedAlbuomToQue()
         {
             string line;
@@ -187,7 +211,7 @@ namespace Sonomium
                 }
             }
 
-                string s = getSelectedAlbum();
+            string s = getSelectedAlbum();
             //string s = artistList.SelectedItem.ToString() + "\" " + "album " + "\"" + ci.AlbumTitle;
             string track = sendMpd("find albumartist " + "\"" + s + "\"");
             StringReader sr = new StringReader(track);
@@ -209,13 +233,16 @@ namespace Sonomium
             postData = postData.TrimEnd(',');
             postData += "]";
             PostRestApi(getIp(), "addPlay", postData);
+
+            Thread.Sleep(300);
+            UpdatePlayerUI();
         }
 
 
         private void Button_Main_Click(object sender, RoutedEventArgs e)
         {
             navigation.Navigate(new PageMainPlayer(this));
-            buttonMain.BorderBrush = Brushes.Black;
+            buttonMain.BorderBrush = SystemColors.HighlightBrush; //Brushes.Black;
             buttonCurrent.BorderBrush = Brushes.Transparent;
             buttonSettings.BorderBrush = Brushes.Transparent;
         }
@@ -225,15 +252,27 @@ namespace Sonomium
             navigation.Navigate(new PageSettings(this));
             buttonMain.BorderBrush = Brushes.Transparent;
             buttonCurrent.BorderBrush = Brushes.Transparent;
-            buttonSettings.BorderBrush = Brushes.Black;
+            buttonSettings.BorderBrush = SystemColors.HighlightBrush;
         }
 
         private void Button_Current_Click(object sender, RoutedEventArgs e)
         {
             navigation.Navigate(new PageCurrent(this));
             buttonMain.BorderBrush = Brushes.Transparent;
-            buttonCurrent.BorderBrush = Brushes.Black;
+            buttonCurrent.BorderBrush = SystemColors.HighlightBrush;
             buttonSettings.BorderBrush = Brushes.Transparent;
+        }
+
+        private void PauseButton_Click(object sender, RoutedEventArgs e)
+        {
+            GetRestApi(getIp(), "commands/?cmd=pause");
+            UpdatePlayerUI();
+        }
+
+        private void PlayButton_Click(object sender, RoutedEventArgs e)
+        {
+            GetRestApi(getIp(), "commands/?cmd=play");
+            UpdatePlayerUI();
         }
     }
 }
