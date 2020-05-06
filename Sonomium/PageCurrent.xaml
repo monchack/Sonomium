@@ -9,8 +9,8 @@
       Title="PageCurrent">
 
     <Grid>
-        <Image x:Name="albumImage" HorizontalAlignment="Left" Height="171" Margin="0,10,0,0" VerticalAlignment="Top" Width="140pt"/>
-        <ListView x:Name="trackList" HorizontalAlignment="Left" Height="388" Margin="187,10,0,0" VerticalAlignment="Top" Width="603"  SelectedValuePath="TrackFile" BorderThickness="0" FontFamily="Segoe UI" FontSize="14pt"   Loaded="Page_Loaded" >
+        <Image x:Name="albumImage" HorizontalAlignment="Left" Height="160pt" Margin="0,10,0,0" VerticalAlignment="Top" Width="160pt"/>
+        <ListView x:Name="trackList" HorizontalAlignment="Left" Height="388" Margin="218,10,0,0" VerticalAlignment="Top" Width="572"  SelectedValuePath="TrackFile" BorderThickness="0" FontFamily="Segoe UI" FontSize="14pt"   Loaded="Page_Loaded" SelectionChanged="TrackList_SelectionChanged" >
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">

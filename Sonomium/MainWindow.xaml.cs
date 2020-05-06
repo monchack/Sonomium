@@ -241,7 +241,7 @@ namespace Sonomium
             Task t = WaitAndGetVolumioStatus(getIp(), true, this);
         }
 
-        public void addSelectedAlbuomToQue()
+        public void addSelectedAlbuomToQue(int start)
         {
             string line;
 
@@ -252,10 +252,13 @@ namespace Sonomium
             StringReader sr = new StringReader(track);
 
             List<string> files = new List<string>();
+            int i = 0;
             while ((line = sr.ReadLine()) != null)
             {
                 if (line.Contains("file: "))
                 {
+                    ++i;
+                    if (i < start) continue;
                     string file = line.Replace("file: ", "");
                     files.Add(file);
                 }

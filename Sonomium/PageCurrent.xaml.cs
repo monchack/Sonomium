@@ -49,9 +49,7 @@ namespace Sonomium
         {
             if (mainWindow == null) return;
             if (mainWindow.getSelectedAlbum() == "") return;
-            //string s = mainWindow.getSelectedAlbum();
-            //string s = artistList.SelectedItem.ToString() + "\" " + "album " + "\"" + ci.AlbumTitle;
-            //string track = mainWindow.sendMpd("find albumartist " + "\"" + s + "\"");
+
             string s = "find albumartist " + "\"" + mainWindow.getSelectedArtist() + "\"" + " album " + "\"" + mainWindow.getSelectedAlbum() + "\"";
             string track = mainWindow.sendMpd(s);
             StringReader sr = new StringReader(track);
@@ -96,6 +94,12 @@ namespace Sonomium
                 string st = "\uEC4F"; // MusicNote
                 trackList.Items.Add(new TrackInfo() { TrackTitle = title, TrackDuration = duration, TrackFile=file, TrackStatus=st });
             }
+        }
+
+        private void TrackList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int n = trackList.SelectedIndex;
+            if (mainWindow!=null) mainWindow.addSelectedAlbuomToQue(n+1);
         }
     }
 }
