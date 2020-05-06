@@ -221,15 +221,24 @@ namespace Sonomium
             return resp;
         }
 
+        static async Task WaitAndGetVolumioStatus(string ip, bool wait, MainWindow window)
+        {
+            string s="";
+            await Task.Run(() =>
+            {
+                if (wait == true) Thread.Sleep(1000);
+                s = GetRestApi(ip, "getstate");
+            });
+            VolumioState vs = JsonSerializer.Deserialize<VolumioState>(s);
+            window.CurrentArtist.Text = vs.artist;
+            window.CurrentTitle.Text = vs.title;
+            window.CurrentAlbum.Text = vs.album;
+        }
+
 
         public void UpdatePlayerUI()
         {
-            string s = GetRestApi(getIp(), "getstate");
-            VolumioState vs = JsonSerializer.Deserialize<VolumioState>(s);
-            CurrentArtist.Text = vs.artist;
-            CurrentTitle.Text = vs.title;
-            CurrentAlbum.Text = vs.album;
-
+            Task t = WaitAndGetVolumioStatus(getIp(), true, this);
         }
 
         public void addSelectedAlbuomToQue()
