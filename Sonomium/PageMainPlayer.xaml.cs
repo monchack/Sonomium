@@ -29,6 +29,9 @@ namespace Sonomium
         {
             public BitmapImage AlbumImage { get; set; }
             public string AlbumTitle { get; set; }
+            public int AlbumImageWidth { get; set; }
+            public int AlbumImageHeight { get; set; }
+            public int AlbumCardWidth { get; set; }
         }
 
         public PageMainPlayer(MainWindow _mainWindow)
@@ -104,7 +107,19 @@ namespace Sonomium
             StringReader sr = new StringReader(album);
             string line;
             string nextAlbum = "";
-            while ((line = sr.ReadLine()) != null)
+
+            int size1 = 200;
+            int size2 = 200;
+            if (mainWindow.getAlbumArtSize() == 0)
+            {
+                size1 = size2 = 120;
+            }
+            else if (mainWindow.getAlbumArtSize() == 2)
+            {
+                size1 = size2 = 240;
+            }
+
+                while ((line = sr.ReadLine()) != null)
             {
                 if (line.Contains("Album:"))
                 {
@@ -121,7 +136,7 @@ namespace Sonomium
                     if (nextAlbum != "")
                     {
                         BitmapImage bmp = getAlbumImage(line.Replace("file: ", ""));
-                        albumImages.Items.Add(new CardItem() { AlbumImage = bmp, AlbumTitle=nextAlbum });
+                        albumImages.Items.Add(new CardItem() { AlbumImage = bmp, AlbumTitle=nextAlbum, AlbumCardWidth=size1, AlbumImageWidth=size2, AlbumImageHeight=size2 });
                         nextAlbum = "";
                     }
                 }

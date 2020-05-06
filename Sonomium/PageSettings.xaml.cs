@@ -41,8 +41,21 @@ namespace Sonomium
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (mainWindow != null) ipBox.Text = mainWindow.getIp();
+            if (mainWindow != null)
+            {
+                ipBox.Text = mainWindow.getIp();
+                if (mainWindow.getAlbumArtSize() == 0) buttonAlbumArtSmall.IsChecked = true;
+                else if (mainWindow.getAlbumArtSize() == 2) buttonAlbumArtLarge.IsChecked = true;
+                else buttonAlbumArtNormal.IsChecked = true;
+            }
             string s = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        }
+
+        private void ButtonAlbumArt_Checked(object sender, RoutedEventArgs e)
+        {
+            if (buttonAlbumArtSmall.IsChecked == true) { mainWindow.setAlbumArtSize(0); }
+            else if (buttonAlbumArtLarge.IsChecked == true) { mainWindow.setAlbumArtSize(2); }
+            else mainWindow.setAlbumArtSize(1);
         }
     }
 }

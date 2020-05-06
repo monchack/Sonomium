@@ -31,6 +31,7 @@ namespace Sonomium
         private string selectedArtist = "";
         private string cursoredArtist = "";
         private BitmapImage selectedAlbumImage;
+        private int albumArtSize = 0;
 
         class VolumioState
         {
@@ -48,6 +49,7 @@ namespace Sonomium
             public int windowWidth { get; set; }
             public int windowHeight { get; set; }
             public int windowState { get; set; }
+            public int albumArtSize { get; set; }
         };
 
         public MainWindow()
@@ -67,6 +69,8 @@ namespace Sonomium
         public BitmapImage getSelectedAlbumImage() { return selectedAlbumImage; }
         public void setCursoredArtist(string artist) { cursoredArtist = artist; }
         public string getCursoredArtist() { return cursoredArtist; }
+        public void setAlbumArtSize(int size) { albumArtSize = size; }
+        public int getAlbumArtSize() { return albumArtSize; }
 
         public string GetProfileFilePathAndName()
         {
@@ -293,7 +297,7 @@ namespace Sonomium
         private void Window_Closed(object sender, EventArgs e)
         {
             //save
-            SonomiumSettings a = new SonomiumSettings { ipServer = this.ipServer, cursoredArtist = this.cursoredArtist };
+            SonomiumSettings a = new SonomiumSettings { ipServer = this.ipServer, cursoredArtist = this.cursoredArtist, albumArtSize = this.albumArtSize };
             a.windowWidth = (int)this.Width;
             a.windowHeight = (int)this.Height;
             a.windowState = (int)this.WindowState;
@@ -310,7 +314,6 @@ namespace Sonomium
             try
             {
                 File.WriteAllText(s, jsonString);
-                
             }
             catch
             {
@@ -331,6 +334,7 @@ namespace Sonomium
                 Application.Current.MainWindow.Width = ss.windowWidth;
                 if (ss.ipServer != "") setIp(ss.ipServer);
                 if (ss.cursoredArtist != "") setCursoredArtist(ss.cursoredArtist);
+                setAlbumArtSize(ss.albumArtSize);
             }
             catch
             {
