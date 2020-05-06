@@ -55,6 +55,24 @@ namespace Sonomium
         public MainWindow()
         {
             InitializeComponent();
+
+            string s = GetProfileFilePathAndName();
+            string jsonString;
+            try
+            {
+                jsonString = File.ReadAllText(s);
+                SonomiumSettings ss = JsonSerializer.Deserialize<SonomiumSettings>(jsonString);
+                Application.Current.MainWindow.WindowState = (System.Windows.WindowState)ss.windowState;
+                Application.Current.MainWindow.Height = ss.windowHeight;
+                Application.Current.MainWindow.Width = ss.windowWidth;
+                if (ss.ipServer != "") setIp(ss.ipServer);
+                if (ss.cursoredArtist != "") setCursoredArtist(ss.cursoredArtist);
+                setAlbumArtSize(ss.albumArtSize);
+            }
+            catch
+            {
+            }
+
             navigation = this.mainFrame.NavigationService;
             navigation.Navigate(new PageSettings(this));
         }
@@ -317,28 +335,6 @@ namespace Sonomium
             }
             catch
             {
-            }
-        }
-
-        private void Window_SourceInitialized(object sender, EventArgs e)
-        {
-            string s = GetProfileFilePathAndName();
-            string jsonString;
-
-            try
-            {
-                jsonString = File.ReadAllText(s);
-                SonomiumSettings ss = JsonSerializer.Deserialize<SonomiumSettings>(jsonString);
-                Application.Current.MainWindow.WindowState = (System.Windows.WindowState)ss.windowState;
-                Application.Current.MainWindow.Height = ss.windowHeight;
-                Application.Current.MainWindow.Width = ss.windowWidth;
-                if (ss.ipServer != "") setIp(ss.ipServer);
-                if (ss.cursoredArtist != "") setCursoredArtist(ss.cursoredArtist);
-                setAlbumArtSize(ss.albumArtSize);
-            }
-            catch
-            {
-
             }
         }
     }
