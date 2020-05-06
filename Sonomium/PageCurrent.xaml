@@ -15,7 +15,7 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Path=TrackStatus}" Width="20pt" FontFamily="Segoe MDL2 Assets" FontSize="8pt" VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding Path=TrackTitle}" Width="120pt" />
+                        <TextBlock Text="{Binding Path=TrackTitle}" Width="240pt" />
                         <TextBlock Text="{Binding Path=TrackDuration}" TextAlignment="Right" Width="100pt" FontSize="10pt"  Foreground="#808080" VerticalAlignment="Center" HorizontalAlignment="Right" />
                         <TextBlock Text="" HorizontalAlignment="Stretch" />
                     </StackPanel>

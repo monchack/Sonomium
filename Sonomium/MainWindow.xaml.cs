@@ -192,7 +192,8 @@ namespace Sonomium
             //if (vs.status == "play") { playPauseButton.Content = "\uf5b0\uedb4"; }
             //if (vs.status == "stop") { playPauseButton.Content = "\uf5b0\uedb4"; }
             CurrentArtist.Text = vs.artist;
-            CurrentTitle.Text = vs.album;
+            CurrentTitle.Text = vs.title;
+            CurrentAlbum.Text = vs.album;
 
         }
 
@@ -211,9 +212,15 @@ namespace Sonomium
                 }
             }
 
-            string s = getSelectedAlbum();
+            
+            //string s = getSelectedAlbum();
             //string s = artistList.SelectedItem.ToString() + "\" " + "album " + "\"" + ci.AlbumTitle;
-            string track = sendMpd("find albumartist " + "\"" + s + "\"");
+            //string track = sendMpd("find albumartist " + "\"" + s + "\"");
+
+            // artist と album 情報から、トラックを抽出してキューに積む
+            string s = "find albumartist " + "\"" + getSelectedArtist() + "\"" + " album " + "\"" + getSelectedAlbum() + "\"";
+            string track = sendMpd(s);
+
             StringReader sr = new StringReader(track);
 
             List<string> files = new List<string>();
@@ -272,6 +279,18 @@ namespace Sonomium
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
             GetRestApi(getIp(), "commands/?cmd=play");
+            UpdatePlayerUI();
+        }
+
+        private void NextButton_Click(object sender, RoutedEventArgs e)
+        {
+            GetRestApi(getIp(), "commands/?cmd=next");
+            UpdatePlayerUI();
+        }
+
+        private void PrevButton_Click(object sender, RoutedEventArgs e)
+        {
+            GetRestApi(getIp(), "commands/?cmd=prev");
             UpdatePlayerUI();
         }
     }

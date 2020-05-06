@@ -49,9 +49,11 @@ namespace Sonomium
         {
             if (mainWindow == null) return;
             if (mainWindow.getSelectedAlbum() == "") return;
-            string s = mainWindow.getSelectedAlbum();
+            //string s = mainWindow.getSelectedAlbum();
             //string s = artistList.SelectedItem.ToString() + "\" " + "album " + "\"" + ci.AlbumTitle;
-            string track = mainWindow.sendMpd("find albumartist " + "\"" + s + "\"");
+            //string track = mainWindow.sendMpd("find albumartist " + "\"" + s + "\"");
+            string s = "find albumartist " + "\"" + mainWindow.getSelectedArtist() + "\"" + " album " + "\"" + mainWindow.getSelectedAlbum() + "\"";
+            string track = mainWindow.sendMpd(s);
             StringReader sr = new StringReader(track);
 
             albumImage.Source = mainWindow.getSelectedAlbumImage();

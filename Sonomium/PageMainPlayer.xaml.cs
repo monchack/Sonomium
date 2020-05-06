@@ -144,7 +144,8 @@ namespace Sonomium
             mainWindow.setSelectedArtist(artist);
 
             CardItem ci = (CardItem)albumImages.SelectedItem;
-            string s = artistList.SelectedItem.ToString() + "\" " + "album " + "\"" + ci.AlbumTitle;
+            //string s = artistList.SelectedItem.ToString() + "\" " + "album " + "\"" + ci.AlbumTitle;
+            string s = ci.AlbumTitle;
             mainWindow.setSelectedAlbumImage(ci.AlbumImage);
             mainWindow.setSelectedAlbum(s);
 
