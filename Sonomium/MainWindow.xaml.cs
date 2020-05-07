@@ -241,7 +241,7 @@ namespace Sonomium
             Task t = WaitAndGetVolumioStatus(getIp(), true, this);
         }
 
-        public void addSelectedAlbuomToQue(int start)
+        public void addSelectedAlbuomToQue(int pos, bool start)
         {
             string line;
 
@@ -258,7 +258,7 @@ namespace Sonomium
                 if (line.Contains("file: "))
                 {
                     ++i;
-                    if (i < start) continue;
+                    if (i < pos) continue;
                     string file = line.Replace("file: ", "");
                     files.Add(file);
                 }
@@ -270,8 +270,9 @@ namespace Sonomium
             }
             postData = postData.TrimEnd(',');
             postData += "]";
-            //PostRestApi(getIp(), "addPlay", postData);
-            PostRestApi(getIp(), "addToQueue", postData);
+
+            if (start==true) PostRestApi(getIp(), "addPlay", postData);
+            else PostRestApi(getIp(), "addToQueue", postData);
 
             UpdatePlayerUI();
         }
@@ -293,7 +294,7 @@ namespace Sonomium
             buttonSettings.BorderBrush = SystemColors.HighlightBrush;
         }
 
-        private void Button_Current_Click(object sender, RoutedEventArgs e)
+        public void Button_Current_Click(object sender, RoutedEventArgs e)
         {
             navigation.Navigate(new PageCurrent(this));
             buttonMain.BorderBrush = Brushes.Transparent;

@@ -99,7 +99,17 @@ namespace Sonomium
         private void TrackList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int n = trackList.SelectedIndex;
-            if (mainWindow!=null) mainWindow.addSelectedAlbuomToQue(n+1);
+            if (mainWindow!=null) mainWindow.addSelectedAlbuomToQue(n+1, true);
+        }
+
+        private void Button_PlayNow_Click(object sender, RoutedEventArgs e)
+        {
+            if (mainWindow != null) mainWindow.addSelectedAlbuomToQue(1, true);
+        }
+
+        private void Button_PlayLater_Click(object sender, RoutedEventArgs e)
+        {
+            if (mainWindow != null) mainWindow.addSelectedAlbuomToQue(1, false);
         }
     }
 }

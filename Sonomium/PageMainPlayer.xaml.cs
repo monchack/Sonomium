@@ -153,6 +153,7 @@ namespace Sonomium
 
         private void AlbumImages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            
             if (albumImages.SelectedItem == null) return;
 
             string artist = artistList.SelectedItem.ToString();
@@ -163,7 +164,10 @@ namespace Sonomium
             mainWindow.setSelectedAlbumImage(ci.AlbumImage);
             mainWindow.setSelectedAlbum(s);
 
-            mainWindow.addSelectedAlbuomToQue(1);
+            //mainWindow.addSelectedAlbuomToQue(3, false);
+            mainWindow.Button_Current_Click(null, null);
+
+
         }
     }
 }

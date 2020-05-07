@@ -11,9 +11,7 @@
 
     <Page.Resources>
 
-        <Style x:Key="listbox_style"
-           TargetType="{x:Type ListBoxItem}">
-
+        <Style x:Key="listbox_style" TargetType="{x:Type ListBoxItem}">
             <Setter Property="Template">
                 <Setter.Value>
 
@@ -43,34 +41,44 @@
 
     </Page.Resources>
 
-    <Grid>
-        <ListBox x:Name="artistList" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="10,0,0,0"  Width="282" FontFamily="Segoe UI" FontSize="14pt" BorderThickness="0" SelectionChanged="ArtistList_SelectionChanged" />
+    <DockPanel>
+        <Grid Background="#F0F0F0" Width="260pt" HorizontalAlignment="Left" DockPanel.Dock="Left">
+            <ListBox x:Name="artistList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0pt,10pt,0pt,10pt"   FontFamily="Segoe UI" FontSize="14pt" BorderThickness="0" SelectionChanged="ArtistList_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled"  Background="#F0F0F0" >
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Height" Value="30pt" />
+                        <Setter Property="Margin" Value="8pt, 0, 8pt, 0" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </Grid>
+        <Grid   DockPanel.Dock="Left"  >
+            <Grid Margin="10pt,10pt,10pt,10pt" >
+                <ListBox x:Name="albumImages" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  ScrollViewer.HorizontalScrollBarVisibility="Disabled"  BorderThickness="0"  SelectionChanged="AlbumImages_SelectionChanged"  ItemContainerStyle="{StaticResource listbox_style}" Background="Transparent"  >
+                    <ItemsControl.ItemTemplate >
+                        <DataTemplate>
+                            <StackPanel Margin="12pt, 8pt, 12pt, 8pt" Width="{Binding AlbumCardWidth}" Background="White"  >
+                                <Rectangle RadiusX="4pt" RadiusY="4pt" Width="{Binding AlbumImageWidth}" Height="{Binding AlbumImageHeight}" >
+                                    <Rectangle.Effect>
+                                        <DropShadowEffect Color="#D0D0D0" BlurRadius="2" ShadowDepth="4" Direction="315" />
+                                    </Rectangle.Effect>
+                                    <Rectangle.Fill>
+                                        <ImageBrush ImageSource="{Binding AlbumImage}"  />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <TextBlock FontSize="9pt" Height="22pt" Foreground="#404040" Text="{Binding AlbumTitle}" TextWrapping = "Wrap" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
 
-        <ListBox x:Name="albumImages" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="297,0,0,0"  ScrollViewer.HorizontalScrollBarVisibility="Disabled"  BorderThickness="0"  SelectionChanged="AlbumImages_SelectionChanged"  ItemContainerStyle="{StaticResource listbox_style}" >
-            
-            <ItemsControl.ItemTemplate >
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
 
-                <DataTemplate>
-                    <StackPanel Margin="5 6 7 7" Width="{Binding AlbumCardWidth}" Background="White"  >
-                        <Rectangle RadiusX="4pt" RadiusY="4pt" Width="{Binding AlbumImageWidth}" Height="{Binding AlbumImageHeight}" >
-                                <Rectangle.Effect>
-                                    <DropShadowEffect Color="#D0D0D0" BlurRadius="2" ShadowDepth="4" Direction="315" />
-                                </Rectangle.Effect>
-                                <Rectangle.Fill>
-                                    <ImageBrush ImageSource="{Binding AlbumImage}"  />
-                                </Rectangle.Fill>
-                            </Rectangle>
-                            <TextBlock FontSize="9pt" Height="22pt" Foreground="#404040" Text="{Binding AlbumTitle}" TextWrapping = "Wrap" />
-                        </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-
-        </ListBox>
-    </Grid>
+                </ListBox>
+            </Grid>
+        </Grid>
+    </DockPanel>
 </Page>

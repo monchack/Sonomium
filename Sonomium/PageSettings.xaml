@@ -9,8 +9,8 @@
       Loaded="Page_Loaded"
       Title="PageSettings">
 
-    <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="20,20,0,0" TextWrapping="Wrap"
+    <Grid Background="#EDF1F5">
+        <TextBlock HorizontalAlignment="Left" Margin="20,20,0,0" TextWrapping="Wrap" Foreground="#1C3B61"
                    Text="Settings" VerticalAlignment="Top" FontFamily="Segoe UI" FontSize="14pt" />
         <TextBlock HorizontalAlignment="Left" Margin="56,66,0,0" TextWrapping="Wrap"
             Text="IP address" VerticalAlignment="Top" FontFamily="Segoe UI" FontSize="14pt" />
