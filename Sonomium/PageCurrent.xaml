@@ -9,9 +9,9 @@
       Title="PageCurrent">
 
     <StackPanel Orientation="Horizontal">
-        <StackPanel Orientation="Vertical" Background="#F0F0F0">
-            <Image x:Name="albumImage" HorizontalAlignment="Left" Height="160pt" Margin="10pt,10pt,10pt,10pt" VerticalAlignment="Top" Width="200pt"/>
-            <Button FontSize="18pt" HorizontalAlignment="Left"  VerticalAlignment="Top" BorderThickness="0" Background="Transparent" Margin="10pt, 4pt, 0pt, 4pt">
+        <StackPanel Orientation="Vertical" Background="#F0F0F0" Width="280pt">
+            <Image x:Name="albumImage"  Margin="40pt,20pt,40pt,20pt"   Width="200pt" Height="200pt" />
+            <Button FontSize="18pt" HorizontalAlignment="Left"  VerticalAlignment="Top" BorderThickness="0" Background="Transparent" Margin="10pt, 4pt, 0pt, 4pt" Click="Button_PlayNow_Click">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="&#xE8D6;" FontFamily="Segoe MDL2 Assets" FontSize="18pt" VerticalAlignment="Center" Foreground="#404040" />
@@ -21,7 +21,7 @@
                 </Button.Content>
             </Button>
 
-            <Button HorizontalAlignment="Left"  VerticalAlignment="Top" BorderThickness="0" Background="Transparent" Margin="10pt, 4pt, 0pt, 4pt">
+            <Button HorizontalAlignment="Left"  VerticalAlignment="Top" BorderThickness="0" Background="Transparent" Margin="10pt, 4pt, 0pt, 4pt" Click="Button_PlayLater_Click" >
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="&#xED0E;" FontFamily="Segoe MDL2 Assets" FontSize="18pt" VerticalAlignment="Center" Foreground="#404040" />
