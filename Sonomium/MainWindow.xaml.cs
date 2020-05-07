@@ -270,7 +270,8 @@ namespace Sonomium
             }
             postData = postData.TrimEnd(',');
             postData += "]";
-            PostRestApi(getIp(), "addPlay", postData);
+            //PostRestApi(getIp(), "addPlay", postData);
+            PostRestApi(getIp(), "addToQueue", postData);
 
             UpdatePlayerUI();
         }
