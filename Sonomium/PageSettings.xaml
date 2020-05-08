@@ -44,10 +44,11 @@
             <RadioButton x:Name="buttonAlbumArtSmall" Content="Small"  HorizontalAlignment="Left" Margin="183,125,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" Style="{StaticResource newRadioButton}" />
             <RadioButton x:Name="buttonAlbumArtNormal" Content="Normal" HorizontalAlignment="Left" Margin="183,157,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" Style="{StaticResource newRadioButton}" />
             <RadioButton x:Name="buttonAlbumArtLarge" Content="Large" HorizontalAlignment="Left" Margin="183,187,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" Style="{StaticResource newRadioButton}" />
+            <RadioButton x:Name="buttonAlbumArtXLarge" Content="Extra Large" HorizontalAlignment="Left" Margin="183,219,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" Style="{StaticResource newRadioButton}" />
 
         </Grid>
 
-        <Button Content="Reset Albumart Cache" HorizontalAlignment="Left" Height="46" Margin="56,228,0,0" VerticalAlignment="Top" Width="233"  BorderThickness="0"  FontFamily="Segoe UI" FontSize="14pt" >
+        <Button Content="Reset Albumart Cache" HorizontalAlignment="Left" Height="46" Margin="56,252,0,0" VerticalAlignment="Top" Width="233"  BorderThickness="0"  FontFamily="Segoe UI" FontSize="14pt" >
         </Button>
 
     </Grid>

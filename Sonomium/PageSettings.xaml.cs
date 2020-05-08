@@ -55,6 +55,7 @@ namespace Sonomium
         {
             if (buttonAlbumArtSmall.IsChecked == true) { mainWindow.setAlbumArtSize(0); }
             else if (buttonAlbumArtLarge.IsChecked == true) { mainWindow.setAlbumArtSize(2); }
+            else if (buttonAlbumArtXLarge.IsChecked == true) { mainWindow.setAlbumArtSize(3); }
             else mainWindow.setAlbumArtSize(1);
         }
     }

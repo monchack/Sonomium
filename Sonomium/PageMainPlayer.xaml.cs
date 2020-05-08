@@ -130,18 +130,23 @@ namespace Sonomium
             string line;
             string nextAlbum = "";
 
-            int size1 = 196;
-            int size2 = 196;
+            int size1 = 160;
+            int size2 = 160;
             if (mainWindow.getAlbumArtSize() == 0)
             {
-                size1 = size2 = 135;
+                size1 = size2 = 132;
             }
             else if (mainWindow.getAlbumArtSize() == 2)
+            {
+                size1 = size2 = 196;
+            }
+            else if (mainWindow.getAlbumArtSize() == 3)
             {
                 size1 = size2 = 240;
             }
 
-                while ((line = sr.ReadLine()) != null)
+
+            while ((line = sr.ReadLine()) != null)
             {
                 if (line.Contains("Album:"))
                 {
