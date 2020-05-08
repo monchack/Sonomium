@@ -55,6 +55,8 @@ namespace Sonomium
             string track = mainWindow.sendMpd(s);
             StringReader sr = new StringReader(track);
 
+            albumTitle.Text = mainWindow.getSelectedAlbum();
+            albumArtist.Text = mainWindow.getSelectedArtist();
             albumImage.Source = mainWindow.getSelectedAlbumImage();
 
             string line;

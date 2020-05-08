@@ -10,8 +10,11 @@
 
     <DockPanel >
         <StackPanel Orientation="Vertical" Background="#F0F0F0" Width="280pt" DockPanel.Dock="Left" >
-            <Image x:Name="albumImage"  Margin="40pt,20pt,40pt,20pt"   Width="200pt" Height="200pt" />
-            <Button FontSize="18pt" HorizontalAlignment="Left"  VerticalAlignment="Top" BorderThickness="0" Background="Transparent" Margin="12pt, 4pt, 0pt, 4pt" Click="Button_PlayNow_Click">
+            <Image x:Name="albumImage"  Margin="40pt,20pt,40pt,16pt"   Width="200pt" Height="200pt" />
+            <TextBlock x:Name="albumTitle" FontFamily="Segoe UI Semibold" FontSize="12pt" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#808080" />
+            <TextBlock x:Name="albumArtist" FontFamily="Segoe UI Semibold" FontSize="12pt" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#808080" />
+            <Grid Height="22pt" />
+            <Button FontSize="18pt" HorizontalAlignment="Left"  VerticalAlignment="Top" BorderThickness="0" Background="Transparent" Margin="14pt, 4pt, 0pt, 4pt" Click="Button_PlayNow_Click">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="&#xE8D6;" FontFamily="Segoe MDL2 Assets" FontSize="18pt" VerticalAlignment="Center" Foreground="#404040" />
@@ -21,7 +24,7 @@
                 </Button.Content>
             </Button>
 
-            <Button HorizontalAlignment="Left"  VerticalAlignment="Top" BorderThickness="0" Background="Transparent" Margin="12pt, 4pt, 0pt, 4pt" Click="Button_PlayLater_Click" >
+            <Button HorizontalAlignment="Left"  VerticalAlignment="Top" BorderThickness="0" Background="Transparent" Margin="14pt, 4pt, 0pt, 4pt" Click="Button_PlayLater_Click" >
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="&#xED0E;" FontFamily="Segoe MDL2 Assets" FontSize="18pt" VerticalAlignment="Center" Foreground="#404040" />
@@ -36,16 +39,20 @@
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                     <Setter Property="Height" Value="30pt" />
+                    <Setter Property="BorderThickness" Value="0,1,0,1" />
+                    <Setter Property="BorderBrush" Value="#F8F8F8" />
+
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                     <DataTemplate>
-                    <DockPanel>
-                        <Grid Width="10pt" DockPanel.Dock="Right"/>
-                        <TextBlock Text="{Binding Path=TrackDuration}" DockPanel.Dock="Right" Width="80pt" TextAlignment="Right" />
-                        <TextBlock Text="{Binding Path=TrackNumber}"  DockPanel.Dock="Left" TextAlignment="Left" Width="34pt" />
-                        <TextBlock Text="{Binding Path=TrackTitle}"  DockPanel.Dock="Left" />
+                        <DockPanel>
                        
+                        <Grid Width="10pt" DockPanel.Dock="Right"/>
+                            <TextBlock Text="{Binding Path=TrackDuration}" DockPanel.Dock="Right" Width="80pt" TextAlignment="Right" />
+                            <TextBlock Text="{Binding Path=TrackNumber}"  DockPanel.Dock="Left" TextAlignment="Left" Width="34pt" />
+                            <TextBlock Text="{Binding Path=TrackTitle}"  DockPanel.Dock="Left" />
+                        
                     </DockPanel>
                 </DataTemplate>
                 </ListView.ItemTemplate>
