@@ -71,9 +71,14 @@ namespace Sonomium
         {
             if (mainWindow == null) return;
             string json = mainWindow.GetServerInfo();
-            VolumioVersionInfo vvi = JsonSerializer.Deserialize<VolumioVersionInfo>(json);
-            textTestResult.Text = "version :" + vvi.systemversion + "\n" + "build date: " + vvi.builddate + "\n" + "hardware: " + vvi.hardware;
-            //versionText.Text = vvi.systemversion;
+            try
+            {
+                VolumioVersionInfo vvi = JsonSerializer.Deserialize<VolumioVersionInfo>(json);
+                textTestResult.Text = "version :" + vvi.systemversion + "\n" + "build date: " + vvi.builddate + "\n" + "hardware: " + vvi.hardware;
+            }
+            catch
+            {
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

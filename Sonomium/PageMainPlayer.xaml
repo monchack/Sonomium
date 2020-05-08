@@ -8,19 +8,14 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Loaded="Page_Loaded"
       Title="PageMainPlayer">
-
     <Page.Resources>
-
         <Style x:Key="listbox_style" TargetType="{x:Type ListBoxItem}">
             <Setter Property="Template">
                 <Setter.Value>
-
                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
-
                         <Border Background="{TemplateBinding Background}">
                             <ContentPresenter />
                         </Border>
-
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background"  Value="Transparent" />
@@ -29,18 +24,11 @@
                                 <Setter Property="Background" Value="Transparent" />
                             </Trigger>
                         </ControlTemplate.Triggers>
-
                     </ControlTemplate>
-
                 </Setter.Value>
             </Setter>
-
         </Style>
-        
-        
-
     </Page.Resources>
-
     <DockPanel>
         <Grid Background="#F0F0F0" Width="250pt" HorizontalAlignment="Left" DockPanel.Dock="Left">
             <ListBox x:Name="artistList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0pt,10pt,0pt,10pt"   FontFamily="Segoe UI" FontSize="14pt" BorderThickness="0" SelectionChanged="ArtistList_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled"  Background="#F0F0F0" >
@@ -52,12 +40,12 @@
                 </ListBox.ItemContainerStyle>
             </ListBox>
         </Grid>
-        <Grid   DockPanel.Dock="Left"  >
+        <Grid DockPanel.Dock="Left"  >
             <Grid Margin="10pt,10pt,10pt,10pt" >
                 <ListBox x:Name="albumImages" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  ScrollViewer.HorizontalScrollBarVisibility="Disabled"  BorderThickness="0"  SelectionChanged="AlbumImages_SelectionChanged"  ItemContainerStyle="{StaticResource listbox_style}" Background="Transparent"  >
                     <ItemsControl.ItemTemplate >
                         <DataTemplate>
-                            <StackPanel Margin="12pt, 8pt, 12pt, 8pt" Width="{Binding AlbumCardWidth}" Background="White"  >
+                            <StackPanel Margin="12pt, 8pt, 12pt, 10pt" Width="{Binding AlbumCardWidth}" Background="White" Orientation="Vertical" >
                                 <Rectangle RadiusX="4pt" RadiusY="4pt" Width="{Binding AlbumImageWidth}" Height="{Binding AlbumImageHeight}" >
                                     <Rectangle.Effect>
                                         <DropShadowEffect Color="#D0D0D0" BlurRadius="2" ShadowDepth="4" Direction="315" />
@@ -66,17 +54,16 @@
                                         <ImageBrush ImageSource="{Binding AlbumImage}"  />
                                     </Rectangle.Fill>
                                 </Rectangle>
+                                <Grid Height="4pt" />
                                 <TextBlock FontSize="9pt" Height="22pt" Foreground="#404040" Text="{Binding AlbumTitle}" TextWrapping = "Wrap" />
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
-
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-
                 </ListBox>
             </Grid>
         </Grid>

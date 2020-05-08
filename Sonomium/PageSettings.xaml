@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Sonomium"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="600" d:DesignWidth="800"
       Loaded="Page_Loaded"
       Title="PageSettings">
     <Page.Resources>
@@ -33,25 +33,53 @@
     </Page.Resources>
 
     <Grid Background="#EDF1F5">
-        <TextBlock HorizontalAlignment="Left" Margin="20,20,0,0" TextWrapping="Wrap" Foreground="#1C3B61"
-                   Text="Settings" VerticalAlignment="Top" FontFamily="Segoe UI Semibold" FontSize="14pt" />
-        <TextBlock HorizontalAlignment="Left" Margin="56,66,0,0" TextWrapping="Wrap"
-            Text="IP address" VerticalAlignment="Top" FontFamily="Segoe UI" FontSize="14pt" />
-        <TextBox x:Name="ipBox" FontFamily="Segoe UI" FontSize="14pt" HorizontalAlignment="Left" Height="27" Margin="163,66,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"  VerticalContentAlignment="Center" Width="198" TextChanged="IpBox_TextChanged"/>
-        <TextBlock HorizontalAlignment="Left" Margin="56,184,0,0" TextWrapping="Wrap"
-            Text="Album art size" VerticalAlignment="Top" FontFamily="Segoe UI" FontSize="14pt" />
-        <Grid>
-            <RadioButton x:Name="buttonAlbumArtSmall" Content="Small"  HorizontalAlignment="Left" Margin="183,189,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" Style="{StaticResource newRadioButton}" />
-            <RadioButton x:Name="buttonAlbumArtNormal" Content="Normal" HorizontalAlignment="Left" Margin="183,221,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" Style="{StaticResource newRadioButton}" />
-            <RadioButton x:Name="buttonAlbumArtLarge" Content="Large" HorizontalAlignment="Left" Margin="183,251,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" Style="{StaticResource newRadioButton}" />
-            <RadioButton x:Name="buttonAlbumArtXLarge" Content="Extra Large" HorizontalAlignment="Left" Margin="183,283,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" Style="{StaticResource newRadioButton}" />
-            <Button x:Name="ConnectivityTest" Content="Run server connectivity test" HorizontalAlignment="Left" Height="42" Margin="56,106,0,0" VerticalAlignment="Top" Width="240"  BorderThickness="0"  FontFamily="Segoe UI" FontSize="14pt" Click="ConnectivityTest_Click" />
-            <TextBlock x:Name="textTestResult" HorizontalAlignment="Left" Height="80" Margin="325,106,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="312"/>
-
-        </Grid>
-
-        <Button Content="Reset Albumart Cache" HorizontalAlignment="Left" Height="42" Margin="56,340,0,0" VerticalAlignment="Top" Width="233"  BorderThickness="0"  FontFamily="Segoe UI" FontSize="14pt" Click="Button_Click" >
-        </Button>
-
+        <DockPanel>
+            <Grid Height="12pt" DockPanel.Dock="Top" />
+            <Grid Width="12pt" DockPanel.Dock="Left" />
+            <TextBlock Text="Settings" DockPanel.Dock="Top"  Foreground="#1C3B61"  FontFamily="Segoe UI Semibold" FontSize="18pt" />
+            <DockPanel  DockPanel.Dock="Top">
+            <Grid DockPanel.Dock="Left" Width="22pt" />
+            <Grid Height="12pt"  DockPanel.Dock="Top" />
+            <StackPanel Orientation="Horizontal"  DockPanel.Dock="Top" >
+                        <TextBlock  Text="IP address"  FontFamily="Segoe UI" FontSize="14pt"  />
+                        <Grid Width="20pt" />
+                    <StackPanel Orientation="Vertical">
+                <TextBox x:Name="ipBox"  FontFamily="Segoe UI" FontSize="14pt" HorizontalAlignment="Left" Height="20pt"  Width="120pt" VerticalContentAlignment="Center"  TextChanged="IpBox_TextChanged"  />
+             
+            <Grid Height="12pt" DockPanel.Dock="Top" />
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" >
+                            <Button x:Name="ConnectivityTest"  Padding="8pt,4pt,8pt,4pt"  Content="Run server connectivity test" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0"  FontFamily="Segoe UI" FontSize="14pt" Click="ConnectivityTest_Click" />
+                            <Grid Width="16pt" />
+                            <TextBlock x:Name="textTestResult"  Height="40pt" TextWrapping="Wrap"   Width="312" FontFamily="Segoe UI" FontSize="10pt"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+                <Grid Height="12pt"  DockPanel.Dock="Top" />
+                <StackPanel Orientation="Horizontal"  DockPanel.Dock="Top" >
+                    <TextBlock   Text="Album art size"  FontFamily="Segoe UI" FontSize="14pt" />
+                    <Grid Width="20pt" />
+                    <StackPanel Orientation="Vertical">
+                        <RadioButton x:Name="buttonAlbumArtSmall" Content="Small"  HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" Style="{StaticResource newRadioButton}" />
+                        <RadioButton x:Name="buttonAlbumArtNormal" Content="Normal" HorizontalAlignment="Left"  VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" Style="{StaticResource newRadioButton}" />
+                        <RadioButton x:Name="buttonAlbumArtLarge" Content="Large" HorizontalAlignment="Left"  VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" Style="{StaticResource newRadioButton}" />
+                        <RadioButton x:Name="buttonAlbumArtXLarge" Content="Extra Large" HorizontalAlignment="Left"  VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" Style="{StaticResource newRadioButton}" />
+                        <Grid Height="12pt"  />
+                        <Button Content="Reset Albumart Cache" Padding="8pt,4pt,8pt,4pt" BorderThickness="0" HorizontalAlignment="Left" FontFamily="Segoe UI" FontSize="14pt" Click="Button_Click" />
+                    </StackPanel>
+                </StackPanel>
+            </DockPanel>
+            <Grid Height="32pt" DockPanel.Dock="Top" />
+        <TextBlock Text="About SONOMIUM" DockPanel.Dock="Top"  Foreground="#1C3B61"  FontFamily="Segoe UI Semibold" FontSize="18pt" />
+            <DockPanel  DockPanel.Dock="Top">
+                <Grid DockPanel.Dock="Left" Width="22pt" />
+                <Grid Height="8pt"  DockPanel.Dock="Top" />
+                <TextBlock  Text="Version 1.0.0"  FontFamily="Segoe UI" FontSize="14pt" DockPanel.Dock="Top" Foreground="#404040" />
+                <Grid Height="4pt"  DockPanel.Dock="Top" />
+                <TextBlock  Text="© 2020 Monchack Audio. All rights reserved."  FontFamily="Segoe UI" FontSize="14pt" DockPanel.Dock="Top" Foreground="#404040" />
+            </DockPanel>
+        </DockPanel>
     </Grid>
+
+
+
 </Page>

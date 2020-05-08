@@ -261,7 +261,13 @@ namespace Sonomium
         public void RemoveImageCache()
         {
             string s = GetImageCacheDirectory();
-            System.IO.Directory.Delete(s, true);
+            try
+            {
+                System.IO.Directory.Delete(s, true);
+            }
+            catch
+            {
+            }
         }
 
         public void UpdatePlayerUI()
