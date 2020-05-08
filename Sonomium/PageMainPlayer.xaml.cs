@@ -112,7 +112,7 @@ namespace Sonomium
             int size2 = 196;
             if (mainWindow.getAlbumArtSize() == 0)
             {
-                size1 = size2 = 120;
+                size1 = size2 = 135;
             }
             else if (mainWindow.getAlbumArtSize() == 2)
             {

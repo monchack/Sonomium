@@ -26,7 +26,7 @@ namespace Sonomium
     public partial class MainWindow : Window
     {
         private NavigationService navigation;
-        private string ipServer = "192.168.0.51";
+        private string ipServer = "http://volumio.local/";
         private string selectedAlbum = "";
         private string selectedArtist = "";
         private string cursoredArtist = "";
@@ -97,6 +97,13 @@ namespace Sonomium
             return s;
         }
 
+        public string GetImageCacheDirectory(int level)
+        {
+            string s = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            s += "\\" + level.ToString() + "\\";
+            return s;
+        }
+
         public string sendMpd(string command, bool wait = true)
         {
             string ipString = getIp();
@@ -144,12 +151,10 @@ namespace Sonomium
 
             if (postData == "") return "";
 
-            //ipAddress = @"http://" + ipBox.Text + @"/api/v1/getstate";
             ipAddress = @"http://" + ipString + @"/api/v1/";
-            ipAddress += cmd; // "addToQueue";
+            ipAddress += cmd;
 
             System.Net.HttpWebRequest req = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(ipAddress);
-
             req.Method = System.Net.WebRequestMethods.Http.Post;
             req.ContentType = "application/json; charset=\"utf-8\" ";
             req.KeepAlive = false;
@@ -191,13 +196,10 @@ namespace Sonomium
         {
             string ipAddress;
 
-
-            //ipAddress = @"http://" + ipBox.Text + @"/api/v1/getstate";
             ipAddress = @"http://" + ipString + @"/api/v1/";
-            ipAddress += cmd; // "addToQueue";
+            ipAddress += cmd;
 
             System.Net.HttpWebRequest req = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(ipAddress);
-
             req.Method = System.Net.WebRequestMethods.Http.Get;
             req.ContentType = "application/json; charset=\"utf-8\" ";
             req.KeepAlive = false;
@@ -234,7 +236,6 @@ namespace Sonomium
             window.CurrentTitle.Text = vs.title;
             window.CurrentAlbum.Text = vs.album;
         }
-
 
         public void UpdatePlayerUI()
         {

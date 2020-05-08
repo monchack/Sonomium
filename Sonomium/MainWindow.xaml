@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sonomium"
+        xmlns:properties="clr-namespace:Sonomium.Properties"
         mc:Ignorable="d"
         Closed="Window_Closed"
         Title="SONOMIUM" Height="450" Width="800">
@@ -20,7 +21,7 @@
                         <Grid Width="4pt" />
                         <TextBlock Text="&#xE93C;" FontFamily="Segoe MDL2 Assets" FontSize="12pt" VerticalAlignment="Center" />
                         <Grid Width="4pt" />
-                        <TextBlock Text="MAIN" FontFamily="Segoe UI Semibold" FontSize="12pt" />
+                        <TextBlock  Text="{x:Static properties:Resources.MainWindow_Navigation_Main}" FontFamily="Segoe UI Semibold" FontSize="12pt" />
                         <Grid Width="4pt" />
                     </StackPanel>
                 </Button.Content>
@@ -31,7 +32,7 @@
                         <Grid Width="4pt" />
                         <TextBlock Text="&#xE90B;" FontFamily="Segoe MDL2 Assets" FontSize="12pt" VerticalAlignment="Center" />
                         <StackPanel Width="4pt" />
-                        <TextBlock Text="TRACKS" FontFamily="Segoe UI Semibold" FontSize="12pt" />
+                        <TextBlock Text="{x:Static properties:Resources.MainWindow_Navigation_Tracks}" FontFamily="Segoe UI Semibold" FontSize="12pt" />
                         <Grid Width="4pt" />
                     </StackPanel>
                 </Button.Content>
@@ -42,7 +43,7 @@
                         <Grid Width="4pt" />
                         <TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="12pt" VerticalAlignment="Center" />
                         <StackPanel Width="4pt" />
-                        <TextBlock Text="SETTINGS" FontFamily="Segoe UI Semibold" FontSize="12pt" />
+                        <TextBlock Text="{x:Static properties:Resources.MainWindow_Navigation_Settings}" FontFamily="Segoe UI Semibold" FontSize="12pt" />
                         <Grid Width="4pt" />
                     </StackPanel>
                 </Button.Content>

@@ -2,8 +2,9 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Sonomium"
+             xmlns:properties="clr-namespace:Sonomium.Properties"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <properties:Resources x:Key="resources" />
     </Application.Resources>
 </Application>
