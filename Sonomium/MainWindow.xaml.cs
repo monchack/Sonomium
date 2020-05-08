@@ -97,10 +97,17 @@ namespace Sonomium
             return s;
         }
 
-        public string GetImageCacheDirectory(int level)
+        public string GetImageCacheDirectory()
         {
+            int level = this.getAlbumArtSize();
             string s = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            s += "\\" + level.ToString() + "\\";
+            s += "\\Sonomium\\Temp\\ImageCache\\" + level.ToString() + "\\";
+
+            if (!File.Exists(s))
+            {
+                Directory.CreateDirectory(System.IO.Path.GetDirectoryName(s));
+            }
+
             return s;
         }
 

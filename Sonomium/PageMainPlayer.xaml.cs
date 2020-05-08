@@ -90,11 +90,33 @@ namespace Sonomium
             string s = uri.Remove(n);   //   最後の / の出現位置までをキープして、残りは削除
             s = s.Replace("=", "%3D");
 
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(@"http://" + ip + @"/albumart?path=/mnt/" + s);
-            bitmap.EndInit();
-            return bitmap;
+            //キャッシュ
+            string fileName = System.IO.Path.GetFileName(s) + ".jpg";
+            string imageCacheFileName = mainWindow.GetImageCacheDirectory() + fileName;
+            Uri sourceUri = new Uri(@"http://" + ip + @"/albumart?path=/mnt/" + s);
+
+            if (!File.Exists(imageCacheFileName))
+            {
+                System.Net.WebClient wc = new System.Net.WebClient();
+                wc.DownloadFileTaskAsync(sourceUri, imageCacheFileName);
+            }
+
+            try
+            {
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(@"file://" + imageCacheFileName);
+                bitmap.EndInit();
+                return bitmap;
+            }
+            catch
+            {
+            }
+            BitmapImage bitmap2 = new BitmapImage();
+            bitmap2.BeginInit();
+            bitmap2.UriSource = new Uri(@"http://" + ip + @"/albumart?path=/mnt/" + s);
+            bitmap2.EndInit();
+            return bitmap2;
         }
 
         private void ArtistList_SelectionChanged(object sender, SelectionChangedEventArgs e)
