@@ -48,7 +48,7 @@
 
         </Grid>
 
-        <Button Content="Reset Albumart Cache" HorizontalAlignment="Left" Height="46" Margin="56,252,0,0" VerticalAlignment="Top" Width="233"  BorderThickness="0"  FontFamily="Segoe UI" FontSize="14pt" >
+        <Button Content="Reset Albumart Cache" HorizontalAlignment="Left" Height="46" Margin="56,276,0,0" VerticalAlignment="Top" Width="233"  BorderThickness="0"  FontFamily="Segoe UI" FontSize="14pt" >
         </Button>
 
     </Grid>

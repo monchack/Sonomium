@@ -26,7 +26,7 @@ namespace Sonomium
     public partial class MainWindow : Window
     {
         private NavigationService navigation;
-        private string ipServer = "http://volumio.local/";
+        private string ipServer = "";
         private string selectedAlbum = "";
         private string selectedArtist = "";
         private string cursoredArtist = "";
@@ -114,8 +114,17 @@ namespace Sonomium
         {
             string ipString = getIp();
             int port = 6600;
+            System.Net.Sockets.TcpClient tcp;
 
-            System.Net.Sockets.TcpClient tcp = new System.Net.Sockets.TcpClient(ipString, port);
+            if (ipString == "") return "";
+            try
+            {
+                tcp = new System.Net.Sockets.TcpClient(ipString, port);
+            }
+            catch
+            {
+                return "";
+            }
             System.Net.Sockets.NetworkStream ns = tcp.GetStream();
             ns.ReadTimeout = 10000;
             ns.WriteTimeout = 10000;
