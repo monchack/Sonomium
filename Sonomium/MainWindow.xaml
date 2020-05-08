@@ -14,30 +14,36 @@
             <RowDefinition Height="40pt"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0"  Orientation="Horizontal" Background="#F0F0F0" Margin="0,0,0,0">
-            <Button x:Name="buttonMain"  Margin="20,0,20,0" Width="85" BorderThickness="0,0,0,4" BorderBrush="Transparent" Background="Transparent" FontSize="12pt" FontFamily="Segoe UI Semibold" Click="Button_Main_Click" Foreground="#404040">
+            <Button x:Name="buttonMain"  Margin="12pt,0,8pt,0" Width="85" BorderThickness="0,0,0,4" BorderBrush="Transparent" Background="Transparent" FontSize="12pt" FontFamily="Segoe UI Semibold" Click="Button_Main_Click" Foreground="#404040">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
+                        <Grid Width="4pt" />
                         <TextBlock Text="&#xE93C;" FontFamily="Segoe MDL2 Assets" FontSize="12pt" VerticalAlignment="Center" />
-                        <StackPanel Width="4pt" />
+                        <Grid Width="4pt" />
                         <TextBlock Text="MAIN" FontFamily="Segoe UI Semibold" FontSize="12pt" />
+                        <Grid Width="4pt" />
                     </StackPanel>
                 </Button.Content>
             </Button>
-            <Button x:Name="buttonCurrent" Margin="20,0,20,0"  BorderThickness="0,0,0,4" BorderBrush="Transparent" Background="Transparent" FontSize="12pt" FontFamily="Segoe UI Semibold" Click="Button_Current_Click" Foreground="#404040" >
+            <Button x:Name="buttonCurrent" Margin="8pt,0,8pt,0"  BorderThickness="0,0,0,4" BorderBrush="Transparent" Background="Transparent" FontSize="12pt" FontFamily="Segoe UI Semibold" Click="Button_Current_Click" Foreground="#404040" >
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
+                        <Grid Width="4pt" />
                         <TextBlock Text="&#xE90B;" FontFamily="Segoe MDL2 Assets" FontSize="12pt" VerticalAlignment="Center" />
                         <StackPanel Width="4pt" />
                         <TextBlock Text="TRACKS" FontFamily="Segoe UI Semibold" FontSize="12pt" />
+                        <Grid Width="4pt" />
                     </StackPanel>
                 </Button.Content>
             </Button>
-            <Button x:Name="buttonSettings" Margin="20,0,20,0"  BorderThickness="0,0,0,4" BorderBrush="Transparent" Background="Transparent" FontSize="12pt" FontFamily="Segoe UI Semibold" Click="Button_Settings_Click" Foreground="#404040" >
+            <Button x:Name="buttonSettings" Margin="8pt,0,8pt,0"  BorderThickness="0,0,0,4" BorderBrush="Transparent" Background="Transparent" FontSize="12pt" FontFamily="Segoe UI Semibold" Click="Button_Settings_Click" Foreground="#404040" >
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
+                        <Grid Width="4pt" />
                         <TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="12pt" VerticalAlignment="Center" />
                         <StackPanel Width="4pt" />
                         <TextBlock Text="SETTINGS" FontFamily="Segoe UI Semibold" FontSize="12pt" />
+                        <Grid Width="4pt" />
                     </StackPanel>
                 </Button.Content>
             </Button>
