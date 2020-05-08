@@ -34,6 +34,7 @@ namespace Sonomium
             public string TrackDuration { get; set; }
             public string TrackFile { get; set; }
             public string TrackStatus { get; set; }
+            public string TrackNumber { get; set; }
         }
 
         public PageCurrent(MainWindow _mainWindow)
@@ -92,7 +93,7 @@ namespace Sonomium
                 else duration = ts.ToString(@"m\:ss");
                 //string st = "\uF5B0"; // PlaySolid
                 string st = "\uEC4F"; // MusicNote
-                trackList.Items.Add(new TrackInfo() { TrackTitle = title, TrackDuration = duration, TrackFile=file, TrackStatus=st });
+                trackList.Items.Add(new TrackInfo() { TrackNumber=(i+1).ToString(), TrackTitle = title, TrackDuration = duration, TrackFile=file, TrackStatus=st });
             }
         }
 

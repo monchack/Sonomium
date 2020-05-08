@@ -11,7 +11,7 @@
 
     <Grid Background="#EDF1F5">
         <TextBlock HorizontalAlignment="Left" Margin="20,20,0,0" TextWrapping="Wrap" Foreground="#1C3B61"
-                   Text="Settings" VerticalAlignment="Top" FontFamily="Segoe UI" FontSize="14pt" />
+                   Text="Settings" VerticalAlignment="Top" FontFamily="Segoe UI Semibold" FontSize="14pt" />
         <TextBlock HorizontalAlignment="Left" Margin="56,66,0,0" TextWrapping="Wrap"
             Text="IP address" VerticalAlignment="Top" FontFamily="Segoe UI" FontSize="14pt" />
         <TextBox x:Name="ipBox" FontFamily="Segoe UI" FontSize="14pt" HorizontalAlignment="Left" Height="27" Margin="163,66,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"  VerticalContentAlignment="Center" Width="198" TextChanged="IpBox_TextChanged"/>
@@ -21,7 +21,6 @@
             <RadioButton x:Name="buttonAlbumArtSmall" Content="Small" HorizontalAlignment="Left" Margin="183,125,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" />
             <RadioButton x:Name="buttonAlbumArtNormal" Content="Normal" HorizontalAlignment="Left" Margin="183,157,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" />
             <RadioButton x:Name="buttonAlbumArtLarge" Content="Large" HorizontalAlignment="Left" Margin="183,187,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" />
-            <CheckBox Content="CheckBox" HorizontalAlignment="Left" Height="34" Margin="86,320,0,0" VerticalAlignment="Top" Width="294"/>
         </Grid>
 
         <Button Content="Reset Albumart Cache" HorizontalAlignment="Left" Height="46" Margin="56,228,0,0" VerticalAlignment="Top" Width="233"  BorderThickness="0"  FontFamily="Segoe UI" FontSize="14pt" >

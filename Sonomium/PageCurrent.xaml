@@ -8,8 +8,8 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PageCurrent">
 
-    <DockPanel>
-        <StackPanel Orientation="Vertical" Background="#F0F0F0" Width="280pt" DockPanel.Dock="Left">
+    <DockPanel >
+        <StackPanel Orientation="Vertical" Background="#F0F0F0" Width="280pt" DockPanel.Dock="Left" >
             <Image x:Name="albumImage"  Margin="40pt,20pt,40pt,20pt"   Width="200pt" Height="200pt" />
             <Button FontSize="18pt" HorizontalAlignment="Left"  VerticalAlignment="Top" BorderThickness="0" Background="Transparent" Margin="12pt, 4pt, 0pt, 4pt" Click="Button_PlayNow_Click">
                 <Button.Content>
@@ -31,17 +31,24 @@
                 </Button.Content>
             </Button>
         </StackPanel>
-        <Grid>
-            <ListView x:Name="trackList" Margin="8pt,8pt, 8pt,8pt" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectedValuePath="TrackFile" BorderThickness="0" FontFamily="Segoe UI" FontSize="14pt"   Loaded="Page_Loaded" SelectionChanged="TrackList_SelectionChanged" >
-                <ListBox.ItemTemplate>
+        <ListView x:Name="trackList" Margin="8pt,8pt, 0pt,8pt" DockPanel.Dock="Top" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectedValuePath="TrackFile" BorderThickness="0" FontFamily="Segoe UI" FontSize="14pt"   Loaded="Page_Loaded" SelectionChanged="TrackList_SelectionChanged" >
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Height" Value="30pt" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
                     <DataTemplate>
-                        <DockPanel  Margin="0pt, 2pt, 0pt, 2pt">
-                            <TextBlock Text="{Binding Path=TrackTitle}" Width="340pt" DockPanel.Dock="Left" />
-                            <TextBlock Text="{Binding Path=TrackDuration}" TextAlignment="Right" Width="100pt" FontSize="10pt"  Foreground="#808080" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0pt,0pt,20pt,0pt" DockPanel.Dock="Left" />
-                        </DockPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
+                    <DockPanel>
+                        <Grid Width="10pt" DockPanel.Dock="Right"/>
+                        <TextBlock Text="{Binding Path=TrackDuration}" DockPanel.Dock="Right" Width="80pt" TextAlignment="Right" />
+                        <TextBlock Text="{Binding Path=TrackNumber}"  DockPanel.Dock="Left" TextAlignment="Left" Width="34pt" />
+                        <TextBlock Text="{Binding Path=TrackTitle}"  DockPanel.Dock="Left" />
+                       
+                    </DockPanel>
+                </DataTemplate>
+                </ListView.ItemTemplate>
             </ListView>
-        </Grid>
     </DockPanel>
 </Page>

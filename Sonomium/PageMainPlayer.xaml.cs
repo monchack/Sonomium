@@ -54,7 +54,7 @@ namespace Sonomium
                 {
                     string newItem = line.Replace("AlbumArtist: ", "");
                     if (newItem == "") newItem = "(Unknown)";
-                    artistList.Items.Add(newItem);// WriteLine(line);
+                    artistList.Items.Add(newItem);
                 }
             }
         }
@@ -108,8 +108,8 @@ namespace Sonomium
             string line;
             string nextAlbum = "";
 
-            int size1 = 200;
-            int size2 = 200;
+            int size1 = 196;
+            int size2 = 196;
             if (mainWindow.getAlbumArtSize() == 0)
             {
                 size1 = size2 = 120;

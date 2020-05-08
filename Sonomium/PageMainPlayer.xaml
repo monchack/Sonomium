@@ -42,7 +42,7 @@
     </Page.Resources>
 
     <DockPanel>
-        <Grid Background="#F0F0F0" Width="260pt" HorizontalAlignment="Left" DockPanel.Dock="Left">
+        <Grid Background="#F0F0F0" Width="250pt" HorizontalAlignment="Left" DockPanel.Dock="Left">
             <ListBox x:Name="artistList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0pt,10pt,0pt,10pt"   FontFamily="Segoe UI" FontSize="14pt" BorderThickness="0" SelectionChanged="ArtistList_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled"  Background="#F0F0F0" >
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
