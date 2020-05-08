@@ -8,6 +8,29 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Loaded="Page_Loaded"
       Title="PageSettings">
+    <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolVisibilityConverter" />
+        <Style x:Key="newRadioButton" TargetType="{x:Type RadioButton}" >
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <Grid>
+                                <TextBlock  Text="&#xE91F;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" FontSize="10pt" Foreground="White"  TextOptions.TextRenderingMode="Grayscale" />
+                                <TextBlock  Text="&#xE91F;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" FontSize="10pt" Foreground="{x:Static SystemColors.HighlightBrush}" Opacity="0.2" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsMouseOver, Converter={StaticResource BoolVisibilityConverter}}" TextOptions.TextRenderingMode="Grayscale" />
+                                <TextBlock  Text="&#xECCA;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" FontSize="10pt"  TextOptions.TextRenderingMode="Grayscale" />
+                                <TextBlock  Text="&#xECCA;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" FontSize="10pt" Foreground="{x:Static SystemColors.HighlightBrush}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsMouseOver, Converter={StaticResource BoolVisibilityConverter}}"  TextOptions.TextRenderingMode="Grayscale"  />
+                                <TextBlock  Text="&#xECCA;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" FontSize="10pt" Foreground="{x:Static SystemColors.HighlightBrush}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsChecked, Converter={StaticResource BoolVisibilityConverter}}"  TextOptions.TextRenderingMode="Grayscale"  />
+                                <TextBlock  Text="&#xECCC;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" FontSize="10pt" Foreground="{x:Static SystemColors.HighlightBrush}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsChecked, Converter={StaticResource BoolVisibilityConverter}}"  TextOptions.TextRenderingMode="Grayscale" />
+                            </Grid>
+                            <Grid Width="6pt" />
+                            <TextBlock Text="{TemplateBinding Content}" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
 
     <Grid Background="#EDF1F5">
         <TextBlock HorizontalAlignment="Left" Margin="20,20,0,0" TextWrapping="Wrap" Foreground="#1C3B61"
@@ -18,10 +41,10 @@
         <TextBlock HorizontalAlignment="Left" Margin="56,120,0,0" TextWrapping="Wrap"
             Text="Album art size" VerticalAlignment="Top" FontFamily="Segoe UI" FontSize="14pt" />
         <Grid>
-            <RadioButton x:Name="buttonAlbumArtSmall" Content="Small" HorizontalAlignment="Left" Margin="183,125,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" />
-            <RadioButton x:Name="buttonAlbumArtNormal" Content="Normal" HorizontalAlignment="Left" Margin="183,157,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" />
-            <RadioButton x:Name="buttonAlbumArtLarge" Content="Large" HorizontalAlignment="Left" Margin="183,187,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" />
-            
+            <RadioButton x:Name="buttonAlbumArtSmall" Content="Small"  HorizontalAlignment="Left" Margin="183,125,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" Style="{StaticResource newRadioButton}" />
+            <RadioButton x:Name="buttonAlbumArtNormal" Content="Normal" HorizontalAlignment="Left" Margin="183,157,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" Style="{StaticResource newRadioButton}" />
+            <RadioButton x:Name="buttonAlbumArtLarge" Content="Large" HorizontalAlignment="Left" Margin="183,187,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" Style="{StaticResource newRadioButton}" />
+
         </Grid>
 
         <Button Content="Reset Albumart Cache" HorizontalAlignment="Left" Height="46" Margin="56,228,0,0" VerticalAlignment="Top" Width="233"  BorderThickness="0"  FontFamily="Segoe UI" FontSize="14pt" >
