@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Text.Json;
 
 namespace Sonomium
 {
@@ -20,6 +21,13 @@ namespace Sonomium
     /// </summary>
     public partial class PageSettings : Page
     {
+        class VolumioVersionInfo
+        {
+            public string systemversion { get; set; }
+            public string builddate { get; set; }
+            public string hardware { get; set; }
+        };
+
         private MainWindow mainWindow;
 
         public PageSettings(MainWindow _mainWindow)
@@ -57,6 +65,21 @@ namespace Sonomium
             else if (buttonAlbumArtLarge.IsChecked == true) { mainWindow.setAlbumArtSize(2); }
             else if (buttonAlbumArtXLarge.IsChecked == true) { mainWindow.setAlbumArtSize(3); }
             else mainWindow.setAlbumArtSize(1);
+        }
+
+        private void ConnectivityTest_Click(object sender, RoutedEventArgs e)
+        {
+            if (mainWindow == null) return;
+            string json = mainWindow.GetServerInfo();
+            VolumioVersionInfo vvi = JsonSerializer.Deserialize<VolumioVersionInfo>(json);
+            textTestResult.Text = "version :" + vvi.systemversion + "\n" + "build date: " + vvi.builddate + "\n" + "hardware: " + vvi.hardware;
+            //versionText.Text = vvi.systemversion;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (mainWindow == null) return;
+            mainWindow.RemoveImageCache();
         }
     }
 }

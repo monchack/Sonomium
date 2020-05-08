@@ -252,6 +252,18 @@ namespace Sonomium
             window.CurrentAlbum.Text = vs.album;
         }
 
+        public string GetServerInfo()
+        {
+            string json = GetRestApi(this.getIp(), "getSystemVersion");
+            return json;
+        }
+
+        public void RemoveImageCache()
+        {
+            string s = GetImageCacheDirectory();
+            System.IO.Directory.Delete(s, true);
+        }
+
         public void UpdatePlayerUI()
         {
             Task t = WaitAndGetVolumioStatus(getIp(), true, this);
@@ -354,10 +366,10 @@ namespace Sonomium
             jsonString = JsonSerializer.Serialize(a);
             string s = GetProfileFilePathAndName();
 
-            string path = System.IO.Path.GetDirectoryName(s);
+            string path = System.IO.Path.GetDirectoryName(s) + "\\";
             if (!File.Exists(path))
             {
-                Directory.CreateDirectory(System.IO.Path.GetDirectoryName(s)); //must be path including file name
+                Directory.CreateDirectory(System.IO.Path.GetDirectoryName(path));
             }
             try
             {
