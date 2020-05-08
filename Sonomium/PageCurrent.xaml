@@ -49,8 +49,8 @@
                         <DockPanel>
                        
                         <Grid Width="10pt" DockPanel.Dock="Right"/>
-                            <TextBlock Text="{Binding Path=TrackDuration}" DockPanel.Dock="Right" Width="80pt" TextAlignment="Right" />
-                            <TextBlock Text="{Binding Path=TrackNumber}"  DockPanel.Dock="Left" TextAlignment="Left" Width="34pt" />
+                        <TextBlock Text="{Binding Path=TrackDuration}" DockPanel.Dock="Right" Width="80pt" TextAlignment="Right"  FontSize="10pt"  Foreground="#808080" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding Path=TrackNumber}"  DockPanel.Dock="Left" TextAlignment="Left" Width="34pt"  />
                             <TextBlock Text="{Binding Path=TrackTitle}"  DockPanel.Dock="Left" />
                         
                     </DockPanel>
