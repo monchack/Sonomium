@@ -48,7 +48,15 @@
              
             <Grid Height="12pt" DockPanel.Dock="Top" />
                         <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" >
-                            <Button x:Name="ConnectivityTest"  Padding="8pt,4pt,8pt,4pt"  Content="Run server connectivity test" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0"  FontFamily="Segoe UI" FontSize="14pt" Click="ConnectivityTest_Click" />
+                            <Button x:Name="ConnectivityTest"  Padding="8pt,4pt,8pt,4pt"   HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0"  FontFamily="Segoe UI" FontSize="14pt" Click="ConnectivityTest_Click" >
+                                <StackPanel Orientation="Horizontal">
+                                    <Grid Width="16pt">
+                                        <TextBlock Text="&#xF385;" FontFamily="Segoe MDL2 Assets" FontSize="12pt" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="#404040" />
+                                        <TextBlock Text="&#xF143;" FontFamily="Segoe MDL2 Assets" FontSize="12pt" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="#404040" />
+                                    </Grid>
+                                    <TextBlock>Run server connectivity test</TextBlock>
+                                </StackPanel>
+                            </Button>
                             <Grid Width="16pt" />
                             <TextBlock x:Name="textTestResult"  Height="40pt" TextWrapping="Wrap"   Width="312" FontFamily="Segoe UI" FontSize="10pt"/>
                         </StackPanel>
