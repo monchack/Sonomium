@@ -133,13 +133,17 @@ namespace Sonomium
             string imageCacheFileName = mainWindow.GetImageCacheDirectory() + fileName;
             Uri sourceUri = new Uri(@"http://" + ip + @"/albumart?path=/mnt/" + s);
 
+            BitmapImage bitmap = new BitmapImage();
             if (!File.Exists(imageCacheFileName))
             {
                 downloadFile(@"http://" + ip + @"/albumart?path=/mnt/" + s, imageCacheFileName, cancellationSource.Token);
+                bitmap.DownloadCompleted += (sender, args) =>
+                {
+                    albumImages.Items.Refresh();
+                };
             }
             try
             {
-                BitmapImage bitmap = new BitmapImage();
                 bitmap.BeginInit();
                 bitmap.UriSource = new Uri(@"file://" + imageCacheFileName);
                 bitmap.EndInit();
