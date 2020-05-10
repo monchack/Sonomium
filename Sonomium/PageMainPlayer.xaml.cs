@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,6 +26,7 @@ namespace Sonomium
         private MainWindow mainWindow;
         private List<string> albumList;
         private List<int> albumTimeList;
+        private CancellationTokenSource cancellationSource;
 
         public class CardItem
         {
@@ -40,6 +43,7 @@ namespace Sonomium
             mainWindow = _mainWindow;
             albumList = new List<string>();
             albumTimeList = new List<int>();
+            cancellationSource = new CancellationTokenSource();
         }
 
         private void update_album_list()
@@ -78,6 +82,31 @@ namespace Sonomium
             }
         }
 
+        private async void downloadFile(string uri, string outputFilePath, CancellationToken token)
+        {
+            HttpClient client = new HttpClient();
+            client.Timeout = TimeSpan.FromMilliseconds(3000);
+            HttpResponseMessage res = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, token);
+
+            using (var fileStream = File.Create(outputFilePath))
+            {
+                try
+                {
+                    using (var httpStream = await res.Content.ReadAsStreamAsync())
+                    {
+                        httpStream.CopyTo(fileStream);
+                        fileStream.Flush();
+                    }
+                }
+                catch (TaskCanceledException ) 
+                {
+                    // timeout
+                    fileStream.Flush();
+                    File.Delete(outputFilePath);
+                }
+            }
+        }
+
         private BitmapImage getAlbumImage(string uri)
         {
             if (uri == "")
@@ -97,8 +126,7 @@ namespace Sonomium
 
             if (!File.Exists(imageCacheFileName))
             {
-                System.Net.WebClient wc = new System.Net.WebClient();
-                wc.DownloadFileTaskAsync(sourceUri, imageCacheFileName);
+                downloadFile(@"http://" + ip + @"/albumart?path=/mnt/" + s, imageCacheFileName, cancellationSource.Token);
             }
 
             try
@@ -195,6 +223,11 @@ namespace Sonomium
             mainWindow.Button_Current_Click(null, null);
 
 
+        }
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            cancellationSource.Cancel();
         }
     }
 }
