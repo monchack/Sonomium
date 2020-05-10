@@ -150,6 +150,10 @@ namespace Sonomium
             }
             BitmapImage bitmap2 = new BitmapImage();
             bitmap2.BeginInit();
+            bitmap2.DownloadCompleted += (sender, args) =>
+            {
+                albumImages.Items.Refresh();
+            };
             bitmap2.UriSource = new Uri(@"http://" + ip + @"/albumart?path=/mnt/" + s);
             bitmap2.EndInit();
             return bitmap2;
