@@ -396,8 +396,6 @@ namespace Sonomium
             catch
             {
             }
-            System.Net.WebClient wc = new System.Net.WebClient();
-            wc.CancelAsync();
         }
     }
 }

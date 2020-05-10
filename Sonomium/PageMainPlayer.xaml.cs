@@ -88,6 +88,11 @@ namespace Sonomium
             client.Timeout = TimeSpan.FromMilliseconds(3000);
             HttpResponseMessage res = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, token);
 
+            if (!res.IsSuccessStatusCode)
+            {
+                return;
+            }
+
             using (var fileStream = File.Create(outputFilePath))
             {
                 try
