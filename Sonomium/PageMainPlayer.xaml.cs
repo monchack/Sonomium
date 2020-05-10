@@ -99,7 +99,11 @@ namespace Sonomium
                 {
                     using (var httpStream = await res.Content.ReadAsStreamAsync())
                     {
-                        httpStream.CopyTo(fileStream);
+                        if (!httpStream.CanRead)
+                        {
+                            return;
+                        }
+                        await httpStream.CopyToAsync(fileStream);
                         fileStream.Flush();
                     }
                 }
@@ -133,7 +137,6 @@ namespace Sonomium
             {
                 downloadFile(@"http://" + ip + @"/albumart?path=/mnt/" + s, imageCacheFileName, cancellationSource.Token);
             }
-
             try
             {
                 BitmapImage bitmap = new BitmapImage();
