@@ -72,7 +72,13 @@
                         <RadioButton x:Name="buttonAlbumArtLarge" Content="Large" HorizontalAlignment="Left"  VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" Style="{StaticResource newRadioButton}" />
                         <RadioButton x:Name="buttonAlbumArtXLarge" Content="Extra Large" HorizontalAlignment="Left"  VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Checked="ButtonAlbumArt_Checked" Style="{StaticResource newRadioButton}" />
                         <Grid Height="12pt"  />
-                        <Button Content="Reset Albumart Cache" Padding="8pt,4pt,8pt,4pt" BorderThickness="0" HorizontalAlignment="Left" FontFamily="Segoe UI" FontSize="14pt" Click="Button_Click" />
+                        <Button x:Name="ResetImageCache"  Padding="8pt,4pt,8pt,4pt"   HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0"  FontFamily="Segoe UI" FontSize="14pt" Click="Button_Click" >
+                            <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE74D;" FontFamily="Segoe MDL2 Assets" FontSize="12pt" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="#404040" />
+                                <Grid Width="4pt" />
+                                <TextBlock>Reset album art cache</TextBlock>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                 </StackPanel>
             </DockPanel>

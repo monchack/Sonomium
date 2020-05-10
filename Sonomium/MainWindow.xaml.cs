@@ -136,7 +136,7 @@ namespace Sonomium
             ns.Write(sendBytes, 0, sendBytes.Length);
 
             System.IO.MemoryStream ms = new System.IO.MemoryStream();
-            byte[] resBytes = new byte[256];
+            byte[] resBytes = new byte[1024*512];
             int resSize = 0;
 
             if (wait) System.Threading.Thread.Sleep(500);
@@ -314,8 +314,18 @@ namespace Sonomium
 
         private void Button_Main_Click(object sender, RoutedEventArgs e)
         {
+            navigation.Navigate(new PageAllAlbums(this));
+            //buttonMain.BorderBrush = SystemColors.HighlightBrush; //Brushes.Black;
+            buttonArtist.BorderBrush = Brushes.Transparent;
+            buttonCurrent.BorderBrush = Brushes.Transparent;
+            buttonSettings.BorderBrush = Brushes.Transparent;
+        }
+
+        private void Button_Artist_Click(object sender, RoutedEventArgs e)
+        {
             navigation.Navigate(new PageMainPlayer(this));
-            buttonMain.BorderBrush = SystemColors.HighlightBrush; //Brushes.Black;
+            //buttonMain.BorderBrush = Brushes.Transparent;
+            buttonArtist.BorderBrush = SystemColors.HighlightBrush;
             buttonCurrent.BorderBrush = Brushes.Transparent;
             buttonSettings.BorderBrush = Brushes.Transparent;
         }
@@ -323,7 +333,8 @@ namespace Sonomium
         private void Button_Settings_Click(object sender, RoutedEventArgs e)
         {
             navigation.Navigate(new PageSettings(this));
-            buttonMain.BorderBrush = Brushes.Transparent;
+            //buttonMain.BorderBrush = Brushes.Transparent;
+            buttonArtist.BorderBrush = Brushes.Transparent;
             buttonCurrent.BorderBrush = Brushes.Transparent;
             buttonSettings.BorderBrush = SystemColors.HighlightBrush;
         }
@@ -331,7 +342,8 @@ namespace Sonomium
         public void Button_Current_Click(object sender, RoutedEventArgs e)
         {
             navigation.Navigate(new PageCurrent(this));
-            buttonMain.BorderBrush = Brushes.Transparent;
+            //buttonMain.BorderBrush = Brushes.Transparent;
+            buttonArtist.BorderBrush = Brushes.Transparent;
             buttonCurrent.BorderBrush = SystemColors.HighlightBrush;
             buttonSettings.BorderBrush = Brushes.Transparent;
         }
@@ -384,6 +396,8 @@ namespace Sonomium
             catch
             {
             }
+            System.Net.WebClient wc = new System.Net.WebClient();
+            wc.CancelAsync();
         }
     }
 }
