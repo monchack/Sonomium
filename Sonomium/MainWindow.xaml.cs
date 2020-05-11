@@ -88,7 +88,23 @@ namespace Sonomium
         public void setCursoredArtist(string artist) { cursoredArtist = artist; }
         public string getCursoredArtist() { return cursoredArtist; }
         public void setAlbumArtSize(int size) { albumArtSize = size; }
-        public int getAlbumArtSize() { return albumArtSize; }
+
+        public int getAlbumArtSize()
+        { 
+            if (albumArtSize == 0)
+            {
+                return 132;
+            }
+            else if (albumArtSize == 2)
+            {
+                return 196;
+            }
+            else if (albumArtSize == 3)
+            {
+                return 240;
+            }
+            return 160;
+        }
 
         public string GetProfileFilePathAndName()
         {
