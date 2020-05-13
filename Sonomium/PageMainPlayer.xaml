@@ -56,7 +56,7 @@
                                     </Rectangle.Fill>
                                 </Rectangle>
                                 <Grid Height="4pt" />
-                                <TextBlock FontSize="9pt" Height="22pt" Foreground="#404040" Text="{Binding AlbumTitle}" TextWrapping = "Wrap" />
+                                <TextBlock FontSize="9pt" Height="24pt" Foreground="#404040" Text="{Binding AlbumTitle}" TextWrapping = "Wrap" />
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

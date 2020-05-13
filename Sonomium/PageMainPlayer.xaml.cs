@@ -86,33 +86,57 @@ namespace Sonomium
         {
             HttpClient client = new HttpClient();
             client.Timeout = TimeSpan.FromMilliseconds(3000);
-            HttpResponseMessage res = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, token);
-
-            if (!res.IsSuccessStatusCode)
+            HttpResponseMessage res;
+            string dbg = outputFilePath + " ";
+            try
             {
-                return;
-            }
+                bool toDelete = false;
+                res = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, token);
+                if (!res.IsSuccessStatusCode)
+                {
+                    return;
+                }
 
-            using (var fileStream = File.Create(outputFilePath))
-            {
+                FileStream fileStream = null;
                 try
                 {
-                    using (var httpStream = await res.Content.ReadAsStreamAsync())
+                    using (fileStream = File.Create(outputFilePath))
                     {
-                        if (!httpStream.CanRead)
+                        using (Stream httpStream = await res.Content.ReadAsStreamAsync())
                         {
-                            return;
+                            if (!httpStream.CanRead)
+                            {
+                                fileStream.Dispose();
+                                File.Delete(outputFilePath);
+                                return;
+                            }
+                            await httpStream.CopyToAsync(fileStream);
                         }
-                        await httpStream.CopyToAsync(fileStream);
-                        fileStream.Flush();
                     }
                 }
-                catch (TaskCanceledException ) 
+                catch
                 {
-                    // timeout
-                    fileStream.Flush();
-                    File.Delete(outputFilePath);
+                    toDelete = true;
                 }
+                finally
+                {
+                    if (toDelete)
+                    {
+                        try
+                        {
+                            fileStream.Dispose();
+                            File.Delete(outputFilePath);
+                        }
+                        catch
+                        {
+                        }
+                    }
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                // http cancel
+                dbg += "123";
             }
         }
 
@@ -126,32 +150,44 @@ namespace Sonomium
 
             int n = uri.LastIndexOf('/');
             string s = uri.Remove(n);   //   最後の / の出現位置までをキープして、残りは削除
-            s = s.Replace("=", "%3D");
-
-            //キャッシュ
             string fileName = System.IO.Path.GetFileName(s) + ".jpg";
             string imageCacheFileName = mainWindow.GetImageCacheDirectory() + fileName;
-            Uri sourceUri = new Uri(@"http://" + ip + @"/albumart?path=/mnt/" + s);
+            s = s.Replace("=", "%3D");
+            //Uri sourceUri = new Uri(@"http://" + ip + @"/albumart?path=/mnt/" + s);
 
-            BitmapImage bitmap = new BitmapImage();
             if (!File.Exists(imageCacheFileName))
             {
                 downloadFile(@"http://" + ip + @"/albumart?path=/mnt/" + s, imageCacheFileName, cancellationSource.Token);
-                bitmap.DownloadCompleted += (sender, args) =>
+            }
+            else
+            {
+                try
                 {
-                    albumImages.Items.Refresh();
-                };
+                    BitmapImage bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.DownloadCompleted += (sender, args) =>
+                    {
+                        albumImages.Items.Refresh();
+                    };
+                    bitmap.UriSource = new Uri(@"file://" + imageCacheFileName);
+                    bitmap.EndInit();
+                    return bitmap;
+                }
+                catch
+                {
+                    // // キャッシュにファイルはあったが、bitmap作成に失敗
+                    //fileName += "!";
+                    try
+                    {
+                        File.Delete(imageCacheFileName);
+                        downloadFile(@"http://" + ip + @"/albumart?path=/mnt/" + s, imageCacheFileName, cancellationSource.Token);
+                    }
+                    catch
+                    {
+                    }
+                }
             }
-            try
-            {
-                bitmap.BeginInit();
-                bitmap.UriSource = new Uri(@"file://" + imageCacheFileName);
-                bitmap.EndInit();
-                return bitmap;
-            }
-            catch
-            {
-            }
+            // キャッシュがなかったか、キャッシュからのbitmap生成に失敗した
             BitmapImage bitmap2 = new BitmapImage();
             bitmap2.BeginInit();
             bitmap2.DownloadCompleted += (sender, args) =>
@@ -165,6 +201,10 @@ namespace Sonomium
 
         private void ArtistList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            cancellationSource.Cancel();
+            cancellationSource = new CancellationTokenSource();
+            //CancellationToken token = source.Token;
+
             albumList.Clear();
             albumImages.Items.Clear();
             mainWindow.setCursoredArtist(artistList.SelectedItem.ToString());
