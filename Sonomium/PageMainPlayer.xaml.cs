@@ -136,7 +136,6 @@ namespace Sonomium
             catch (TaskCanceledException)
             {
                 // http cancel
-                dbg += "123";
             }
         }
 

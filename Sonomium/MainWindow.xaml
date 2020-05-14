@@ -65,8 +65,30 @@
                     Width="28pt"  VerticalAlignment="Stretch" FontFamily="Segoe UI Symbol" Click="PauseButton_Click" />
                 <Button Name="nextButton" Content="&#xE101;" HorizontalAlignment="Left"
                     VerticalAlignment="Stretch" Width="50" Background="Transparent" BorderThickness="0" FontSize="14pt" FontFamily="Segoe UI Symbol" Click="NextButton_Click" />
-
-                    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                <Grid Width="12pt" HorizontalAlignment="Left" />
+                <Grid  HorizontalAlignment="Left">
+                        <Button Name="back10Button" Width="26pt" Background="Transparent" BorderThickness="0" FontSize="10pt" Click="Back15Button_Click" VerticalAlignment="Stretch">
+                            <Button.Content>
+                            <StackPanel VerticalAlignment="Center">
+                                <Grid Height="3pt" />
+                                <TextBlock Text="&#xF037;" HorizontalAlignment="Left"  FontFamily="Webdings" />
+                                <TextBlock Text="15" HorizontalAlignment="Left" />
+                            </StackPanel>
+                        </Button.Content>
+                        </Button>
+                </Grid>
+                <Grid  HorizontalAlignment="Left">
+                    <Button Name="skip10Button" Width="26pt" Background="Transparent" BorderThickness="0" FontSize="10pt" Click="Skip15Button_Click" VerticalAlignment="Stretch" >
+                        <Button.Content>
+                            <StackPanel VerticalAlignment="Center">
+                                <Grid Height="3pt" />
+                                <TextBlock Text="&#xF038;" HorizontalAlignment="Right"  FontFamily="Webdings" />
+                                <TextBlock Text="15" HorizontalAlignment="Left" />
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                </Grid>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
                         <TextBlock x:Name="CurrentTitle"   HorizontalAlignment="Center" Foreground="#808080" />
                         <TextBlock x:Name="CurrentAlbum"   HorizontalAlignment="Center" Foreground="#808080" />
                         <TextBlock x:Name="CurrentArtist"  HorizontalAlignment="Center" Foreground="#808080" />

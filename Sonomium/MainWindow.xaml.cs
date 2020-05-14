@@ -413,5 +413,15 @@ namespace Sonomium
             {
             }
         }
+
+        private void Back15Button_Click(object sender, RoutedEventArgs e)
+        {
+            sendMpd("seekcur -15", false);
+        }
+
+        private void Skip15Button_Click(object sender, RoutedEventArgs e)
+        {
+            sendMpd("seekcur +15", false);
+        }
     }
 }
