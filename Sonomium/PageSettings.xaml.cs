@@ -54,6 +54,7 @@ namespace Sonomium
                 ipBox.Text = mainWindow.getIp();
                 if (mainWindow.getAlbumArtSize() == 0) buttonAlbumArtSmall.IsChecked = true;
                 else if (mainWindow.getAlbumArtSize() == 2) buttonAlbumArtLarge.IsChecked = true;
+                else if (mainWindow.getAlbumArtSize() == 3) buttonAlbumArtXLarge.IsChecked = true;
                 else buttonAlbumArtNormal.IsChecked = true;
             }
             string s = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);

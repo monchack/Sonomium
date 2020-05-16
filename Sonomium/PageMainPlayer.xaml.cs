@@ -215,7 +215,8 @@ namespace Sonomium
 
             int size1 = 160;
             int size2 = 160;
-            size1 = size2 = mainWindow.getAlbumArtSize();
+            int [] size_table = { 132, 160, 196, 240};
+            size1 = size2 = size_table[mainWindow.getAlbumArtSize()];
 
             while ((line = sr.ReadLine()) != null)
             {
