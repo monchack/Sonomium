@@ -175,7 +175,6 @@ namespace Sonomium
                 catch
                 {
                     // // キャッシュにファイルはあったが、bitmap作成に失敗
-                    //fileName += "!";
                     try
                     {
                         File.Delete(imageCacheFileName);

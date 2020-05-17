@@ -20,6 +20,19 @@ using System.Text.Json;
 
 namespace Sonomium
 {
+    public class AlbumInfo
+    {
+        public string albumTitle { get; set; }
+        public string filePath { get; set; }
+        public string albumArtist { get; set; }
+    };
+
+    public class AlbumDb
+    {
+        public int num { set; get; }
+        public List<AlbumInfo> list { set; get; }
+    };
+
     /// <summary>
     /// MainWindow.xaml の相互作用ロジック
     /// </summary>
@@ -32,6 +45,11 @@ namespace Sonomium
         private string cursoredArtist = "";
         private BitmapImage selectedAlbumImage;
         private int albumArtSize = 0;
+        private AlbumDb albumDb;
+        private Page pageMain;
+        private Page pageAll;
+        private Page pageSettings;
+        private Page pageTracks;
 
         class VolumioState
         {
@@ -73,6 +91,23 @@ namespace Sonomium
             {
             }
 
+            s = GetDbFilePathAndName();
+            try
+            {
+                //jsonString = File.ReadAllText(s);
+                //albumDb = JsonSerializer.Deserialize<AlbumDb>(jsonString);
+            }
+            catch
+            {
+                //albumDb = new AlbumDb();
+                //albumDb.list = new List<AlbumInfo>();
+                //albumDb.num = 0;
+            }
+            albumDb = new AlbumDb();
+            albumDb.list = new List<AlbumInfo>();
+            albumDb.num = 0;
+
+
             navigation = this.mainFrame.NavigationService;
             navigation.Navigate(new PageSettings(this));
         }
@@ -89,11 +124,51 @@ namespace Sonomium
         public string getCursoredArtist() { return cursoredArtist; }
         public void setAlbumArtSize(int size) { albumArtSize = size; }
         public int getAlbumArtSize() { return albumArtSize;  }
+        public void setAlbumDb(AlbumDb db) { albumDb = db; }
+        public AlbumDb getAlbumDb() { return albumDb; }
+        
+        public bool isAlbumDbCreated()
+        {
+            if (albumDb.num == 0) return false;
+            return true;
+        }
+
+        public void createAlbumDb()
+        {
+
+        }
+
+        public void updateAlbumDb(string albumTitle, string albumArtist, string albumFilePath)
+        {
+            for (int i = 0; i < albumDb.list.Count; ++i)
+            {
+                if (albumDb.list[i].albumArtist.Equals(albumArtist))
+                {
+                    if (albumDb.list[i].albumTitle.Equals(albumTitle))
+                    {
+                        albumDb.list[i].filePath = albumFilePath;
+                        return;
+                    }
+                }
+            }
+            AlbumInfo info = new AlbumInfo();
+            info.albumArtist = albumArtist;
+            info.albumTitle = albumTitle;
+            info.filePath = albumFilePath;
+            albumDb.list.Add(info);
+        }
 
         public string GetProfileFilePathAndName()
         {
             string s = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             s += "\\Sonomium\\profile.json";
+            return s;
+        }
+
+        public string GetDbFilePathAndName()
+        {
+            string s = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            s += "\\Sonomium\\albumdb.json";
             return s;
         }
 
@@ -110,9 +185,8 @@ namespace Sonomium
             return s;
         }
 
-        public string sendMpd(string command, bool wait = true)
+        static public string _sendMpd(string ipString, string command, bool wait = true)
         {
-            string ipString = getIp();
             int port = 6600;
             System.Net.Sockets.TcpClient tcp;
 
@@ -126,8 +200,8 @@ namespace Sonomium
                 return "";
             }
             System.Net.Sockets.NetworkStream ns = tcp.GetStream();
-            ns.ReadTimeout = 10000;
-            ns.WriteTimeout = 10000;
+            ns.ReadTimeout = 5000;
+            ns.WriteTimeout = 5000;
 
             string sendMsg = command + '\n';
             System.Text.Encoding encoding = System.Text.Encoding.UTF8;
@@ -144,13 +218,27 @@ namespace Sonomium
             do
             {
                 resSize = ns.Read(resBytes, 0, resBytes.Length);
-                if (resSize == 0)
-                {
-                    // 切断
-                    break;
-                }
                 ms.Write(resBytes, 0, resSize);
-            } while (ns.DataAvailable);
+
+                if (resSize >= 4)
+                {
+                    if (resBytes[resSize - 1] == '\n')
+                    {
+                        if (resBytes[resSize - 4] == '\n' && resBytes[resSize - 3] == 'O' && resBytes[resSize - 2] == 'K')
+                        {
+                            break;
+                        }
+                    }
+                }
+                if (resSize == 3)
+                {
+                    if (resBytes[resSize - 3] == 'O' && resBytes[resSize - 2] == 'K' && resBytes[resSize - 1] == '\n')
+                    {
+                        break;
+                    }
+                }
+            } while (resSize > 0);
+
             string response = encoding.GetString(ms.GetBuffer(), 0, (int)ms.Length);
             ms.Close();
 
@@ -158,6 +246,11 @@ namespace Sonomium
             tcp.Close();
 
             return response;
+        }
+
+        public string sendMpd(string command, bool wait = true)
+        {
+            return _sendMpd(getIp(), command, wait);
         }
 
         static string PostRestApi(string ipString, string cmd, string postData)
@@ -252,6 +345,66 @@ namespace Sonomium
             window.CurrentAlbum.Text = vs.album;
         }
 
+        static void CreateAlbumDb(string ip, MainWindow window)
+        {
+            string s = "";
+            string line;
+            int i = 0;
+            //await Task.Run(() =>
+            //{
+            // s = _sendMpd(ip, "listallinfo");
+            //});
+            s = _sendMpd(ip, "listallinfo");
+
+            StringReader sr = new StringReader(s);
+
+
+                List<string> files = new List<string>();
+
+            string lastAlbum = "";
+            string lastArtist = "";
+            string lastFilePath = "";
+
+
+            window.albumDb.list.Clear();
+
+            while ((line = sr.ReadLine()) != null)
+            {
+                if (line.Contains("Artist: "))
+                {
+                    string artist = line.Replace("Artist: ", "");
+                    lastArtist = artist;
+                }
+                if (line.Contains("Album: "))
+                {
+                    string album = line.Replace("Album: ", "");
+                    if (!lastAlbum.Equals(album))
+                    {
+                        // new album
+                        lastAlbum = album;
+                        lastFilePath = "";
+                    }
+                }
+                if (line.Contains("file: "))
+                {
+                    string file  = line.Replace("file: ", "");
+                    if (lastFilePath == "")
+                    {
+                        lastFilePath = file;
+
+                        AlbumInfo info = new AlbumInfo();
+                        info.albumArtist = lastArtist;
+                        info.albumTitle = lastAlbum;
+                        info.filePath = lastFilePath;
+                        window.albumDb.list.Add(info);
+
+                        ++i;
+                    }
+                }
+            }
+            window.albumDb.num = i;
+        }
+
         public string GetServerInfo()
         {
             string json = GetRestApi(this.getIp(), "getSystemVersion");
@@ -281,7 +434,7 @@ namespace Sonomium
 
             // artist と album 情報から、トラックを抽出してキューに積む
             string s = "find albumartist " + "\"" + getSelectedArtist() + "\"" + " album " + "\"" + getSelectedAlbum() + "\"";
-            string track = sendMpd(s);
+            string track = _sendMpd(getIp(), s);
 
             StringReader sr = new StringReader(track);
 
@@ -314,8 +467,9 @@ namespace Sonomium
 
         private void Button_Main_Click(object sender, RoutedEventArgs e)
         {
-            navigation.Navigate(new PageAllAlbums(this));
-            //buttonMain.BorderBrush = SystemColors.HighlightBrush; //Brushes.Black;
+            //navigation.Navigate(new PageAllAlbums(this));
+            navigation.Navigate(pageAll);
+            buttonMain.BorderBrush = SystemColors.HighlightBrush; //Brushes.Black;
             buttonArtist.BorderBrush = Brushes.Transparent;
             buttonCurrent.BorderBrush = Brushes.Transparent;
             buttonSettings.BorderBrush = Brushes.Transparent;
@@ -323,8 +477,9 @@ namespace Sonomium
 
         private void Button_Artist_Click(object sender, RoutedEventArgs e)
         {
-            navigation.Navigate(new PageMainPlayer(this));
-            //buttonMain.BorderBrush = Brushes.Transparent;
+            //navigation.Navigate(new PageMainPlayer(this));
+            navigation.Navigate(pageMain);
+            buttonMain.BorderBrush = Brushes.Transparent;
             buttonArtist.BorderBrush = SystemColors.HighlightBrush;
             buttonCurrent.BorderBrush = Brushes.Transparent;
             buttonSettings.BorderBrush = Brushes.Transparent;
@@ -332,8 +487,9 @@ namespace Sonomium
 
         private void Button_Settings_Click(object sender, RoutedEventArgs e)
         {
-            navigation.Navigate(new PageSettings(this));
-            //buttonMain.BorderBrush = Brushes.Transparent;
+            //navigation.Navigate(new PageSettings(this));
+            navigation.Navigate(pageSettings);
+            buttonMain.BorderBrush = Brushes.Transparent;
             buttonArtist.BorderBrush = Brushes.Transparent;
             buttonCurrent.BorderBrush = Brushes.Transparent;
             buttonSettings.BorderBrush = SystemColors.HighlightBrush;
@@ -341,8 +497,9 @@ namespace Sonomium
 
         public void Button_Current_Click(object sender, RoutedEventArgs e)
         {
-            navigation.Navigate(new PageCurrent(this));
-            //buttonMain.BorderBrush = Brushes.Transparent;
+            //navigation.Navigate(new PageCurrent(this));
+            navigation.Navigate(pageTracks);
+            buttonMain.BorderBrush = Brushes.Transparent;
             buttonArtist.BorderBrush = Brushes.Transparent;
             buttonCurrent.BorderBrush = SystemColors.HighlightBrush;
             buttonSettings.BorderBrush = Brushes.Transparent;
@@ -383,7 +540,6 @@ namespace Sonomium
             string jsonString;
             jsonString = JsonSerializer.Serialize(a);
             string s = GetProfileFilePathAndName();
-
             string path = System.IO.Path.GetDirectoryName(s) + "\\";
             if (!File.Exists(path))
             {
@@ -396,16 +552,44 @@ namespace Sonomium
             catch
             {
             }
+
+            /*
+            jsonString = JsonSerializer.Serialize(albumDb);
+            s = GetDbFilePathAndName();
+            path = System.IO.Path.GetDirectoryName(s) + "\\";
+            if (!File.Exists(path))
+            {
+                Directory.CreateDirectory(System.IO.Path.GetDirectoryName(path));
+            }
+            try
+            {
+                File.WriteAllText(s, jsonString);
+            }
+            catch
+            {
+            }
+            */
         }
 
         private void Back15Button_Click(object sender, RoutedEventArgs e)
         {
-            sendMpd("seekcur -15", false);
+            _sendMpd(getIp(), "seekcur -15", false);
         }
 
         private void Skip15Button_Click(object sender, RoutedEventArgs e)
         {
-            sendMpd("seekcur +15", false);
+            _sendMpd(getIp(), "seekcur +15", false);
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            //Task t =  CreateAlbumDb(getIp(), this);
+            CreateAlbumDb(getIp(), this);
+
+            pageMain = new PageMainPlayer(this);
+            pageAll = new PageAllAlbums(this);
+            pageSettings = new PageSettings(this);
+            pageTracks = new PageCurrent(this);
         }
     }
 }

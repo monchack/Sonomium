@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Sonomium"
         xmlns:properties="clr-namespace:Sonomium.Properties"
         mc:Ignorable="d"
+        Loaded="Window_Loaded"
         Closed="Window_Closed"
         Title="SONOMIUM" Height="450" Width="800">
     <Grid>
@@ -15,6 +16,18 @@
             <RowDefinition Height="40pt"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0"  Orientation="Horizontal" Background="#F0F0F0" Margin="0,0,0,0">
+
+            <Button x:Name="buttonMain" Margin="8pt,0,8pt,0"  BorderThickness="0,0,0,4" BorderBrush="Transparent" Background="Transparent" FontSize="12pt" FontFamily="Segoe UI Semibold" Click="Button_Main_Click" Foreground="#404040" >
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Grid Width="4pt" />
+                        <TextBlock Text="&#xE93C;" FontFamily="Segoe MDL2 Assets" FontSize="12pt" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                        <StackPanel Width="4pt" />
+                        <TextBlock Text="{x:Static properties:Resources.MainWindow_Navigation_Main}" FontFamily="Segoe UI Semibold" FontSize="12pt" />
+                        <Grid Width="4pt" />
+                    </StackPanel>
+                </Button.Content>
+            </Button>
 
             <Button x:Name="buttonArtist" Margin="8pt,0,8pt,0"  BorderThickness="0,0,0,4" BorderBrush="Transparent" Background="Transparent" FontSize="12pt" FontFamily="Segoe UI Semibold" Click="Button_Artist_Click" Foreground="#404040" >
                 <Button.Content>
