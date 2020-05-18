@@ -293,9 +293,20 @@ namespace Sonomium
             ///DoEvents();
         }
 
-    private void AlbumImages_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void AlbumImages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (albumImages.SelectedItem == null) return;
 
+            CardItem ci = (CardItem)albumImages.SelectedItem;
+
+            string artist = ci.AlbumArtist;
+            mainWindow.setSelectedArtist(artist);
+            
+            string s = ci.AlbumTitle;
+            mainWindow.setSelectedAlbumImage(ci.AlbumImage);
+            mainWindow.setSelectedAlbum(s);
+
+            mainWindow.Button_Current_Click(null, null);
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
