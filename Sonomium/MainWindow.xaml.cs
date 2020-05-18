@@ -50,6 +50,7 @@ namespace Sonomium
         private Page pageAll;
         private Page pageSettings;
         private Page pageTracks;
+        private int albumArtResolution = 0;
 
         class VolumioState
         {
@@ -68,6 +69,7 @@ namespace Sonomium
             public int windowHeight { get; set; }
             public int windowState { get; set; }
             public int albumArtSize { get; set; }
+            public int albumArtResolution { get; set; }
         };
 
         public MainWindow()
@@ -86,6 +88,7 @@ namespace Sonomium
                 if (ss.ipServer != "") setIp(ss.ipServer);
                 if (ss.cursoredArtist != "") setCursoredArtist(ss.cursoredArtist);
                 setAlbumArtSize(ss.albumArtSize);
+                setAlbumArtResolution(ss.albumArtResolution);
             }
             catch
             {
@@ -126,6 +129,8 @@ namespace Sonomium
         public int getAlbumArtSize() { return albumArtSize;  }
         public void setAlbumDb(AlbumDb db) { albumDb = db; }
         public AlbumDb getAlbumDb() { return albumDb; }
+        public void setAlbumArtResolution(int resolution) {  albumArtResolution = resolution;}
+        public int getAlbumArtResolution() {  return albumArtResolution; }
         
         public bool isAlbumDbCreated()
         {
@@ -532,10 +537,11 @@ namespace Sonomium
         private void Window_Closed(object sender, EventArgs e)
         {
             //save
-            SonomiumSettings a = new SonomiumSettings { ipServer = this.ipServer, cursoredArtist = this.cursoredArtist, albumArtSize = this.albumArtSize };
+            SonomiumSettings a = new SonomiumSettings { ipServer = this.ipServer, cursoredArtist = this.cursoredArtist, albumArtSize = this.albumArtSize, albumArtResolution=this.albumArtResolution };
             a.windowWidth = (int)this.Width;
             a.windowHeight = (int)this.Height;
             a.windowState = (int)this.WindowState;
+
 
             string jsonString;
             jsonString = JsonSerializer.Serialize(a);

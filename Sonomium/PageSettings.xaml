@@ -80,7 +80,21 @@
                             </StackPanel>
                         </Button>
                     </StackPanel>
+
+                  </StackPanel>
+                <Grid Height="14pt"  DockPanel.Dock="Top" />
+                <StackPanel Orientation="Horizontal"  DockPanel.Dock="Top" >
+                    <TextBlock   Text="Album art resolution"  FontFamily="Segoe UI" FontSize="14pt" />
+                    <Grid Width="20pt" />
+                    <StackPanel Orientation="Vertical">
+                        <RadioButton x:Name="buttonAlbumArtResolutionNormal" Content="Normal"  HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt"  Style="{StaticResource newRadioButton}" Checked="ButtonAlbumArtResolution_Checked" />
+                        <RadioButton x:Name="buttonAlbumArtResolutionHigh" Content="High quality" HorizontalAlignment="Left"  VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Style="{StaticResource newRadioButton}" Checked="ButtonAlbumArtResolution_Checked"  />
+                    </StackPanel>
+
                 </StackPanel>
+
+
+
             </DockPanel>
             <Grid Height="32pt" DockPanel.Dock="Top" />
         <TextBlock Text="About SONOMIUM" DockPanel.Dock="Top"  Foreground="#1C3B61"  FontFamily="Segoe UI Semibold" FontSize="18pt" />

@@ -56,6 +56,9 @@ namespace Sonomium
                 else if (mainWindow.getAlbumArtSize() == 2) buttonAlbumArtLarge.IsChecked = true;
                 else if (mainWindow.getAlbumArtSize() == 3) buttonAlbumArtXLarge.IsChecked = true;
                 else buttonAlbumArtNormal.IsChecked = true;
+
+                if (mainWindow.getAlbumArtResolution() == 0) buttonAlbumArtResolutionNormal.IsChecked = true;
+                else buttonAlbumArtResolutionHigh.IsChecked = true;
             }
             string s = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         }
@@ -86,6 +89,12 @@ namespace Sonomium
         {
             if (mainWindow == null) return;
             mainWindow.RemoveImageCache();
+        }
+
+        private void ButtonAlbumArtResolution_Checked(object sender, RoutedEventArgs e)
+        {
+            if (buttonAlbumArtResolutionNormal.IsChecked == true) { mainWindow.setAlbumArtResolution(0); }
+            else if (buttonAlbumArtResolutionHigh.IsChecked == true) { mainWindow.setAlbumArtResolution(1); }
         }
     }
 }

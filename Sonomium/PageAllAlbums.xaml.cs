@@ -27,8 +27,8 @@ namespace Sonomium
         private MainWindow mainWindow;
         private CancellationTokenSource cancellationSource;
         private double currentPos = 0;
-        private bool initialized = false;
         private int albumArtSize = -1;
+        private int albumArtResolution = -1;
 
         public class CardItem
         {
@@ -135,7 +135,7 @@ namespace Sonomium
                     {
                         albumImages.Items.Refresh();
                     };
-                    //bitmap.DecodePixelWidth = size;
+                    if (mainWindow.getAlbumArtResolution() == 0) bitmap.DecodePixelWidth = size;
                     bitmap.UriSource = new Uri(@"file://" + imageCacheFileName);
                     bitmap.CacheOption = BitmapCacheOption.OnLoad;
                     bitmap.EndInit();
@@ -226,11 +226,11 @@ namespace Sonomium
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (albumArtSize != mainWindow.getAlbumArtSize())
+            if (albumArtSize != mainWindow.getAlbumArtSize() || albumArtResolution != mainWindow.getAlbumArtResolution())
             {
                 Set_Album_Images();
                 albumArtSize = mainWindow.getAlbumArtSize();
-                initialized = true;
+                albumArtResolution = mainWindow.getAlbumArtResolution();
             }
 
             var border = VisualTreeHelper.GetChild(albumImages, 0) as Border;
