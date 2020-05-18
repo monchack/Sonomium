@@ -59,6 +59,11 @@ namespace Sonomium
             albumArtist.Text = mainWindow.getSelectedArtist();
             albumImage.Source = mainWindow.getSelectedAlbumImage();
 
+            trackTitleList.Clear();
+            trackFileList.Clear();
+            trackTimeList.Clear();
+            trackList.Items.Clear();
+
             string line;
             int i = 0;
             while ((line = sr.ReadLine()) != null)
