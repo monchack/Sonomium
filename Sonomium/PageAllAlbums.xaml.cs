@@ -189,7 +189,7 @@ namespace Sonomium
             return imageCacheFileName;
         }
 
-        private void Set_Album_Images()
+        private async void Set_Album_Images()
         {
             AlbumDb db = mainWindow.getAlbumDb();
 
@@ -209,11 +209,18 @@ namespace Sonomium
                 size1 = size2 = 240;
             }
 
-            foreach (AlbumInfo info in db.list)
+            await Task.Run(() =>
             {
-                BitmapImage s = getAlbumImage(info.filePath, size1);
-                albumImages.Items.Add(new CardItem() { AlbumImage = s, IsVisible=true, AlbumTitle = info.albumTitle, AlbumCardWidth = size1, AlbumImageWidth = size2, AlbumImageHeight = size2 });
-            }
+
+                foreach (AlbumInfo info in db.list)
+                {
+                    BitmapImage s = getAlbumImage(info.filePath, size1);
+                    this.Dispatcher.Invoke((Action)(() =>
+                    {
+                        albumImages.Items.Add(new CardItem() { AlbumImage = s, IsVisible = true, AlbumTitle = info.albumTitle, AlbumCardWidth = size1, AlbumImageWidth = size2, AlbumImageHeight = size2 });
+                    }));
+                }
+            });
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
