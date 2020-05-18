@@ -28,6 +28,7 @@ namespace Sonomium
         private CancellationTokenSource cancellationSource;
         private double currentPos = 0;
         private bool initialized = false;
+        private int albumArtSize = -1;
 
         public class CardItem
         {
@@ -134,7 +135,7 @@ namespace Sonomium
                     {
                         albumImages.Items.Refresh();
                     };
-                    bitmap.DecodePixelWidth = size;
+                    //bitmap.DecodePixelWidth = size;
                     bitmap.UriSource = new Uri(@"file://" + imageCacheFileName);
                     bitmap.CacheOption = BitmapCacheOption.OnLoad;
                     bitmap.EndInit();
@@ -225,9 +226,10 @@ namespace Sonomium
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!initialized)
+            if (albumArtSize != mainWindow.getAlbumArtSize())
             {
                 Set_Album_Images();
+                albumArtSize = mainWindow.getAlbumArtSize();
                 initialized = true;
             }
 
@@ -299,12 +301,12 @@ namespace Sonomium
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
             cancellationSource.Cancel();
-            /*
+            
             GC.Collect();
             GC.WaitForPendingFinalizers();
             GC.Collect();
             System.GC.Collect();
-            */
+            
         }
     }
 }
