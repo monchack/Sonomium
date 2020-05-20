@@ -25,6 +25,7 @@ namespace Sonomium
         public string albumTitle { get; set; }
         public string filePath { get; set; }
         public string albumArtist { get; set; }
+        public Task gettingImageTask { get; set; }
     };
 
     public class AlbumDb

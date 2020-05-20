@@ -29,6 +29,7 @@ namespace Sonomium
         private double currentPos = 0;
         private int albumArtSize = -1;
         private int albumArtResolution = -1;
+        static Object lockObj = new Object();
 
         public class CardItem
         {
@@ -49,126 +50,107 @@ namespace Sonomium
             cancellationSource = new CancellationTokenSource();
         }
 
-        private async void downloadFile(string uri, string outputFilePath, CancellationToken token)
+        private  bool  downloadFile(HttpResponseMessage h, string uri, string outputFilePath, CancellationToken token)
         {
             HttpClient client = new HttpClient();
             client.Timeout = TimeSpan.FromMilliseconds(3000);
-            HttpResponseMessage res;
+
             string dbg = outputFilePath + " ";
+            bool toDelete = false;
+            FileStream fileStream = null;
             try
             {
-                bool toDelete = false;
-                res = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, token);
-                if (!res.IsSuccessStatusCode)
+                using (fileStream = File.Create(outputFilePath))
                 {
-                    return;
-                }
-
-                FileStream fileStream = null;
-                try
-                {
-                    using (fileStream = File.Create(outputFilePath))
+                    Task<Stream> httpStream;
+                    using (httpStream = h.Content.ReadAsStreamAsync())
                     {
-                        using (Stream httpStream = await res.Content.ReadAsStreamAsync())
-                        {
-                            if (!httpStream.CanRead)
-                            {
-                                fileStream.Dispose();
-                                File.Delete(outputFilePath);
-                                return;
-                            }
-                            await httpStream.CopyToAsync(fileStream);
-                        }
-                    }
-                }
-                catch
-                {
-                    toDelete = true;
-                }
-                finally
-                {
-                    if (toDelete)
-                    {
-                        try
+                        httpStream.Wait();
+                        if (!httpStream.Result.CanRead)
                         {
                             fileStream.Dispose();
                             File.Delete(outputFilePath);
+                            return false;
+                        }
+
+                        httpStream.Result.ReadTimeout = 3000;
+                        try
+                        {
+                            httpStream.Result.CopyTo(fileStream); //たまにタイム・アウトする
                         }
                         catch
                         {
+                            toDelete = true;
                         }
-                    }
-                }
+                    } // using
+                } //using
             }
-            catch (TaskCanceledException)
+            catch
             {
-                // http cancel
+                toDelete = true;
             }
-        }
-
-        private BitmapImage getAlbumImage(string uri, int size)
-        {
-            if (uri == "")
+            finally
             {
-                return null;
-            }
-            string ip = mainWindow.getIp();
-
-            int n = uri.LastIndexOf('/');
-            string s = uri.Remove(n);   //   最後の / の出現位置までをキープして、残りは削除
-            string fileName = System.IO.Path.GetFileName(s) + ".jpg";
-            string imageCacheFileName = mainWindow.GetImageCacheDirectory() + fileName;
-            s = s.Replace("=", "%3D");
-            //Uri sourceUri = new Uri(@"http://" + ip + @"/albumart?path=/mnt/" + s);
-
-            if (!File.Exists(imageCacheFileName))
-            {
-                downloadFile(@"http://" + ip + @"/albumart?path=/mnt/" + s, imageCacheFileName, cancellationSource.Token);
-            }
-            else
-            {
-                try
+                if (toDelete)
                 {
-                    BitmapImage bitmap = new BitmapImage();
-                    bitmap.BeginInit();
-                    bitmap.DownloadCompleted += (sender, args) =>
-                    {
-                        albumImages.Items.Refresh();
-                    };
-                    if (mainWindow.getAlbumArtResolution() == 0) bitmap.DecodePixelWidth = size;
-                    bitmap.UriSource = new Uri(@"file://" + imageCacheFileName);
-                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmap.EndInit();
-                    bitmap.Freeze();
-                    return bitmap;
-                }
-                catch
-                {
-                    // // キャッシュにファイルはあったが、bitmap作成に失敗
-                    //fileName += "!";
                     try
                     {
-                        File.Delete(imageCacheFileName);
-                        downloadFile(@"http://" + ip + @"/albumart?path=/mnt/" + s, imageCacheFileName, cancellationSource.Token);
+                        fileStream.Dispose();
+                        File.Delete(outputFilePath);
                     }
                     catch
                     {
                     }
                 }
             }
-            // キャッシュがなかったか、キャッシュからのbitmap生成に失敗した
-            BitmapImage bitmap2 = new BitmapImage();
-            bitmap2.BeginInit();
-            bitmap2.DownloadCompleted += (sender, args) =>
-            {
-                albumImages.Items.Refresh();
-            };
-            bitmap2.UriSource = new Uri(@"http://" + ip + @"/albumart?path=/mnt/" + s);
-            bitmap2.EndInit();
-            return bitmap2;
+
+            if (toDelete) return false;
+            return true;
         }
 
-        private string getAlbumImageFromCache(string uri)
+        private HttpResponseMessage prepareDownload(string uri, int size, Task prevTask)
+        {
+            if (uri == "")
+            {
+                return null;
+            }
+            string ip = mainWindow.getIp();
+
+            int n = uri.LastIndexOf('/');
+            string s = uri.Remove(n);   //   最後の / の出現位置までをキープして、残りは削除
+            string fileName = System.IO.Path.GetFileName(s) + ".jpg";
+            string imageCacheFileName = mainWindow.GetImageCacheDirectory() + fileName;
+            s = s.Replace("=", "%3D");
+           Uri sourceUri = new Uri(@"http://" + ip + @"/albumart?path=/mnt/" + s);
+
+            try
+            {
+                if (File.Exists(imageCacheFileName)) return null;
+            }
+            catch
+            {
+                return null;
+            }
+
+            HttpClient client = new HttpClient();
+            client.Timeout = TimeSpan.FromMilliseconds(3000);
+            Task<HttpResponseMessage> res = null;
+
+            string uri2 = @"http://" + ip + @"/albumart?path=/mnt/" + s;
+
+            try
+            {
+                res = client.GetAsync(sourceUri, HttpCompletionOption.ResponseHeadersRead, cancellationSource.Token);
+                res.Wait();
+           }
+            catch
+            {
+                return null;
+            }
+            return res.Result;
+        }
+
+        private BitmapImage getAlbumImage(HttpResponseMessage h, string uri, int size, Task prevTask)
         {
             if (uri == "")
             {
@@ -182,12 +164,96 @@ namespace Sonomium
             string imageCacheFileName = mainWindow.GetImageCacheDirectory() + fileName;
             s = s.Replace("=", "%3D");
             //Uri sourceUri = new Uri(@"http://" + ip + @"/albumart?path=/mnt/" + s);
+            BitmapImage bitmap = null;
 
-            if (!File.Exists(imageCacheFileName))
+            if (h != null)
             {
-                return "";
+                if (!downloadFile(h, @"http://" + ip + @"/albumart?path=/mnt/" + s, imageCacheFileName, cancellationSource.Token))
+                {
+                    if (!downloadFile(h, @"http://" + ip + @"/albumart?path=/mnt/" + s, imageCacheFileName, cancellationSource.Token))
+                    {
+                        if (!downloadFile(h, @"http://" + ip + @"/albumart?path=/mnt/" + s, imageCacheFileName, cancellationSource.Token))
+                            return null;
+                    }
+                }
             }
-            return imageCacheFileName;
+            try
+            {
+                bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                if (mainWindow.getAlbumArtResolution() == 0) bitmap.DecodePixelWidth = size;
+                bitmap.UriSource = new Uri(@"file://" + imageCacheFileName);
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.EndInit();
+                bitmap.Freeze();
+            }
+            catch
+            {
+                // キャッシュにファイルはあったが、bitmap作成に失敗
+                try
+                {
+                    //リトライ
+                    bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    if (mainWindow.getAlbumArtResolution() == 0) bitmap.DecodePixelWidth = size;
+                    bitmap.UriSource = new Uri(@"file://" + imageCacheFileName);
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.EndInit();
+                    bitmap.Freeze();
+                }
+                catch
+                {
+                }
+                return null;
+            }
+            return bitmap;
+
+        }
+
+        private async Task getAndSetImage(AlbumInfo info, int size, Task prevTask)
+        {
+            BitmapImage s = null;
+
+            HttpResponseMessage h = prepareDownload(info.filePath, size, prevTask);
+
+
+            // イメージ取得中、並行して次のイメージ取得にすすんでもらう
+            await Task.Run(() =>
+            {
+                s = getAlbumImage(h, info.filePath, size, prevTask);
+            });
+            if (prevTask != null)
+            {
+                //listbox に追加するのは、前のタスクでのlistbox追加が終わってから
+                try
+                {
+                    prevTask.Wait();
+                }
+                catch
+                {
+                }
+            }
+            if (prevTask != null)
+            {
+                try
+                {
+                    CardItem ci = new CardItem() { AlbumImage = s, IsVisible = true, AlbumTitle = info.albumTitle, AlbumCardWidth = size, AlbumImageWidth = size, AlbumImageHeight = size };
+                    this.Dispatcher.Invoke((Action)(() =>
+                    {
+                        try
+                        {
+                            albumImages.Items.Add(ci);
+                        }
+                        catch
+                        {
+                        }
+                    }));
+                }
+                catch
+                {
+                }
+            }
+            
         }
 
         private async void Set_Album_Images()
@@ -210,16 +276,14 @@ namespace Sonomium
                 size1 = size2 = 240;
             }
 
+            Task t = null;
+
+            // ここで一旦 Set_Album_Images は制御を戻しつつ、以下を続行する
             await Task.Run(() =>
             {
-
                 foreach (AlbumInfo info in db.list)
                 {
-                    BitmapImage s = getAlbumImage(info.filePath, size1);
-                    this.Dispatcher.Invoke((Action)(() =>
-                    {
-                        albumImages.Items.Add(new CardItem() { AlbumImage = s, IsVisible = true, AlbumTitle = info.albumTitle, AlbumCardWidth = size1, AlbumImageWidth = size2, AlbumImageHeight = size2 });
-                    }));
+                    t = getAndSetImage(info, size1, t);
                 }
             });
         }
@@ -232,65 +296,6 @@ namespace Sonomium
                 albumArtSize = mainWindow.getAlbumArtSize();
                 albumArtResolution = mainWindow.getAlbumArtResolution();
             }
-
-            var border = VisualTreeHelper.GetChild(albumImages, 0) as Border;
-            if (border != null)
-            {
-                var scrollViewer = border.Child as ScrollViewer;
-                scrollViewer.ScrollChanged += scrollViewer_ScrollChanged;
-            }
-        }
-
-        private void DoEvents()
-        {
-            DispatcherFrame frame = new DispatcherFrame();
-            var callback = new DispatcherOperationCallback(obj =>
-            {
-                ((DispatcherFrame)obj).Continue = false;
-                return null;
-            });
-            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Background, callback, frame);
-            Dispatcher.PushFrame(frame);
-        }
-
-        void scrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
-        {
-            var border = VisualTreeHelper.GetChild(albumImages, 0) as Border;
-            double offset = 0;
-            if (border == null) return;
-            
-            var scrollViewer = border.Child as ScrollViewer;
-            offset = scrollViewer.VerticalOffset / scrollViewer.ScrollableHeight;
-
-            int count = albumImages.Items.Count;
-           
-
-            for (int i = 0; i < count; ++i)
-            {
-                var item = albumImages.Items.GetItemAt(i) as CardItem;
-                double d = (double)i / count;
-                if (d > offset - 0.1 && d < offset + 0.1)
-                {
-                    // visibile
-                    //var item = albumImages.Items.GetItemAt(i) as CardItem;
-                    //item.AlbumImage = item.AlbumImageBackup;
-                    //item.IsVisible = true;
-                    
-                }
-                else
-                {
-                   //tem.AlbumImage = null;
-                   // item.IsVisible = false;
-                }
-
-
-            }
-            //if (currentPos == 0) albumImages.Items.Refresh();
-            //if (currentPos - offset < -0.1) albumImages.Items.Refresh();
-            //if (offset - currentPos > 0.1) albumImages.Items.Refresh();
-            currentPos = offset;
-            //albumImages.Items.Refresh();
-            ///DoEvents();
         }
 
         private void AlbumImages_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -311,13 +316,11 @@ namespace Sonomium
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
-            cancellationSource.Cancel();
+            //cancellationSource.Cancel();
             
             GC.Collect();
             GC.WaitForPendingFinalizers();
             GC.Collect();
-            System.GC.Collect();
-            
         }
     }
 }
