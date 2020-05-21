@@ -233,9 +233,7 @@ namespace Sonomium
                 {
                 }
             }
-            if (prevTask != null)
-            {
-                try
+             try
                 {
                     CardItem ci = new CardItem() { AlbumImage = s, IsVisible = true, AlbumTitle = info.albumTitle, AlbumCardWidth = size, AlbumImageWidth = size, AlbumImageHeight = size };
                     this.Dispatcher.Invoke((Action)(() =>
@@ -254,7 +252,6 @@ namespace Sonomium
                 }
             }
             
-        }
 
         private async void Set_Album_Images()
         {

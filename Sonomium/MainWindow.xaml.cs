@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Linq;
 
 using System.IO;
 using System.Threading;
@@ -25,7 +26,6 @@ namespace Sonomium
         public string albumTitle { get; set; }
         public string filePath { get; set; }
         public string albumArtist { get; set; }
-        public Task gettingImageTask { get; set; }
     };
 
     public class AlbumDb
@@ -351,6 +351,11 @@ namespace Sonomium
             window.CurrentAlbum.Text = vs.album;
         }
 
+        static void AddToDb(string artist, string album, string path)
+        {
+
+        }
+
         static void CreateAlbumDb(string ip, MainWindow window)
         {
             string s = "";
@@ -365,17 +370,34 @@ namespace Sonomium
             StringReader sr = new StringReader(s);
 
 
-                List<string> files = new List<string>();
+            List<string> files = new List<string>();
 
             string lastAlbum = "";
             string lastArtist = "";
             string lastFilePath = "";
-
+            List<AlbumInfo> tmpList = new List<AlbumInfo>();
+            tmpList.Clear();
 
             window.albumDb.list.Clear();
 
             while ((line = sr.ReadLine()) != null)
             {
+                if (line.Contains("file: "))
+                {
+                    if (lastArtist != "" && lastAlbum != "")
+                    {
+                        AlbumInfo info = new AlbumInfo();
+                        info.albumArtist = lastArtist;
+                        info.albumTitle = lastAlbum;
+                        info.filePath = lastFilePath;
+                        tmpList.Add(info);
+                    }
+                    lastArtist = "";
+                    lastAlbum = "";
+
+                    string file = line.Replace("file: ", "");
+                    lastFilePath = file;
+                }
                 if (line.Contains("Artist: "))
                 {
                     string artist = line.Replace("Artist: ", "");
@@ -384,30 +406,47 @@ namespace Sonomium
                 if (line.Contains("Album: "))
                 {
                     string album = line.Replace("Album: ", "");
-                    if (!lastAlbum.Equals(album))
-                    {
-                        // new album
-                        lastAlbum = album;
-                        lastFilePath = "";
-                    }
+                    lastAlbum = album;
                 }
-                if (line.Contains("file: "))
+            }
+            if (lastArtist != "" && lastAlbum != "")
+            {
+                AlbumInfo info = new AlbumInfo();
+                info.albumArtist = lastArtist;
+                info.albumTitle = lastAlbum;
+                info.filePath = lastFilePath;
+                tmpList.Add(info);
+            }
+
+
+            var art = (from b in tmpList
+                      select b.albumArtist).Distinct();
+
+            foreach (var b in art)
+            {
+                var alb = (from c in tmpList
+                           where c.albumArtist == b
+                           select c.albumTitle).Distinct();
+                foreach (var d in alb)
                 {
-                    string file  = line.Replace("file: ", "");
-                    if (lastFilePath == "")
+                    var filess = from e in tmpList
+                                 where e.albumArtist == b
+                                 where e.albumTitle == d
+                                 select e.filePath;
+                    foreach (var x in filess)
                     {
-                        lastFilePath = file;
-
                         AlbumInfo info = new AlbumInfo();
-                        info.albumArtist = lastArtist;
-                        info.albumTitle = lastAlbum;
-                        info.filePath = lastFilePath;
+                        info.albumArtist = b;
+                        info.albumTitle = d;
+                        info.filePath = x;
                         window.albumDb.list.Add(info);
-
                         ++i;
+                        break;
                     }
                 }
             }
+
+
             window.albumDb.num = i;
         }
 
