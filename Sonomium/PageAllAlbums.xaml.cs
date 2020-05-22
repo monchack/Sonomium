@@ -28,7 +28,6 @@ namespace Sonomium
         private CancellationTokenSource cancellationSource;
         private int albumArtSize = -1;
         private int albumArtResolution = -1;
-        static Object lockObj = new Object();
 
         public class CardItem
         {
@@ -38,7 +37,6 @@ namespace Sonomium
             public int AlbumImageHeight { get; set; }
             public int AlbumCardWidth { get; set; }
             public string AlbumArtist { get; set; }
-            public string AlbumImageBackup { get; set; }
             public bool IsVisible { get; set; }
         }
 
@@ -46,10 +44,9 @@ namespace Sonomium
         {
             InitializeComponent();
             mainWindow = _mainWindow;
-            cancellationSource = new CancellationTokenSource();
         }
 
-        private  bool  downloadFile(HttpResponseMessage h, string uri, string outputFilePath, CancellationToken token)
+        private bool downloadFile(HttpResponseMessage h, string uri, string outputFilePath)
         {
             HttpClient client = new HttpClient();
             client.Timeout = TimeSpan.FromMilliseconds(3000);
@@ -102,12 +99,11 @@ namespace Sonomium
                     }
                 }
             }
-
             if (toDelete) return false;
             return true;
         }
 
-        private HttpResponseMessage prepareDownload(string uri, int size, Task prevTask)
+        private HttpResponseMessage prepareDownload(string uri, int size)
         {
             if (uri == "")
             {
@@ -120,7 +116,7 @@ namespace Sonomium
             string fileName = System.IO.Path.GetFileName(s) + ".jpg";
             string imageCacheFileName = mainWindow.GetImageCacheDirectory() + fileName;
             s = s.Replace("=", "%3D");
-           Uri sourceUri = new Uri(@"http://" + ip + @"/albumart?path=/mnt/" + s);
+            Uri sourceUri = new Uri(@"http://" + ip + @"/albumart?path=/mnt/" + s);
 
             try
             {
@@ -141,7 +137,7 @@ namespace Sonomium
             {
                 res = client.GetAsync(sourceUri, HttpCompletionOption.ResponseHeadersRead, cancellationSource.Token);
                 res.Wait();
-           }
+            }
             catch
             {
                 return null;
@@ -164,34 +160,22 @@ namespace Sonomium
             s = s.Replace("=", "%3D");
             //Uri sourceUri = new Uri(@"http://" + ip + @"/albumart?path=/mnt/" + s);
             BitmapImage bitmap = null;
+            int i = 0;
 
             if (h != null)
             {
-                if (!downloadFile(h, @"http://" + ip + @"/albumart?path=/mnt/" + s, imageCacheFileName, cancellationSource.Token))
+                bool downloaded = false;
+                for (i = 0; i < 5; ++i)
                 {
-                    if (!downloadFile(h, @"http://" + ip + @"/albumart?path=/mnt/" + s, imageCacheFileName, cancellationSource.Token))
-                    {
-                        if (!downloadFile(h, @"http://" + ip + @"/albumart?path=/mnt/" + s, imageCacheFileName, cancellationSource.Token))
-                            return null;
-                    }
+                    downloaded = downloadFile(h, @"http://" + ip + @"/albumart?path=/mnt/" + s, imageCacheFileName);
+                    if (downloaded) break;
                 }
+                if (!downloaded) return null;
             }
-            try
+            for (i = 0; i < 5; ++i)
             {
-                bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                if (mainWindow.getAlbumArtResolution() == 0) bitmap.DecodePixelWidth = size;
-                bitmap.UriSource = new Uri(@"file://" + imageCacheFileName);
-                bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                bitmap.EndInit();
-                bitmap.Freeze();
-            }
-            catch
-            {
-                // キャッシュにファイルはあったが、bitmap作成に失敗
                 try
                 {
-                    //リトライ
                     bitmap = new BitmapImage();
                     bitmap.BeginInit();
                     if (mainWindow.getAlbumArtResolution() == 0) bitmap.DecodePixelWidth = size;
@@ -202,19 +186,22 @@ namespace Sonomium
                 }
                 catch
                 {
+                    // キャッシュにファイルはあったが、bitmap作成に失敗
+                    bitmap = null;
                 }
+                if (bitmap != null) break;
+            }
+            if (bitmap == null)
+            {
                 return null;
             }
             return bitmap;
-
         }
 
         private async Task getAndSetImage(AlbumInfo info, int size, Task prevTask)
         {
             BitmapImage s = null;
-
-            HttpResponseMessage h = prepareDownload(info.filePath, size, prevTask);
-
+            HttpResponseMessage h = prepareDownload(info.filePath, size);
 
             // イメージ取得中、並行して次のイメージ取得にすすんでもらう
             await Task.Run(() =>
@@ -232,25 +219,35 @@ namespace Sonomium
                 {
                 }
             }
-             try
+            try
+            {
+                CardItem ci = new CardItem() { AlbumImage = s, AlbumArtist = info.albumArtist, IsVisible = true, AlbumTitle = info.albumTitle, AlbumCardWidth = size, AlbumImageWidth = size, AlbumImageHeight = size };
+                this.Dispatcher.Invoke((Action)(() =>
                 {
-                    CardItem ci = new CardItem() { AlbumImage = s, AlbumArtist=info.albumArtist, IsVisible = true, AlbumTitle = info.albumTitle, AlbumCardWidth = size, AlbumImageWidth = size, AlbumImageHeight = size };
-                    this.Dispatcher.Invoke((Action)(() =>
+                    try
                     {
-                        try
-                        {
-                            albumImages.Items.Add(ci);
-                        }
-                        catch
-                        {
-                        }
-                    }));
-                }
-                catch
+                        albumImages.Items.Add(ci);
+                    }
+                    catch
+                    {
+                    }
+                }));
+            }
+            catch
+            {
+            }
+        }
+
+        private void Fix_Album_Images()
+        {
+            foreach(CardItem ci in albumImages.Items)
+            {
+                if (ci.AlbumImage == null)
                 {
+                    //HttpResponseMessage h = prepareDownload(ci.info.filePath, size);
                 }
             }
-            
+        }
 
         private async void Set_Album_Images()
         {
@@ -286,6 +283,7 @@ namespace Sonomium
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            cancellationSource = new CancellationTokenSource();
             if (albumArtSize != mainWindow.getAlbumArtSize() || albumArtResolution != mainWindow.getAlbumArtResolution())
             {
                 Set_Album_Images();
@@ -312,7 +310,7 @@ namespace Sonomium
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
-            //cancellationSource.Cancel();
+            cancellationSource.Cancel();
             
             GC.Collect();
             GC.WaitForPendingFinalizers();
