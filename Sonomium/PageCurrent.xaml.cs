@@ -24,10 +24,7 @@ namespace Sonomium
     public partial class PageCurrent : Page
     {
         private MainWindow mainWindow;
-        private List<string> trackTitleList;
-        private List<int> trackTimeList;
-        private List<string> trackFileList;
-
+        
         public class TrackInfo
         {
             public string TrackTitle { get; set; }
@@ -36,14 +33,12 @@ namespace Sonomium
             public string TrackStatus { get; set; }
             public string TrackNumber { get; set; }
         }
+        
 
         public PageCurrent(MainWindow _mainWindow)
         {
             InitializeComponent();
             mainWindow = _mainWindow;
-            trackTitleList = new List<string>();
-            trackFileList = new List<string>();
-            trackTimeList = new List<int>();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -51,50 +46,20 @@ namespace Sonomium
             if (mainWindow == null) return;
             if (mainWindow.getSelectedAlbum() == "") return;
 
-            string s = "find albumartist " + "\"" + mainWindow.getSelectedArtist() + "\"" + " album " + "\"" + mainWindow.getSelectedAlbum() + "\"";
-            string track = mainWindow.sendMpd(s);
-            StringReader sr = new StringReader(track);
-
             albumTitle.Text = mainWindow.getSelectedAlbum();
             albumArtist.Text = mainWindow.getSelectedArtist();
             albumImage.Source = mainWindow.getSelectedAlbumImage();
 
-            trackTitleList.Clear();
-            trackFileList.Clear();
-            trackTimeList.Clear();
             trackList.Items.Clear();
 
-            string line;
-            int i = 0;
-            while ((line = sr.ReadLine()) != null)
+            var tracks = mainWindow.GetCurrentAlbumTracks();
+            for (int i = 0; i < tracks.Count; ++i)
             {
-                if (line.Contains("file: "))
-                {
-                    string file = line.Replace("file: ", "");
-                    trackFileList.Add(file);
-                    trackTimeList.Add(-1); // 仮の登録
-                    string title = "Track " + (i+1).ToString();
-                    trackTitleList.Add(title); // 仮の登録
-                    ++i;
-                }
-                if (line.Contains("Time: "))
-                {
-                    string time = line.Replace("Time: ", "");
-                    int n = Int32.Parse(time);
-                    trackTimeList[i-1] = n;
-                }
-                if (line.Contains("Title:"))
-                {
-                    string title = line.Replace("Title: ", "");
-                    trackTitleList[i - 1] = title;
-                }
-            }
-            for (i = 0; i < trackFileList.Count; ++i)
-            {
-                string title = trackTitleList[i];
-                string file = trackFileList[i];
+                string title = tracks[i].trackTitle;
+                string file = tracks[i].filePath;
+                if (title == "") title = "Track " + (i + 1).ToString();
                 string duration;
-                int n = trackTimeList[i];
+                int n = tracks[i].length;
                 TimeSpan ts = new TimeSpan(0,0,n);
                 if (n > 3600) duration = ts.ToString(@"h\:mm\:ss");
                 else duration = ts.ToString(@"m\:ss");

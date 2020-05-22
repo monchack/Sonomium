@@ -51,9 +51,9 @@ namespace Sonomium
             AlbumDb db = mainWindow.getAlbumDb();
             var art = (from b in db.list
                        select b.albumArtist).Distinct();
-            foreach (var b in art)
+            foreach (var c in art)
             {
-                artistList.Items.Add(b);
+                artistList.Items.Add(c);
             }
             /*
             string albumartist = mainWindow.sendMpd("list albumartist");
@@ -215,46 +215,18 @@ namespace Sonomium
             albumImages.Items.Clear();
             mainWindow.setCursoredArtist(artistList.SelectedItem.ToString());
 
-            string album = mainWindow.sendMpd("find albumartist " + "\"" + artistList.SelectedItem.ToString() + "\"");
-            StringReader sr = new StringReader(album);
-            string line;
-            string nextAlbum = "";
-
             int size1 = 160;
             int size2 = 160;
             int [] size_table = { 132, 160, 196, 240};
             size1 = size2 = size_table[mainWindow.getAlbumArtSize()];
 
-            while ((line = sr.ReadLine()) != null)
+            var albums = mainWindow.GetCursoredArtistAlbums();
+            foreach (var x in albums)
             {
-                if (line.Contains("Album:"))
-                {
-                    string newItem = line.Replace("Album: ", "");
-                    if (newItem == "") newItem = "(Unknown)";
-                    if (!albumList.Contains(newItem))
-                    {
-                        albumList.Add(newItem);
-                        nextAlbum = newItem;
-                    }
-                }
-                if (line.Contains("file: "))
-                {
-                    if (nextAlbum != "")
-                    {
-                        BitmapImage bmp = getAlbumImage(line.Replace("file: ", ""));
-                        albumImages.Items.Add(new CardItem() { AlbumImage = bmp, AlbumTitle=nextAlbum, AlbumCardWidth=size1, AlbumImageWidth=size2, AlbumImageHeight=size2 });
-                        nextAlbum = "";
-                    }
-                }
-                if (line.Contains("Time: "))
-                {
-                    string s = line.Replace("Time: ", "");
-                    int n = Int32.Parse(s);
-                    albumTimeList.Add(n);
-                   // TimeSpan ts = new TimeSpan(0,0,n);
-                    //albumTimeList.Add(s.ToLowerInvariant)
-                }
+                BitmapImage bmp = getAlbumImage(x.filePath);
+                albumImages.Items.Add(new CardItem() { AlbumImage = bmp, AlbumTitle = x.albumTitle, AlbumCardWidth = size1, AlbumImageWidth = size2, AlbumImageHeight = size2 });
             }
+
         }
 
         private void AlbumImages_SelectionChanged(object sender, SelectionChangedEventArgs e)

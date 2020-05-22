@@ -234,7 +234,7 @@ namespace Sonomium
             }
              try
                 {
-                    CardItem ci = new CardItem() { AlbumImage = s, IsVisible = true, AlbumTitle = info.albumTitle, AlbumCardWidth = size, AlbumImageWidth = size, AlbumImageHeight = size };
+                    CardItem ci = new CardItem() { AlbumImage = s, AlbumArtist=info.albumArtist, IsVisible = true, AlbumTitle = info.albumTitle, AlbumCardWidth = size, AlbumImageWidth = size, AlbumImageHeight = size };
                     this.Dispatcher.Invoke((Action)(() =>
                     {
                         try

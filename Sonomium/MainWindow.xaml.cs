@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Linq;
 
 using System.IO;
 using System.Threading;
@@ -21,6 +20,21 @@ using System.Text.Json;
 
 namespace Sonomium
 {
+    public class TrackInfo
+    {
+        public string albumTitle { get; set; }
+        public string filePath { get; set; }
+        public string albumArtist { get; set; }
+        public string trackTitle { get; set; }
+        public int length { get; set; }
+    };
+
+    public class TrackDb
+    {
+        public int num { set; get; }
+        public List<TrackInfo> list { set; get; }
+    };
+
     public class AlbumInfo
     {
         public string albumTitle { get; set; }
@@ -47,6 +61,7 @@ namespace Sonomium
         private BitmapImage selectedAlbumImage;
         private int albumArtSize = 0;
         private AlbumDb albumDb;
+        private TrackDb trackDb; 
         private Page pageMain;
         private Page pageAll;
         private Page pageSettings;
@@ -111,6 +126,10 @@ namespace Sonomium
             albumDb.list = new List<AlbumInfo>();
             albumDb.num = 0;
 
+            trackDb = new TrackDb();
+            trackDb.list = new List<TrackInfo>();
+            trackDb.num = 0;
+
 
             navigation = this.mainFrame.NavigationService;
             navigation.Navigate(new PageSettings(this));
@@ -133,37 +152,6 @@ namespace Sonomium
         public void setAlbumArtResolution(int resolution) {  albumArtResolution = resolution;}
         public int getAlbumArtResolution() {  return albumArtResolution; }
         
-        public bool isAlbumDbCreated()
-        {
-            if (albumDb.num == 0) return false;
-            return true;
-        }
-
-        public void createAlbumDb()
-        {
-
-        }
-
-        public void updateAlbumDb(string albumTitle, string albumArtist, string albumFilePath)
-        {
-            for (int i = 0; i < albumDb.list.Count; ++i)
-            {
-                if (albumDb.list[i].albumArtist.Equals(albumArtist))
-                {
-                    if (albumDb.list[i].albumTitle.Equals(albumTitle))
-                    {
-                        albumDb.list[i].filePath = albumFilePath;
-                        return;
-                    }
-                }
-            }
-            AlbumInfo info = new AlbumInfo();
-            info.albumArtist = albumArtist;
-            info.albumTitle = albumTitle;
-            info.filePath = albumFilePath;
-            albumDb.list.Add(info);
-        }
-
         public string GetProfileFilePathAndName()
         {
             string s = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -351,20 +339,12 @@ namespace Sonomium
             window.CurrentAlbum.Text = vs.album;
         }
 
-        static void AddToDb(string artist, string album, string path)
-        {
-
-        }
-
         static void CreateAlbumDb(string ip, MainWindow window)
         {
             string s = "";
             string line;
             int i = 0;
-            //await Task.Run(() =>
-            //{
-            // s = _sendMpd(ip, "listallinfo");
-            //});
+
             s = _sendMpd(ip, "listallinfo");
 
             StringReader sr = new StringReader(s);
@@ -375,10 +355,12 @@ namespace Sonomium
             string lastAlbum = "";
             string lastArtist = "";
             string lastFilePath = "";
-            List<AlbumInfo> tmpList = new List<AlbumInfo>();
-            tmpList.Clear();
+            string lastTrackTitle = "";
+            int lastTime = 0;
 
+            window.trackDb.list.Clear();
             window.albumDb.list.Clear();
+
 
             while ((line = sr.ReadLine()) != null)
             {
@@ -386,19 +368,26 @@ namespace Sonomium
                 {
                     if (lastArtist != "" && lastAlbum != "")
                     {
-                        AlbumInfo info = new AlbumInfo();
+                        TrackInfo info = new TrackInfo();
                         info.albumArtist = lastArtist;
                         info.albumTitle = lastAlbum;
                         info.filePath = lastFilePath;
-                        tmpList.Add(info);
+                        info.trackTitle = lastTrackTitle;
+                        info.length = lastTime;
+                        window.trackDb.list.Add(info);
                     }
                     lastArtist = "";
                     lastAlbum = "";
+                    lastTrackTitle = "";
+                    lastFilePath = "";
 
                     string file = line.Replace("file: ", "");
                     lastFilePath = file;
                 }
-                if (line.Contains("Artist: "))
+                if (line.Contains("AlbumArtist: "))
+                {
+                }
+                else if (line.Contains("Artist: "))
                 {
                     string artist = line.Replace("Artist: ", "");
                     lastArtist = artist;
@@ -408,28 +397,38 @@ namespace Sonomium
                     string album = line.Replace("Album: ", "");
                     lastAlbum = album;
                 }
+                if (line.Contains("Title: "))
+                {
+                    string title = line.Replace("Title: ", "");
+                    lastTrackTitle = title;
+                }
+                if (line.Contains("Time: "))
+                {
+                    string time = line.Replace("Time: ", "");
+                    int n = Int32.Parse(time);
+                    lastTime = n;
+                }
             }
             if (lastArtist != "" && lastAlbum != "")
             {
-                AlbumInfo info = new AlbumInfo();
+                TrackInfo info = new TrackInfo();
                 info.albumArtist = lastArtist;
                 info.albumTitle = lastAlbum;
                 info.filePath = lastFilePath;
-                tmpList.Add(info);
+                window.trackDb.list.Add(info);
             }
 
-
-            var art = (from b in tmpList
+            var art = (from b in window.trackDb.list
                       select b.albumArtist).Distinct();
 
             foreach (var b in art)
             {
-                var alb = (from c in tmpList
+                var alb = (from c in window.trackDb.list
                            where c.albumArtist == b
                            select c.albumTitle).Distinct();
                 foreach (var d in alb)
                 {
-                    var filess = from e in tmpList
+                    var filess = from e in window.trackDb.list
                                  where e.albumArtist == b
                                  where e.albumTitle == d
                                  select e.filePath;
@@ -448,6 +447,49 @@ namespace Sonomium
 
 
             window.albumDb.num = i;
+        }
+
+        public List<TrackInfo> GetCurrentAlbumTracks()
+        {
+            List<TrackInfo> list = new List<TrackInfo>();
+
+            var tracks = from e in trackDb.list
+                            where e.albumArtist == selectedArtist
+                            where e.albumTitle == selectedAlbum
+                            select e;
+            foreach (var x in tracks)
+            {
+                list.Add(x);
+            }
+            return list;
+        }
+
+        public List<AlbumInfo> GetCurrentArtistAlbums()
+        {
+            List<AlbumInfo> list = new List<AlbumInfo>();
+
+            var tracks = from e in albumDb.list
+                         where e.albumArtist == selectedArtist
+                         select e;
+            foreach (var x in tracks)
+            {
+                list.Add(x);
+            }
+            return list;
+        }
+
+        public List<AlbumInfo> GetCursoredArtistAlbums()
+        {
+            List<AlbumInfo> list = new List<AlbumInfo>();
+
+            var tracks = from e in albumDb.list
+                         where e.albumArtist == cursoredArtist
+                         select e;
+            foreach (var x in tracks)
+            {
+                list.Add(x);
+            }
+            return list;
         }
 
         public string GetServerInfo()
@@ -475,26 +517,16 @@ namespace Sonomium
 
         public void addSelectedAlbuomToQue(int pos, bool start)
         {
-            string line;
-
-            // artist と album 情報から、トラックを抽出してキューに積む
-            string s = "find (albumartist==" + "\"" + getSelectedArtist() + "\")" + " AND (album==" + "\"" + getSelectedAlbum() + "\")";
-            string track = _sendMpd(getIp(), s);
-
-            StringReader sr = new StringReader(track);
-
             List<string> files = new List<string>();
             int i = 0;
-            while ((line = sr.ReadLine()) != null)
+
+            var tracks = GetCurrentAlbumTracks();
+            for (i = 0; i < tracks.Count; ++i)
             {
-                if (line.Contains("file: "))
-                {
-                    ++i;
-                    if (i < pos) continue;
-                    string file = line.Replace("file: ", "");
-                    files.Add(file);
-                }
+                if (i + 1 < pos) continue;
+                files.Add(tracks[i].filePath);
             }
+
             string postData = "[";
             foreach (string file in files)
             {
