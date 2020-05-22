@@ -478,7 +478,7 @@ namespace Sonomium
             string line;
 
             // artist と album 情報から、トラックを抽出してキューに積む
-            string s = "find albumartist " + "\"" + getSelectedArtist() + "\"" + " album " + "\"" + getSelectedAlbum() + "\"";
+            string s = "find (albumartist==" + "\"" + getSelectedArtist() + "\")" + " AND (album==" + "\"" + getSelectedAlbum() + "\")";
             string track = _sendMpd(getIp(), s);
 
             StringReader sr = new StringReader(track);

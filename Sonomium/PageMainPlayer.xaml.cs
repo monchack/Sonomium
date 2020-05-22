@@ -48,8 +48,15 @@ namespace Sonomium
 
         private void update_album_list()
         {
+            AlbumDb db = mainWindow.getAlbumDb();
+            var art = (from b in db.list
+                       select b.albumArtist).Distinct();
+            foreach (var b in art)
+            {
+                artistList.Items.Add(b);
+            }
+            /*
             string albumartist = mainWindow.sendMpd("list albumartist");
-
             StringReader sr = new StringReader(albumartist);
             string line;
             while ((line = sr.ReadLine()) != null)
@@ -61,6 +68,7 @@ namespace Sonomium
                     artistList.Items.Add(newItem);
                 }
             }
+            */
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

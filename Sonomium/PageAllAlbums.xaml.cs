@@ -26,7 +26,6 @@ namespace Sonomium
     {
         private MainWindow mainWindow;
         private CancellationTokenSource cancellationSource;
-        private double currentPos = 0;
         private int albumArtSize = -1;
         private int albumArtResolution = -1;
         static Object lockObj = new Object();
