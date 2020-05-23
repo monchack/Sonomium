@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Text.Json;
+using System.Net;
 
 namespace Sonomium
 {
@@ -95,6 +96,22 @@ namespace Sonomium
         {
             if (buttonAlbumArtResolutionNormal.IsChecked == true) { mainWindow.setAlbumArtResolution(0); }
             else if (buttonAlbumArtResolutionHigh.IsChecked == true) { mainWindow.setAlbumArtResolution(1); }
+        }
+
+        private void IpSearch_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                IPHostEntry hostInfo = Dns.GetHostEntry("volumio.local");
+                foreach (IPAddress address in hostInfo.AddressList)
+                {
+                    ipBox.Text = address.ToString();
+                    break;
+                }
+            }
+            catch
+            {
+            }
         }
     }
 }

@@ -44,9 +44,17 @@
                         <TextBlock  Text="IP address"  FontFamily="Segoe UI" FontSize="14pt"  />
                         <Grid Width="20pt" />
                     <StackPanel Orientation="Vertical">
-                <TextBox x:Name="ipBox"  FontFamily="Segoe UI" FontSize="14pt" HorizontalAlignment="Left" Height="20pt"  Width="120pt" VerticalContentAlignment="Center"  TextChanged="IpBox_TextChanged"  />
-             
-            <Grid Height="12pt" DockPanel.Dock="Top" />
+                        <StackPanel Orientation="Horizontal" >
+                            <TextBox x:Name="ipBox"  FontFamily="Segoe UI" FontSize="14pt" HorizontalAlignment="Left" Height="20pt"  Width="120pt" VerticalContentAlignment="Center"  TextChanged="IpBox_TextChanged"  />
+                            <Grid Width="12pt" />
+                            <Button x:Name="ipSearch"  Padding="8pt,4pt,8pt,4pt"   HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0"  FontFamily="Segoe UI" FontSize="14pt" Click="IpSearch_Click" >
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xF6FA;" FontFamily="Segoe MDL2 Assets" FontSize="12pt" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="#404040" />
+                                    <TextBlock>Search the server</TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                        <Grid Height="12pt" DockPanel.Dock="Top" />
                         <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" >
                             <Button x:Name="ConnectivityTest"  Padding="8pt,4pt,8pt,4pt"   HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0"  FontFamily="Segoe UI" FontSize="14pt" Click="ConnectivityTest_Click" >
                                 <StackPanel Orientation="Horizontal">
