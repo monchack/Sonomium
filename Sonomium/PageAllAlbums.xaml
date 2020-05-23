@@ -41,7 +41,7 @@
                             <StackPanel Margin="12pt, 8pt, 12pt, 10pt" Width="{Binding AlbumCardWidth}" Background="White" Orientation="Vertical" >
                                 <Rectangle  Visibility="{Binding IsVisible, Mode=TwoWay, Converter={StaticResource boolToVisibilityConverter}}"  RadiusX="4pt" RadiusY="4pt" Width="{Binding AlbumImageWidth}" Height="{Binding AlbumImageHeight}" >
                                     <Rectangle.Effect>
-                                        <DropShadowEffect Color="#D0D0D0" BlurRadius="2" ShadowDepth="4" Direction="315" />
+                                        <DropShadowEffect Color="#D0D0D0" BlurRadius="12" ShadowDepth="7" Direction="315" RenderingBias="Quality" />
                                     </Rectangle.Effect>
                                     <Rectangle.Fill>
                                         <ImageBrush ImageSource="{Binding AlbumImage}"  />
