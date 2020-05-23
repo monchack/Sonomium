@@ -128,7 +128,7 @@ namespace Sonomium
             }
 
             HttpClient client = new HttpClient();
-            client.Timeout = TimeSpan.FromMilliseconds(3000);
+            client.Timeout = TimeSpan.FromMilliseconds(10000);
             Task<HttpResponseMessage> res = null;
 
             string uri2 = @"http://" + ip + @"/albumart?path=/mnt/" + s;
@@ -138,8 +138,9 @@ namespace Sonomium
                 res = client.GetAsync(sourceUri, HttpCompletionOption.ResponseHeadersRead, cancellationSource.Token);
                 res.Wait();
             }
-            catch
+            catch (Exception ex)
             {
+                // タイムアウト
                 return null;
             }
             return res.Result;

@@ -428,6 +428,8 @@ namespace Sonomium
                 info.albumArtist = lastArtist;
                 info.albumTitle = lastAlbum;
                 info.filePath = lastFilePath;
+                info.length = lastTime;
+                info.trackTitle = lastTrackTitle;
                 window.trackDb.list.Add(info);
             }
 
