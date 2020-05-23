@@ -67,6 +67,7 @@ namespace Sonomium
         private Page pageSettings;
         private Page pageTracks;
         private int albumArtResolution = 0;
+        private Task readTask = null;
 
         class VolumioState
         {
@@ -152,6 +153,13 @@ namespace Sonomium
         public void setAlbumArtResolution(int resolution) {  albumArtResolution = resolution;}
         public int getAlbumArtResolution() {  return albumArtResolution; }
         
+        public string GetTrackListFilePathAndName()
+        {
+            string s = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            s += "\\Sonomium\\listallinfo.txt";
+            return s;
+        }
+
         public string GetProfileFilePathAndName()
         {
             string s = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -344,12 +352,18 @@ namespace Sonomium
             string s = "";
             string line;
             int i = 0;
+            string listFile = window.GetTrackListFilePathAndName();
+            bool readFromFile = false;
 
             s = _sendMpd(ip, "listallinfo");
+            if (s == "")
+            {
+                System.IO.StreamReader srList = new System.IO.StreamReader(listFile, false);
+                s = srList.ReadToEnd();
+                readFromFile = true;
+            }
 
             StringReader sr = new StringReader(s);
-
-
             List<string> files = new List<string>();
 
             string lastAlbum = "";
@@ -360,7 +374,6 @@ namespace Sonomium
 
             window.trackDb.list.Clear();
             window.albumDb.list.Clear();
-
 
             while ((line = sr.ReadLine()) != null)
             {
@@ -444,9 +457,19 @@ namespace Sonomium
                     }
                 }
             }
-
-
             window.albumDb.num = i;
+            if (!readFromFile)
+            {
+                try
+                {
+                    System.IO.StreamWriter swList = new System.IO.StreamWriter(listFile, false);
+                    swList.Write(s);
+                    swList.Close();
+                }
+                catch
+                {
+                }
+            }
         }
 
         public List<TrackInfo> GetCurrentAlbumTracks()
@@ -544,7 +567,7 @@ namespace Sonomium
 
         private void Button_Main_Click(object sender, RoutedEventArgs e)
         {
-            //navigation.Navigate(new PageAllAlbums(this));
+            if (readTask != null) readTask.Wait();
             navigation.Navigate(pageAll);
             buttonMain.BorderBrush = SystemColors.HighlightBrush; //Brushes.Black;
             buttonArtist.BorderBrush = Brushes.Transparent;
@@ -554,7 +577,7 @@ namespace Sonomium
 
         private void Button_Artist_Click(object sender, RoutedEventArgs e)
         {
-            //navigation.Navigate(new PageMainPlayer(this));
+            if (readTask != null) readTask.Wait();
             navigation.Navigate(pageMain);
             buttonMain.BorderBrush = Brushes.Transparent;
             buttonArtist.BorderBrush = SystemColors.HighlightBrush;
@@ -564,7 +587,6 @@ namespace Sonomium
 
         private void Button_Settings_Click(object sender, RoutedEventArgs e)
         {
-            //navigation.Navigate(new PageSettings(this));
             navigation.Navigate(pageSettings);
             buttonMain.BorderBrush = Brushes.Transparent;
             buttonArtist.BorderBrush = Brushes.Transparent;
@@ -574,7 +596,7 @@ namespace Sonomium
 
         public void Button_Current_Click(object sender, RoutedEventArgs e)
         {
-            //navigation.Navigate(new PageCurrent(this));
+            if (readTask != null) readTask.Wait();
             navigation.Navigate(pageTracks);
             buttonMain.BorderBrush = Brushes.Transparent;
             buttonArtist.BorderBrush = Brushes.Transparent;
@@ -608,7 +630,7 @@ namespace Sonomium
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            //save
+            //save setting
             SonomiumSettings a = new SonomiumSettings { ipServer = this.ipServer, cursoredArtist = this.cursoredArtist, albumArtSize = this.albumArtSize, albumArtResolution=this.albumArtResolution };
             a.windowWidth = (int)this.Width;
             a.windowHeight = (int)this.Height;
@@ -662,7 +684,7 @@ namespace Sonomium
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //Task t =  CreateAlbumDb(getIp(), this);
-            CreateAlbumDb(getIp(), this);
+            readTask = Task.Run(() => CreateAlbumDb(getIp(), this));
 
             pageMain = new PageMainPlayer(this);
             pageAll = new PageAllAlbums(this);
