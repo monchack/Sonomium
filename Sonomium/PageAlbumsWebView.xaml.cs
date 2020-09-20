@@ -67,12 +67,12 @@ namespace Sonomium
             html += @"<style>";
             html += @"body { overscroll-behavior : none;} ";
             html += @".wrapper {  display: flex; flex-wrap : wrap ;  flex-direction: row; justify-content: space-between; }";
-            html += @".card { width: 16vw; min-width:160px; height: 16vw; min-height: 160px; background: #fff; border-radius: 5px; box-shadow: 0 2px 5px #ccc; float: left; text-align: center; margin: 8px;}";
-            html += @".cardx { width: 16vw; min-width:160px; height: 0px; background: #fff; border-radius: 5px; box-shadow: 0 2px 5px #ccc; float: left; text-align: center; margin: 8px;}";
-            html += @".card-img { border-radius: 5px 5px 0 0; width: 15vw; min-width:150px; height: 15vw; min-height: 150px; }";
-            html += @".card-content { padding: 2px; }";
-            html += @".card-title { font-size: 20px; margin-bottom: 20px; text-align: center; color: #333;}";
-            html += @".card-text { color: #777; font-size: 12px;  word-wrap: break-word; text-align: left; }";
+            html += @".card { width: 16vw; min-width:160px; background: #fff; border-width: 0px; float: left; text-align: center; }";
+            html += @".cardx { width: 16vw; min-width:160px; height: 0px; background: #fff; border-width: 0px; float: left; text-align: center; }";
+            html += @".card_image { border-radius: 5px 5px 5px 5px; width: 15vw; min-width:150px; height: 15vw; min-height: 150px; box-shadow: 3pt 3pt 5pt gray ;}";
+            html += @".card_content { padding: 8px 0px 16px 0px;  }";
+            html += @".card-title { font-size: 20px; margin-bottom: 40px; text-align: center; color: #333;}";
+            html += @".card_text { color: #777; height:28pt;  font-size: 12px;   text-align: left; margin: 0vw 0.5vw 0vw 0.5vw;  overflow : hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2; }";
             html += @"</style>";
             html += @"</head>";
             html += @"<body>";
@@ -86,9 +86,9 @@ namespace Sonomium
                 string imageCacheFileName = @"./Temp/ImageCache/" + System.IO.Path.GetFileName(s) + ".jpg";
 
                 html += @"<section class=""card"">";
-                html += $@"<img class=""card-img"" src=""{imageCacheFileName}"" alt=""""  onclick=""onImageClick('{info.albumTitle}', '{info.albumArtist}')""  >";
-                html += @"<div class=""card-content"">";
-                html += $@"<p class=""card-text"">{info.albumTitle}</p> ";
+                html += $@"<img class=""card_image"" src=""{imageCacheFileName}"" alt=""""  onclick=""onImageClick('{info.albumTitle}', '{info.albumArtist}')""  >";
+                html += @"<div class=""card_content"">";
+                html += $@"<p class=""card_text"">{info.albumTitle}</p> ";
                 html += @"</div>";
                 html += @"</section>";
             }
