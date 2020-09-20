@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Web.WebView2.Core;
+using System.Text.Json;
 
 using System.IO;
 
@@ -21,13 +22,26 @@ namespace Sonomium
     /// <summary>
     /// PageAlbumsWebView.xaml の相互作用ロジック
     /// </summary>
+    /// 
+
+    class ArtistAndAlbum
+    {
+        public string albumTitle { get; set; }
+        public string albumArtist { get; set; }
+    }
+
     public partial class PageAlbumsWebView : Page
     {
         private MainWindow mainWindow;
 
         private void onWebViewImageClicked(object sender, CoreWebView2WebMessageReceivedEventArgs e)
         {
-            MessageBox.Show(e.TryGetWebMessageAsString());
+            string jsonString = e.TryGetWebMessageAsString();
+            ArtistAndAlbum aa = JsonSerializer.Deserialize<ArtistAndAlbum>(jsonString);
+            string s = aa.albumArtist;
+
+            mainWindow.setSelectedArtist(aa.albumArtist);
+            mainWindow.setSelectedAlbum(aa.albumTitle);
         }
 
         public PageAlbumsWebView(MainWindow _mainWindow)
@@ -37,7 +51,6 @@ namespace Sonomium
             mainWindow = _mainWindow;
             InitializeAsync();
             this.webView.WebMessageReceived += onWebViewImageClicked;
-            //webView.EnsureCoreWebView2Async(null);
         }
 
         void generateHtml()
@@ -73,11 +86,12 @@ namespace Sonomium
                 //string imageCacheFileName = mainWindow.GetImageCacheDirectory() + System.IO.Path.GetFileName(s) + ".jpg";
                 string imageCacheFileName = @"./Temp/ImageCache/" + System.IO.Path.GetFileName(s) + ".jpg";
 
-
+                string js = JsonSerializer.Serialize(info);
 
                 //t = getAndSetImage(info, size1, t);
                 html += @"<section class=""card"">";
-                html += $@"<img class=""card-img"" src=""{imageCacheFileName}"" alt=""""  onclick=""onImageClick('{info.albumTitle}')""  >";
+                html += $@"<img class=""card-img"" src=""{imageCacheFileName}"" alt=""""  onclick=""onImageClick('{info.albumTitle}', '{info.albumArtist}')""  >";
+                //html += $@"<img class=""card-img"" src=""{imageCacheFileName}"" alt=""""  onclick=""onImageClick('{js}')""  >";
                 html += @"<div class=""card-content"">";
                 html += $@"<p class=""card-text"">{info.albumTitle}</p> ";
                 html += @"</div>";
@@ -96,7 +110,8 @@ namespace Sonomium
             html += @"</div>" + "\r\n";
                 
             html += @"<script type=""text/javascript"">" + "\r\n";
-            html += @"function onImageClick(albumTitle) { window.chrome.webview.postMessage(albumTitle); }" + "\r\n";
+            //html += @"function onImageClick(albumTitle) { window.chrome.webview.postMessage(albumTitle); }" + "\r\n";
+            html += @"function onImageClick(albumTitle, albumArtist) { window.chrome.webview.postMessage( JSON.stringify({albumTitle:albumTitle, albumArtist:albumArtist}) ); }" + "\r\n";
 
             html += @"function onResize() {" + "\r\n";
             html += @"if (document.getElementById(""c3"").style.left < 100) {" + "\r\n";
@@ -120,12 +135,6 @@ namespace Sonomium
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            //webView.Source = new Uri(@"https://www.google.com/");
-            //webView.
-            //InitializeAsync();
-            //webView.NavigateToString(@"<html><body>test</body></html>");
-            //AlbumDb db = mainWindow.getAlbumDb();
-
             generateHtml();
 
             string fileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);

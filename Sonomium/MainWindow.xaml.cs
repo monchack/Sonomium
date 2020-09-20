@@ -689,7 +689,7 @@ namespace Sonomium
             readTask = Task.Run(() => CreateAlbumDb(getIp(), this));
 
             pageMain = new PageMainPlayer(this);
-            pageAll = new PageAllAlbums(this);
+            pageAll = new PageAlbumsWebView(this); // PageAllAlbums(this);
             pageSettings = new PageSettings(this);
             pageTracks = new PageCurrent(this);
         }
