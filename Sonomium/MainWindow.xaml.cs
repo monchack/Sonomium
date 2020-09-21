@@ -349,9 +349,18 @@ namespace Sonomium
             s = _sendMpd(ip, "listallinfo");
             if (s == "")
             {
-                System.IO.StreamReader srList = new System.IO.StreamReader(listFile, false);
-                s = srList.ReadToEnd();
-                readFromFile = true;
+                //ipが無効 もしくは　ネットが無効の場合は、すでにローカルにあるファイルを利用
+                try
+                {
+                    System.IO.StreamReader srList = new System.IO.StreamReader(listFile, false);
+                    s = srList.ReadToEnd();
+                    readFromFile = true;
+                }
+                catch
+                {
+                    //ファイルも存在しない
+                    return;
+                }
             }
 
             StringReader sr = new StringReader(s);
