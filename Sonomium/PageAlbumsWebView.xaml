@@ -10,9 +10,9 @@
       Loaded="Page_Loaded"
       Title="PageAlbumsWebView">
 
-    <DockPanel Width="Auto">
+    <DockPanel Margin="0,0,0,0" >
         <Grid>
-            <wv2:WebView2 Name="webView" Source ="http://www008.upp.so-net.ne.jp/aige/links.html"  />
+            <wv2:WebView2 Name="webView" Source =""   />
         </Grid>
 
     </DockPanel>
