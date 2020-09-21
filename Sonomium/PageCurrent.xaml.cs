@@ -24,7 +24,6 @@ namespace Sonomium
     public partial class PageCurrent : Page
     {
         private MainWindow mainWindow;
-        private bool trackListReset = false;
         
         public class TrackInfo
         {
@@ -47,17 +46,10 @@ namespace Sonomium
             if (mainWindow == null) return;
             if (mainWindow.getSelectedAlbum() == "") return;
 
-            if (albumTitle.Text == mainWindow.getSelectedAlbum() && albumArtist.Text == mainWindow.getSelectedArtist())
-            {
-                //return;
-            }
-            trackListReset = true;
-
             albumTitle.Text = mainWindow.getSelectedAlbum();
             albumArtist.Text = mainWindow.getSelectedArtist();
             albumImage.Source = mainWindow.getSelectedAlbumImage();
 
-            //trackListReset = true;
             trackList.Items.Clear();
 
             var tracks = mainWindow.GetCurrentAlbumTracks();
@@ -79,12 +71,11 @@ namespace Sonomium
 
         private void TrackList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (trackListReset)
+            int n = trackList.SelectedIndex;
+            if (n == -1)
             {
-                trackListReset = false;
                 return;
             }
-            int n = trackList.SelectedIndex;
             if (mainWindow!=null) mainWindow.addSelectedAlbuomToQue(n+1, true);
         }
 
