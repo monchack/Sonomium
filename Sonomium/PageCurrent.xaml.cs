@@ -46,6 +46,11 @@ namespace Sonomium
             if (mainWindow == null) return;
             if (mainWindow.getSelectedAlbum() == "") return;
 
+            if (albumArtist.Text == mainWindow.getSelectedAlbum() && albumArtist.Text == mainWindow.getSelectedArtist())
+            {
+                return;
+            }
+
             albumTitle.Text = mainWindow.getSelectedAlbum();
             albumArtist.Text = mainWindow.getSelectedArtist();
             albumImage.Source = mainWindow.getSelectedAlbumImage();
