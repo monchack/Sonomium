@@ -566,6 +566,46 @@ namespace Sonomium
             UpdatePlayerUI();
         }
 
+        public string GetAlbumCacheImageFilePathAndName(string artistName, string albumName)
+        {
+            string pathAndName = "";
+            var albums = from e in albumDb.list
+                         where e.albumArtist == artistName
+                         where e.albumTitle == albumName
+                         select e;
+            foreach (var x in albums)
+            {
+                pathAndName = x.filePath;
+                break;
+            }
+
+            int n = pathAndName.LastIndexOf('/');
+            string s = pathAndName.Remove(n);   //   最後の / の出現位置までをキープして、残りは削除
+            string fileName = System.IO.Path.GetFileName(s) + ".jpg";
+            string imageCacheFileName = GetImageCacheDirectory() + fileName;
+
+            return imageCacheFileName;
+        }
+
+        public BitmapImage getBitmapImageFromFileName(string fileName)
+        {
+            BitmapImage bitmap;
+            bitmap = new BitmapImage();
+            try
+            {
+                bitmap.BeginInit();
+                //if (getAlbumArtResolution() == 0) bitmap.DecodePixelWidth = size;
+                bitmap.UriSource = new Uri(@"file://" + fileName);
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.EndInit();
+                bitmap.Freeze();
+            }
+            catch
+            {
+            }
+            return bitmap;
+        }
+
 
         private void Button_Main_Click(object sender, RoutedEventArgs e)
         {
