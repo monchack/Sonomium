@@ -463,7 +463,7 @@ namespace Sonomium
                 {
                 }
             }
-            generateHtml(window);
+            window.generateHtml();
         }
 
         public List<TrackInfo> GetCurrentAlbumTracks()
@@ -599,10 +599,10 @@ namespace Sonomium
             return bitmap;
         }
 
-        static void generateHtml(MainWindow mainWindow)
+        public void generateHtml()
         {
             string html = "";
-            AlbumDb db = mainWindow.getAlbumDb();
+            AlbumDb db = getAlbumDb();
 
             string fileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             fileName += "\\Sonomium\\albums.html";
@@ -614,16 +614,53 @@ namespace Sonomium
             html += @"body { overscroll-behavior : none;} ";
             html += @".wrapper {  display: flex; flex-wrap : wrap ;  flex-direction: row; justify-content: space-between; }";
 
-            html += @".card { width: 16vw; min-width:160px; background: #fff; border-width: 0px; float: left; text-align: center; }";
-            html += @".cardx { width: 16vw; min-width:160px; height: 0px; background: #fff; border-width: 0px; float: left; text-align: center; }";
-
-            if (mainWindow.getAlbumArtResolution() == 1)
+            string cardSize = "16vw";
+            string cardMinSize = "160px";
+            string albumArtSize = "15vw";
+            string albumArtMinSize = "150px";
+            
+            switch (getAlbumArtSize())
             {
-                html += @".card_image { border-radius: 5px 5px 5px 5px; width: 15vw; min-width:150px; height: 15vw; min-height: 150px; box-shadow: 3pt 3pt 5pt gray ;}";
+                case 0:
+                cardSize = "11vw";
+                cardMinSize = "80px";
+                albumArtSize = "10vw";
+                albumArtMinSize = "80px";
+                break;
+
+                case 1:
+                cardSize = "13vw";
+                cardMinSize = "80px";
+                albumArtSize = "12vw";
+                albumArtMinSize = "80px";
+                break;
+
+                case 2:
+                cardSize = "16vw";
+                cardMinSize = "80px";
+                albumArtSize = "15vw";
+                albumArtMinSize = "80px";
+                break;
+
+                case 3:
+                cardSize = "17vw";
+                cardMinSize = "80px";
+                albumArtSize = "16vw";
+                albumArtMinSize = "80px";
+                break;
+            }
+
+
+            html += $@".card {{ width: {cardSize}; min-width: {cardMinSize}; background: #fff; border-width: 0px; float: left; text-align: center; }}";
+            html += $@".cardx {{ width: {cardSize}; min-width: {cardMinSize}; height: 0px; background: #fff; border-width: 0px; float: left; text-align: center; }}";
+
+            if (getAlbumArtResolution() == 1)
+            {
+                html += $@".card_image {{ border-radius: 5px 5px 5px 5px; width: {albumArtSize}; min-width: {albumArtMinSize}; height: {albumArtSize}; min-height: {albumArtMinSize}; box-shadow: 3pt 3pt 5pt gray ;}}";
             }
             else
             {
-                html += @".card_image { width: 15vw; min-width:150px; height: 15vw; min-height: 150px; }";
+                html += $@".card_image {{ width:{albumArtSize} ; min-width: {albumArtMinSize}; height: {albumArtSize}; min-height: {albumArtMinSize}; }}";
             }
 
             html += @".card_content { padding: 8px 0px 16px 0px;  }";
@@ -636,7 +673,7 @@ namespace Sonomium
 
             foreach (AlbumInfo info in db.list)
             {
-                mainWindow.CopyImageFile(info.filePath);
+                CopyImageFile(info.filePath);
 
                 //string imageFileOnTheServer 
                 int n = info.filePath.LastIndexOf('/');

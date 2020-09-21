@@ -59,7 +59,7 @@ namespace Sonomium
 
         async void InitializeAsync()
         {
-            await webView.EnsureCoreWebView2Async(null);
+            //await webView.EnsureCoreWebView2Async(null);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

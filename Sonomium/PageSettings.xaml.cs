@@ -70,6 +70,7 @@ namespace Sonomium
             else if (buttonAlbumArtLarge.IsChecked == true) { mainWindow.setAlbumArtSize(2); }
             else if (buttonAlbumArtXLarge.IsChecked == true) { mainWindow.setAlbumArtSize(3); }
             else mainWindow.setAlbumArtSize(1);
+            mainWindow.generateHtml();
         }
 
         private void ConnectivityTest_Click(object sender, RoutedEventArgs e)
