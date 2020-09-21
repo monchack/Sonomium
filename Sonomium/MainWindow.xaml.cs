@@ -111,18 +111,8 @@ namespace Sonomium
             {
             }
 
-            s = GetDbFilePathAndName();
-            try
-            {
-                //jsonString = File.ReadAllText(s);
-                //albumDb = JsonSerializer.Deserialize<AlbumDb>(jsonString);
-            }
-            catch
-            {
-                //albumDb = new AlbumDb();
-                //albumDb.list = new List<AlbumInfo>();
-                //albumDb.num = 0;
-            }
+            // DBの初期化. load は Window_Loaded でおこなう.
+
             albumDb = new AlbumDb();
             albumDb.list = new List<AlbumInfo>();
             albumDb.num = 0;
@@ -130,7 +120,6 @@ namespace Sonomium
             trackDb = new TrackDb();
             trackDb.list = new List<TrackInfo>();
             trackDb.num = 0;
-
 
             navigation = this.mainFrame.NavigationService;
             navigation.Navigate(new PageSettings(this));
@@ -694,23 +683,6 @@ namespace Sonomium
             catch
             {
             }
-
-            /*
-            jsonString = JsonSerializer.Serialize(albumDb);
-            s = GetDbFilePathAndName();
-            path = System.IO.Path.GetDirectoryName(s) + "\\";
-            if (!File.Exists(path))
-            {
-                Directory.CreateDirectory(System.IO.Path.GetDirectoryName(path));
-            }
-            try
-            {
-                File.WriteAllText(s, jsonString);
-            }
-            catch
-            {
-            }
-            */
         }
 
         private void Back15Button_Click(object sender, RoutedEventArgs e)
@@ -725,7 +697,6 @@ namespace Sonomium
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //Task t =  CreateAlbumDb(getIp(), this);
             readTask = Task.Run(() => CreateAlbumDb(getIp(), this));
 
             pageMain = new PageMainPlayer(this);
