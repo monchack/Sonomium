@@ -599,7 +599,7 @@ namespace Sonomium
             return bitmap;
         }
 
-        public void generateHtml()
+        public string generateHtml()
         {
             string html = "";
             AlbumDb db = getAlbumDb();
@@ -707,6 +707,7 @@ namespace Sonomium
             html += @"</html>";
 
             File.WriteAllText(fileName, html);
+            return html;
         }
 
 
@@ -858,7 +859,7 @@ namespace Sonomium
                 res = client.GetAsync(sourceUri, HttpCompletionOption.ResponseHeadersRead, cancellationSource.Token);
                 res.Wait();
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 // タイムアウト
                 return;
@@ -907,7 +908,7 @@ namespace Sonomium
             readTask = Task.Run(() => CreateAlbumDb(getIp(), this));
 
             pageMain = new PageMainPlayer(this);
-            pageAll = new PageAlbumsWebView(this); // PageAllAlbums(this);
+            pageAll = new PageAlbumsWebView(this);
             pageSettings = new PageSettings(this);
             pageTracks = new PageCurrent(this);
             cancellationSource = new CancellationTokenSource();

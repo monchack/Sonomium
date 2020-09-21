@@ -46,6 +46,7 @@ namespace Sonomium
             string imageFileName = mainWindow.GetAlbumCacheImageFilePathAndName(aa.albumArtist, aa.albumTitle);
             BitmapImage bmp = mainWindow.getBitmapImageFromFileName(imageFileName);
             mainWindow.setSelectedAlbumImage(bmp);
+            mainWindow.Button_Current_Click(null, null);
         }
 
         public PageAlbumsWebView(MainWindow _mainWindow)
@@ -53,13 +54,13 @@ namespace Sonomium
             InitializeComponent();
 
             mainWindow = _mainWindow;
-            InitializeAsync();
+            //InitializeAsync();
             this.webView.WebMessageReceived += onWebViewImageClicked;
         }
 
         async void InitializeAsync()
         {
-            //await webView.EnsureCoreWebView2Async(null);
+            await webView.EnsureCoreWebView2Async(null);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
