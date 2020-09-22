@@ -99,11 +99,7 @@
                             <RadioButton x:Name="buttonAlbumArtResolutionNormal" Content="Normal"  HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt"  Style="{StaticResource newRadioButton}" Checked="ButtonAlbumArtResolution_Checked" />
                             <RadioButton x:Name="buttonAlbumArtResolutionHigh" Content="High quality" HorizontalAlignment="Left"  VerticalAlignment="Top" VerticalContentAlignment="Center" FontFamily="Segoe UI" FontSize="14pt" Style="{StaticResource newRadioButton}" Checked="ButtonAlbumArtResolution_Checked"  />
                         </StackPanel>
-
                     </StackPanel>
-
-
-
                 </DockPanel>
                 
                 <Grid Height="32pt" DockPanel.Dock="Top" />
@@ -123,7 +119,7 @@
                 <DockPanel  DockPanel.Dock="Top">
                     <Grid DockPanel.Dock="Left" Width="22pt" />
                     <Grid Height="8pt"  DockPanel.Dock="Top" />
-                    <TextBlock  Text="Version 1.2.3"  FontFamily="Segoe UI" FontSize="14pt" DockPanel.Dock="Top" Foreground="#404040" />
+                    <TextBlock  Text="Version 1.2.4"  FontFamily="Segoe UI" FontSize="14pt" DockPanel.Dock="Top" Foreground="#404040" />
                     <Grid Height="4pt"  DockPanel.Dock="Top" />
                     <TextBlock  Text="© 2020 Monchack Audio. All rights reserved."  FontFamily="Segoe UI" FontSize="14pt" DockPanel.Dock="Top" Foreground="#404040" />
                     <Grid Height="36pt"  DockPanel.Dock="Top" />

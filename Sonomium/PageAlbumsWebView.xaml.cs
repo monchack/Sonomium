@@ -34,6 +34,11 @@ namespace Sonomium
     {
         private MainWindow mainWindow;
 
+        private void onWebViewNavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
+        {
+            this.webView.Visibility = Visibility.Visible;
+        }
+
         private void onWebViewImageClicked(object sender, CoreWebView2WebMessageReceivedEventArgs e)
         {
             string jsonString = e.TryGetWebMessageAsString();
@@ -56,6 +61,7 @@ namespace Sonomium
             mainWindow = _mainWindow;
             //InitializeAsync();
             this.webView.WebMessageReceived += onWebViewImageClicked;
+            this.webView.NavigationCompleted += onWebViewNavigationCompleted;
         }
 
         async void InitializeAsync()
