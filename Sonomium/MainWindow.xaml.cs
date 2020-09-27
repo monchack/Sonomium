@@ -627,7 +627,7 @@ namespace Sonomium
             html += @"<html>";
             html += @"<head>";
             html += @"<script>";
-            html += @"function onTimerLoad(e, img) { if (imageLoadTimeout>0) setTimeout( function(){ e.src =img + ""?"" + Math.random(); },1500);  }";
+            html += @"function onTimerLoad(e, img) { if (imageLoadTimeout>0) setTimeout( function(){ e.src =img; },1500);  }";
             html += @"var imageLoadTimeout = 500;";
             html += @"setTimeout(proceedTime, 3000);";
             html += @"function proceedTime() { if (imageLoadTimeout>0) {imageLoadTimeout-=100; setTimeout(proceedTime, 3000);} }";
