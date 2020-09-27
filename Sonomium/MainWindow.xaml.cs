@@ -64,7 +64,7 @@ namespace Sonomium
         private AlbumDb albumDb;
         private TrackDb trackDb; 
         private Page pageMain;
-        private PageAlbumsWebView pageAll;
+        private Page pageAll;
         private Page pageSettings;
         private Page pageTracks;
         private int albumArtResolution = 0;
@@ -614,7 +614,6 @@ namespace Sonomium
         public async void downloadImages()
         {
             await Task.Run(() => CopyImageFile(albumDb, getIp(), GetImageCacheDirectory(), cancellationSource.Token));
-            pageAll.Reload();
         }
 
         public string generateHtml()
@@ -627,6 +626,12 @@ namespace Sonomium
 
             html += @"<html>";
             html += @"<head>";
+            html += @"<script>";
+            html += @"function onTimerLoad(e, img) { if (imageLoadTimeout==0) setTimeout( function(){ e.src =img + ""?"" + Math.random(); },5000);  }";
+            html += @"var imageLoadTimeout = 0;";
+            html += @"setTimeout(function(){ imageLoadTimeout=1 }, 10000);";
+            html += @"function resetTimeout() { imageLoadTimeout=0; setTimeout(function(){ imageLoadTimeout=1 }, 10000);}";
+            html += @"</script>";
             html += @"<title></title>";
             html += @"<style>";
             html += @"body { overscroll-behavior : none;} ";
@@ -687,20 +692,22 @@ namespace Sonomium
             html += @"</style>";
             html += @"</head>";
             html += @"<body>";
-            html += @"<div class=""wrapper"">";
+            html += @"<div class=""wrapper"">" + "\r\n";
 
             foreach (AlbumInfo info in db.list)
             {
                 int n = info.filePath.LastIndexOf('/');
                 string s = info.filePath.Remove(n);   //   最後の / の出現位置までをキープして、残りは削除
                 string imageCacheFileName = @"./Temp/ImageCache/" + System.IO.Path.GetFileName(s) + ".jpg";
+                string s2 = info.albumTitle.Replace("'", @"\'");
+                string s3= info.albumArtist.Replace("'", @"\'"); 
 
-                html += @"<section class=""card"">";
-                html += $@"<img class=""card_image""  src=""{imageCacheFileName}"" alt=""""  onclick=""onImageClick('{info.albumTitle}', '{info.albumArtist}')"" >";
+                html += @"<section class=""card"">" + "\r\n";
+                html += $@"<img class=""card_image"" onload=""resetTimeout()"" onerror=""onTimerLoad(this,'{imageCacheFileName}' )"" src=""{imageCacheFileName}"" alt=""""  onclick=""onImageClick('{s2}', '{s3}')"" >" + "\r\n";
                 html += @"<div class=""card_content"">";
                 html += $@"<p class=""card_text"">{info.albumTitle}</p> ";
                 html += @"</div>";
-                html += @"</section>";
+                html += @"</section>" + "\r\n";
             }
             for (int i = 0; i < 6; ++i)
             {
@@ -888,6 +895,8 @@ namespace Sonomium
                     return;
                 }
                 downloadFile(res.Result, imageCacheFileName);
+
+                
             }
         }
 
