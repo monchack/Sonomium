@@ -64,7 +64,7 @@ namespace Sonomium
         private AlbumDb albumDb;
         private TrackDb trackDb; 
         private Page pageMain;
-        private Page pageAll;
+        private PageAlbumsWebView pageAll;
         private Page pageSettings;
         private Page pageTracks;
         private int albumArtResolution = 0;
@@ -472,6 +472,9 @@ namespace Sonomium
                 {
                 }
             }
+            //// db ができたので、bitmap のコピーと html　作成を開始
+            //Task t = Task.Run(() => downloadImages(window.albumDb, window.getIp(), window.GetImageCacheDirectory(), window.cancellationSource.Token));
+            window.downloadImages();
             window.generateHtml();
         }
 
@@ -608,6 +611,12 @@ namespace Sonomium
             return bitmap;
         }
 
+        public async void downloadImages()
+        {
+            await Task.Run(() => CopyImageFile(albumDb, getIp(), GetImageCacheDirectory(), cancellationSource.Token));
+            pageAll.Reload();
+        }
+
         public string generateHtml()
         {
             string html = "";
@@ -682,15 +691,12 @@ namespace Sonomium
 
             foreach (AlbumInfo info in db.list)
             {
-                CopyImageFile(info.filePath);
-
-                //string imageFileOnTheServer 
                 int n = info.filePath.LastIndexOf('/');
                 string s = info.filePath.Remove(n);   //   最後の / の出現位置までをキープして、残りは削除
                 string imageCacheFileName = @"./Temp/ImageCache/" + System.IO.Path.GetFileName(s) + ".jpg";
 
                 html += @"<section class=""card"">";
-                html += $@"<img class=""card_image"" src=""{imageCacheFileName}"" alt=""""  onclick=""onImageClick('{info.albumTitle}', '{info.albumArtist}')"" >";
+                html += $@"<img class=""card_image""  src=""{imageCacheFileName}"" alt=""""  onclick=""onImageClick('{info.albumTitle}', '{info.albumArtist}')"" >";
                 html += @"<div class=""card_content"">";
                 html += $@"<p class=""card_text"">{info.albumTitle}</p> ";
                 html += @"</div>";
@@ -783,7 +789,7 @@ namespace Sonomium
             UpdatePlayerUI();
         }
 
-        private bool downloadFile(HttpResponseMessage h, string outputFilePath)
+        private static bool downloadFile(HttpResponseMessage h, string outputFilePath)
         {
             HttpClient client = new HttpClient();
             client.Timeout = TimeSpan.FromMilliseconds(3000);
@@ -839,41 +845,50 @@ namespace Sonomium
             return true;
         }
 
-        private void CopyImageFile(string path)
+        private static void CopyImageFile(AlbumDb db, string ip, string localCachePath, CancellationToken token)
         {
-            string ip = getIp();
-
-            int n = path.LastIndexOf('/');
-            string s = path.Remove(n);   //   最後の / の出現位置までをキープして、残りは削除
-            string fileName = System.IO.Path.GetFileName(s) + ".jpg";
-            string imageCacheFileName = GetImageCacheDirectory() + fileName;
-            s = s.Replace("=", "%3D");
-            Uri sourceUri = new Uri(@"http://" + ip + @"/albumart?path=/mnt/" + s);
-
-            try
-            {
-                if (File.Exists(imageCacheFileName)) return;
-            }
-            catch
-            {
-                return;
-            }
+            //string ip = getIp();
 
             HttpClient client = new HttpClient();
             client.Timeout = TimeSpan.FromMilliseconds(10000);
             Task<HttpResponseMessage> res = null;
 
-            try
+            foreach (AlbumInfo info in db.list)
             {
-                res = client.GetAsync(sourceUri, HttpCompletionOption.ResponseHeadersRead, cancellationSource.Token);
-                res.Wait();
+                string path = info.filePath;
+
+
+                int n = path.LastIndexOf('/');
+                string s = path.Remove(n);   //   最後の / の出現位置までをキープして、残りは削除
+                string fileName = System.IO.Path.GetFileName(s) + ".jpg";
+                //string imageCacheFileName = GetImageCacheDirectory() + fileName;
+                string imageCacheFileName = localCachePath + fileName;
+                s = s.Replace("=", "%3D");
+                Uri sourceUri = new Uri(@"http://" + ip + @"/albumart?path=/mnt/" + s);
+
+                try
+                {
+                    if (File.Exists(imageCacheFileName)) continue;
+                }
+                catch
+                {
+                    continue;
+                }
+
+
+
+                try
+                {
+                    res = client.GetAsync(sourceUri, HttpCompletionOption.ResponseHeadersRead, token);
+                   ///// res.Wait(); 不要？
+                }
+                catch (Exception)
+                {
+                    // タイムアウト
+                    return;
+                }
+                downloadFile(res.Result, imageCacheFileName);
             }
-            catch (Exception )
-            {
-                // タイムアウト
-                return;
-            }
-            downloadFile(res.Result, imageCacheFileName);
         }
 
         private void Window_Closed(object sender, EventArgs e)

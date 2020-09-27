@@ -76,5 +76,16 @@ namespace Sonomium
             Uri uri = new Uri(fileName);
             webView.Source = uri;
         }
+
+        public void Reload()
+        {
+            try
+            {
+                this.Dispatcher.Invoke((Action)(() => { webView.Reload(); }));
+            }
+            catch
+            {
+            }
+        }
     }
 }
