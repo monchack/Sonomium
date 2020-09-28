@@ -627,7 +627,7 @@ namespace Sonomium
             html += @"<html>";
             html += @"<head>";
             html += @"<script>";
-            html += @"function onTimerLoad(e, img) { if (imageLoadTimeout>0) setTimeout( function(){ e.src =img; },1500); else location.reload(); }";
+            html += @"function onTimerLoad(e, img) { if (imageLoadTimeout>0) setTimeout( function(){ e.src =img; },1500); else setTimeout( function(){ location.reload(true); }, 3000);  }";
             html += @"var imageLoadTimeout = 500;";
             html += @"setTimeout(proceedTime, 3000);";
             html += @"function proceedTime() { if (imageLoadTimeout>0) {imageLoadTimeout-=100; setTimeout(proceedTime, 3000);} }";
@@ -702,9 +702,10 @@ namespace Sonomium
                 string imageCacheFileName = @"./Temp/ImageCache/" + System.IO.Path.GetFileName(s) + ".jpg";
                 string s2 = info.albumTitle.Replace("'", @"\'");
                 string s3= info.albumArtist.Replace("'", @"\'"); 
+                string s4= imageCacheFileName.Replace("'", @"\'");
 
                 html += @"<section class=""card"">" + "\r\n";
-                html += $@"<img class=""card_image"" onload=""resetTimeout()"" onerror=""onTimerLoad(this,'{imageCacheFileName}' )"" src=""{imageCacheFileName}"" alt=""""  onclick=""onImageClick('{s2}', '{s3}')"" >" + "\r\n";
+                html += $@"<img class=""card_image"" onload=""resetTimeout()"" onerror=""onTimerLoad(this,'{s4}' )"" src=""{s4}"" alt=""""  onclick=""onImageClick('{s2}', '{s3}')"" >" + "\r\n";
                 html += @"<div class=""card_content"">";
                 html += $@"<p class=""card_text"">{info.albumTitle}</p> ";
                 html += @"</div>";
