@@ -627,11 +627,11 @@ namespace Sonomium
             html += @"<html>";
             html += @"<head>";
             html += @"<script>";
-            html += @"function onTimerLoad(e, img) { if (imageLoadTimeout>0) setTimeout( function(){ e.src =img; },1500); else setTimeout( function(){ location.reload(true); }, 3000);  }";
+            html += @"function onTimerLoad(e, img) { if (imageLoadTimeout>0) setTimeout( function(){ e.src =img; },1500); }";
             html += @"var imageLoadTimeout = 500;";
             html += @"setTimeout(proceedTime, 3000);";
-            html += @"function proceedTime() { if (imageLoadTimeout>0) {imageLoadTimeout-=100; setTimeout(proceedTime, 3000);} }";
-            html += @"function resetTimeout() { imageLoadTimeout += 20; }"; // default は 5 x 3sec = 15sec,  5枚で3sec延長
+            html += @"function proceedTime() { if (imageLoadTimeout>0) {imageLoadTimeout-=100; setTimeout(proceedTime, 1500); } else setTimeout( function(){  location.reload(true);}, 5000); }";
+            html += @"function resetTimeout() { imageLoadTimeout += 1; }"; // default は 5 x 1.5sec + 3 = 10.5sec,  100枚で1.5sec延長
             html += @"</script>";
             html += @"<title></title>";
             html += @"<style>";
