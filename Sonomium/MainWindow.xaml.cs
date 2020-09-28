@@ -627,11 +627,11 @@ namespace Sonomium
             html += @"<html>";
             html += @"<head>";
             html += @"<script>";
-            html += @"function onTimerLoad(e, img) { if (imageLoadTimeout>0) setTimeout( function(){ e.src =img; },1500);  }";
+            html += @"function onTimerLoad(e, img) { if (imageLoadTimeout>0) setTimeout( function(){ e.src =img; },1500); else location.reload(); }";
             html += @"var imageLoadTimeout = 500;";
             html += @"setTimeout(proceedTime, 3000);";
             html += @"function proceedTime() { if (imageLoadTimeout>0) {imageLoadTimeout-=100; setTimeout(proceedTime, 3000);} }";
-            html += @"function resetTimeout() { imageLoadTimeout += 5; }"; // default は 5 x 3sec = 15sec,  20枚で3sec延長
+            html += @"function resetTimeout() { imageLoadTimeout += 20; }"; // default は 5 x 3sec = 15sec,  5枚で3sec延長
             html += @"</script>";
             html += @"<title></title>";
             html += @"<style>";
@@ -797,69 +797,70 @@ namespace Sonomium
             UpdatePlayerUI();
         }
 
-        private static bool downloadFile(HttpResponseMessage h, string outputFilePath)
+        private async static void downloadFile(Uri sourceUri, string outputFilePath, CancellationToken token)
         {
             HttpClient client = new HttpClient();
-            client.Timeout = TimeSpan.FromMilliseconds(3000);
+            client.Timeout = TimeSpan.FromMilliseconds(10000);
+            HttpResponseMessage res = null;
 
-            bool toDelete = false;
-            FileStream fileStream = null;
-            try
+            for (int i = 0; i < 10; ++i)
             {
-                using (fileStream = File.Create(outputFilePath))
+                try
                 {
-                    Task<Stream> httpStream;
-                    using (httpStream = h.Content.ReadAsStreamAsync())
-                    {
-                        httpStream.Wait();
-                        if (!httpStream.Result.CanRead)
-                        {
-                            fileStream.Dispose();
-                            File.Delete(outputFilePath);
-                            return false;
-                        }
+                    res = await client.GetAsync(sourceUri, HttpCompletionOption.ResponseHeadersRead, token);
+                }
+                catch
+                {
+                    Thread.Sleep(200);
+                    continue;
+                }
 
-                        httpStream.Result.ReadTimeout = 3000;
+                FileStream fileStream = null;
+                try
+                {
+                    using (fileStream = File.Create(outputFilePath))
+                    {
+                        Stream httpStream;
                         try
                         {
-                            httpStream.Result.CopyTo(fileStream); //たまにタイム・アウトする
+                            using (httpStream = await res.Content.ReadAsStreamAsync())
+                            {
+                                try
+                                {
+                                    httpStream.CopyTo(fileStream); //たまにタイム・アウトする
+                                }
+                                catch
+                                {
+                                    fileStream.Flush();
+                                    Thread.Sleep(200);
+                                    continue;
+                                }
+                                break;
+                            } // using
                         }
                         catch
                         {
-                            toDelete = true;
+                            Thread.Sleep(200);
+                            continue;
                         }
-                    } // using
-                } //using
-            }
-            catch
-            {
-                toDelete = true;
-            }
-            finally
-            {
-                if (toDelete)
+                    } //using
+                }
+                catch
                 {
-                    try
-                    {
-                        fileStream.Dispose();
-                        File.Delete(outputFilePath);
-                    }
-                    catch
-                    {
-                    }
+                    Thread.Sleep(200);
+                    continue;
                 }
             }
-            if (toDelete) return false;
-            return true;
         }
 
-        private static void CopyImageFile(AlbumDb db, string ip, string localCachePath, CancellationToken token)
+        private  static void CopyImageFile(AlbumDb db, string ip, string localCachePath, CancellationToken token)
         {
             //string ip = getIp();
 
             HttpClient client = new HttpClient();
             client.Timeout = TimeSpan.FromMilliseconds(10000);
-            Task<HttpResponseMessage> res = null;
+            //Task<HttpResponseMessage> res = null;
+            
 
             foreach (AlbumInfo info in db.list)
             {
@@ -883,21 +884,8 @@ namespace Sonomium
                     continue;
                 }
 
-
-
-                try
-                {
-                    res = client.GetAsync(sourceUri, HttpCompletionOption.ResponseHeadersRead, token);
-                   ///// res.Wait(); 不要？
-                }
-                catch (Exception)
-                {
-                    // タイムアウト
-                    return;
-                }
-                downloadFile(res.Result, imageCacheFileName);
-
-                
+                downloadFile(sourceUri, imageCacheFileName, token);
+                Thread.Sleep(10);
             }
         }
 
