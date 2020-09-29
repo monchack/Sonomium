@@ -626,13 +626,7 @@ namespace Sonomium
 
             html += @"<html>";
             html += @"<head>";
-            html += @"<script>";
-            html += @"function onTimerLoad(e, img) { if (imageLoadTimeout>0) setTimeout( function(){ e.src =img; },1500); }";
-            html += @"var imageLoadTimeout = 500;";
-            html += @"setTimeout(proceedTime, 3000);";
-            html += @"function proceedTime() { if (imageLoadTimeout>0) {imageLoadTimeout-=100; setTimeout(proceedTime, 1500); } else setTimeout( function(){  location.reload(true);}, 5000); }";
-            html += @"function resetTimeout() { imageLoadTimeout += 1; }"; // default は 5 x 1.5sec + 3 = 10.5sec,  100枚で1.5sec延長
-            html += @"</script>";
+
             html += @"<title></title>";
             html += @"<style>";
             html += @"body { overscroll-behavior : none;} ";
@@ -693,6 +687,14 @@ namespace Sonomium
             html += @"</style>";
             html += @"</head>";
             html += @"<body>";
+
+            html += @"<script type=""text/javascript"">";
+            html += @"function reload(e) { e.src=e.src}";
+            html += @"function reload2(e) { e.src=e.src; e.onload="""";  }";
+            html += @"function startImageLoadTimer(e) { setTimeout( reload,1500, e); }"; //1.5sec ごとにリトライ
+            html += @"function finalImageLoad(e)  { setTimeout( reload2,5000, e); }"; // 5sec後に念のため再読み込み
+            html += @"</script>";
+
             html += @"<div class=""wrapper"">" + "\r\n";
 
             foreach (AlbumInfo info in db.list)
@@ -702,10 +704,9 @@ namespace Sonomium
                 string imageCacheFileName = @"./Temp/ImageCache/" + System.IO.Path.GetFileName(s) + ".jpg";
                 string s2 = info.albumTitle.Replace("'", @"\'");
                 string s3= info.albumArtist.Replace("'", @"\'"); 
-                string s4= imageCacheFileName.Replace("'", @"\'");
 
                 html += @"<section class=""card"">" + "\r\n";
-                html += $@"<img class=""card_image"" onload=""resetTimeout()"" onerror=""onTimerLoad(this,'{s4}' )"" src=""{s4}"" alt=""""  onclick=""onImageClick('{s2}', '{s3}')"" >" + "\r\n";
+                html += $@"<img class=""card_image"" onload=""finalImageLoad(this)"" onerror=""startImageLoadTimer(this)"" src=""{imageCacheFileName}"" alt=""""  onclick=""onImageClick('{s2}', '{s3}')"" >" + "\r\n";
                 html += @"<div class=""card_content"">";
                 html += $@"<p class=""card_text"">{info.albumTitle}</p> ";
                 html += @"</div>";
