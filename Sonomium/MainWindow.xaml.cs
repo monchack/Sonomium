@@ -629,8 +629,12 @@ namespace Sonomium
 
             html += @"<title></title>";
             html += @"<style>";
-            html += @"body { overscroll-behavior : none;} ";
-            html += @".wrapper {  display: flex; flex-wrap : wrap ;  flex-direction: row; justify-content: space-between; }";
+            html += @"body { overscroll-behavior : none; } ";
+            html += @".wrapper { z-index:0; position: relative; display: flex; flex-wrap : wrap ;  flex-direction: row; justify-content: space-between; }";
+            html += @".highlight {position: relative;overflow: hidden; width: 100%;margin: 0;}";
+            html += @".caption{font-family: 'Segoe UI Semibold' ;font-size: 9pt;  position: absolute;bottom: -60px;left: 0;z-index: 2;width: 100%;background: rgba(255,255,255,.6);-webkit-transition: .3s;transition: .3s;} ";
+            html += @".highlight:active  figcaption { bottom: 0;}";
+            html += @".highlight:hover  figcaption { bottom: 0;}";
 
             string cardSize = "16vw";
             string cardMinSize = "160px";
@@ -668,7 +672,6 @@ namespace Sonomium
                 break;
             }
 
-
             html += $@".card {{ width: {cardSize}; min-width: {cardMinSize}; background: #fff; border-width: 0px; float: left; text-align: center; }}";
             html += $@".cardx {{ width: {cardSize}; min-width: {cardMinSize}; height: 0px; background: #fff; border-width: 0px; float: left; text-align: center; }}";
 
@@ -678,7 +681,7 @@ namespace Sonomium
             }
             else
             {
-                html += $@".card_image {{ width:{albumArtSize} ; min-width: {albumArtMinSize}; height: {albumArtSize}; min-height: {albumArtMinSize}; }}";
+                html += $@".card_image {{width:{albumArtSize} ; min-width: {albumArtMinSize}; height: {albumArtSize}; min-height: {albumArtMinSize}; }}";
             }
 
             html += @".card_content { padding: 8px 0px 16px 0px;  }";
@@ -694,9 +697,12 @@ namespace Sonomium
             html += @"function reload2(e) { e.onload=""""; e.src=e.src; }";
             html += @"function startImageLoadTimer(e) { setTimeout( reload,1500, e); }"; //1.5sec ごとにリトライ
             html += @"function finalImageLoad(e)  { setTimeout( reload2,5000, e); lastDownload=Date.now();  }"; // 5sec後に念のため再読み込み
+            html += @"window.onload = function() {  document.body.oncontextmenu = function () { return false;  }  }";
             html += @"</script>";
 
             html += @"<div class=""wrapper"">" + "\r\n";
+
+            
 
             foreach (AlbumInfo info in db.list)
             {
@@ -707,10 +713,16 @@ namespace Sonomium
                 string s3= info.albumArtist.Replace("'", @"\'"); 
 
                 html += @"<section class=""card"">" + "\r\n";
+
+                html += @"<figure class=""highlight"">";
+
                 html += $@"<img class=""card_image"" onload=""finalImageLoad(this)"" onerror=""startImageLoadTimer(this)"" src=""{imageCacheFileName}"" alt=""""  onclick=""onImageClick('{s2}', '{s3}')"" >" + "\r\n";
+                html += $@"<figcaption class=""caption"">{info.albumArtist}<br><br>{info.albumTitle}</figcaption>";
+                html += @"</figure>";
                 html += @"<div class=""card_content"">";
                 html += $@"<p class=""card_text"">{info.albumTitle}</p> ";
                 html += @"</div>";
+                
                 html += @"</section>" + "\r\n";
             }
             for (int i = 0; i < 6; ++i)
