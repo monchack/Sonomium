@@ -697,7 +697,9 @@ namespace Sonomium
             html += @"function reload2(e) { e.onload=""""; e.src=e.src; }";
             html += @"function startImageLoadTimer(e) { setTimeout( reload,1500, e); }"; //1.5sec ごとにリトライ
             html += @"function finalImageLoad(e)  { setTimeout( reload2,5000, e); lastDownload=Date.now();  }"; // 5sec後に念のため再読み込み
+            #if !DEBUG
             html += @"window.onload = function() {  document.body.oncontextmenu = function () { return false;  }  }";
+            #endif       
             html += @"</script>";
 
             html += @"<div class=""wrapper"">" + "\r\n";
