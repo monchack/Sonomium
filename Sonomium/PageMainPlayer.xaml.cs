@@ -46,34 +46,23 @@ namespace Sonomium
             cancellationSource = new CancellationTokenSource();
         }
 
-        private void update_album_list()
+        private void init_artist_list()
         {
             AlbumDb db = mainWindow.getAlbumDb();
             var art = (from b in db.list
-                       select b.albumArtist).Distinct();
+                       select b.albumArtist).Distinct(); // artistの重複を除去
             foreach (var c in art)
             {
                 artistList.Items.Add(c);
             }
-            /*
-            string albumartist = mainWindow.sendMpd("list albumartist");
-            StringReader sr = new StringReader(albumartist);
-            string line;
-            while ((line = sr.ReadLine()) != null)
-            {
-                if (line.Contains("AlbumArtist:"))
-                {
-                    string newItem = line.Replace("AlbumArtist: ", "");
-                    if (newItem == "") newItem = "(Unknown)";
-                    artistList.Items.Add(newItem);
-                }
-            }
-            */
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            update_album_list();
+            if (artistList.Items.Count == 0)
+            {
+                init_artist_list();
+            }
             if (mainWindow != null)
             {
                 string s = mainWindow.getCursoredArtist();
@@ -87,63 +76,6 @@ namespace Sonomium
                         break;
                     }
                 }
-            }
-        }
-
-        private async void downloadFile(string uri, string outputFilePath, CancellationToken token)
-        {
-            HttpClient client = new HttpClient();
-            client.Timeout = TimeSpan.FromMilliseconds(3000);
-            HttpResponseMessage res;
-            string dbg = outputFilePath + " ";
-            try
-            {
-                bool toDelete = false;
-                res = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, token);
-                if (!res.IsSuccessStatusCode)
-                {
-                    return;
-                }
-
-                FileStream fileStream = null;
-                try
-                {
-                    using (fileStream = File.Create(outputFilePath))
-                    {
-                        using (Stream httpStream = await res.Content.ReadAsStreamAsync())
-                        {
-                            if (!httpStream.CanRead)
-                            {
-                                fileStream.Dispose();
-                                File.Delete(outputFilePath);
-                                return;
-                            }
-                            await httpStream.CopyToAsync(fileStream);
-                        }
-                    }
-                }
-                catch
-                {
-                    toDelete = true;
-                }
-                finally
-                {
-                    if (toDelete)
-                    {
-                        try
-                        {
-                            fileStream.Dispose();
-                            File.Delete(outputFilePath);
-                        }
-                        catch
-                        {
-                        }
-                    }
-                }
-            }
-            catch (TaskCanceledException)
-            {
-                // http cancel
             }
         }
 
@@ -164,7 +96,7 @@ namespace Sonomium
 
             if (!File.Exists(imageCacheFileName))
             {
-                downloadFile(@"http://" + ip + @"/albumart?path=/mnt/" + s, imageCacheFileName, cancellationSource.Token);
+                return null;
             }
             else
             {
@@ -183,26 +115,9 @@ namespace Sonomium
                 catch
                 {
                     // // キャッシュにファイルはあったが、bitmap作成に失敗
-                    try
-                    {
-                        File.Delete(imageCacheFileName);
-                        downloadFile(@"http://" + ip + @"/albumart?path=/mnt/" + s, imageCacheFileName, cancellationSource.Token);
-                    }
-                    catch
-                    {
-                    }
                 }
             }
-            // キャッシュがなかったか、キャッシュからのbitmap生成に失敗した
-            BitmapImage bitmap2 = new BitmapImage();
-            bitmap2.BeginInit();
-            bitmap2.DownloadCompleted += (sender, args) =>
-            {
-                albumImages.Items.Refresh();
-            };
-            bitmap2.UriSource = new Uri(@"http://" + ip + @"/albumart?path=/mnt/" + s);
-            bitmap2.EndInit();
-            return bitmap2;
+            return null;
         }
 
         private void ArtistList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -226,7 +141,6 @@ namespace Sonomium
                 BitmapImage bmp = getAlbumImage(x.filePath);
                 albumImages.Items.Add(new CardItem() { AlbumImage = bmp, AlbumTitle = x.albumTitle, AlbumCardWidth = size1, AlbumImageWidth = size2, AlbumImageHeight = size2 });
             }
-
         }
 
         private void AlbumImages_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -244,8 +158,6 @@ namespace Sonomium
 
             //mainWindow.addSelectedAlbuomToQue(3, false);
             mainWindow.Button_Current_Click(null, null);
-
-
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
