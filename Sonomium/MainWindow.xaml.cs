@@ -631,10 +631,7 @@ namespace Sonomium
             html += @"<style>";
             html += @"body { overscroll-behavior : none; } ";
             html += @".wrapper { z-index:0; position: relative; display: flex; flex-wrap : wrap ;  flex-direction: row; justify-content: space-between; }";
-            html += @".highlight {position: relative;overflow: hidden; width: 100%;margin: 0;}";
-            html += @".caption{font-family: 'Segoe UI Semibold' ;font-size: 9pt;  position: absolute;bottom: -60px;left: 0;z-index: 2;width: 100%;background: rgba(255,255,255,.6);-webkit-transition: .3s;transition: .3s;} ";
-            html += @".highlight:active  figcaption { bottom: 0;}";
-            html += @".highlight:hover  figcaption { bottom: 0;}";
+
 
             string cardSize = "16vw";
             string cardMinSize = "160px";
@@ -674,6 +671,11 @@ namespace Sonomium
 
             html += $@".card {{ width: {cardSize}; min-width: {cardMinSize}; background: #fff; border-width: 0px; float: left; text-align: center; }}";
             html += $@".cardx {{ width: {cardSize}; min-width: {cardMinSize}; height: 0px; background: #fff; border-width: 0px; float: left; text-align: center; }}";
+
+            html += $@".highlight {{position: relative; width: {albumArtSize};margin: 0;}}";
+            html += @".caption{ display: none;  border-radius: 0 0 5px 5px; font-family: 'Segoe UI Semibold' ;font-size: 9pt;  position: absolute;bottom: -60px;left: 0;z-index: 2;width: 100%;background: rgba(255,255,255,.6);-webkit-transition: .3s;transition: .3s;} ";
+            html += @".highlight:active  figcaption { display:inline; bottom: 0;}";
+            html += @".highlight:hover  figcaption { display:inline; bottom: 0;}";
 
             if (getAlbumArtResolution() == 1)
             {
