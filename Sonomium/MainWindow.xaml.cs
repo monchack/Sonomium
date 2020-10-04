@@ -678,7 +678,7 @@ namespace Sonomium
             html += $@".cardx {{ width: {cardSize}; min-width: {cardMinSize}; height: 0px; background: #fff; border-width: 0px; float: left; text-align: center; }}";
 
             html += $@".highlight {{position: relative; width: {albumArtSize};margin: 0;}}";
-            html += $@".caption {{ display: none; animation: captionAnime 1s linear; line-height:1.5; border-radius: 0 0 5px 5px; font-family: 'Segoe UI Semibold' ;font-size: {fontsize};  position: absolute;bottom: -60px;left: 0;z-index: 2;width: 100%; background:rgba(255,255,255,0.6);}} ";
+            html += $@".caption {{ display: none; font-family:  ""Calibri"", ""Yu Gothic"", ""Segoe UI Semibold""; animation: captionAnime 1s linear; line-height:1.5; border-radius: 0 0 5px 5px; font-size: {fontsize};  position: absolute;bottom: -60px;left: 0;z-index: 2;width: 100%; background:rgba(255,255,255,0.6);}} ";
             html += @".highlight:active  figcaption { display:inline; bottom: 0;}";
             html += @".highlight:hover  figcaption { display:inline; bottom: 0;}";
             html += @"@keyframes  captionAnime { 90% { color : black; background:rgba(255, 255, 255, 0.55) } 50% { color : rgba(0,0,0,0.6); background:rgba(255, 255, 255, 0.4) } 0% { color : rgba(0,0,0,0); background:rgba(255, 255, 255, 0) }}";
@@ -692,7 +692,7 @@ namespace Sonomium
                 html += $@".card_image {{width:{albumArtSize} ; min-width: {albumArtMinSize}; height: {albumArtSize}; min-height: {albumArtMinSize}; }}";
             }
 
-            html += @".card_content { padding: 8px 0px 8pt 0px;  }";
+            html += @".card_content { padding: 5pt 0px 8pt 0px;  }";
             html += @".card-title { font-size: 20px; margin-bottom: 40px; text-align: center; color: #333;}";
             html += @".card_text { color: #777; height:26pt;  font-size: 12px;   text-align: left; margin: 0vw 0.5vw 0 0;  overflow : hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2; }";
             html += @"</style>";
@@ -738,7 +738,7 @@ namespace Sonomium
                 html += @"<figure class=""highlight"">";
 
                 html += $@"<img class=""card_image"" onload=""finalImageLoad(this)"" onerror=""startImageLoadTimer(this)"" src=""{imageCacheFileName}"" alt=""""  onclick=""onImageClick('{s2}', '{s3}')"" >" + "\r\n";
-                html += $@"<figcaption class=""caption"" onclick=""console.log(this.parentNode);this.parentNode.getElementsByClassName('card_image')[0].click();"">{info.albumArtist}<br><br>{info.albumTitle}</figcaption>";
+                html += $@"<figcaption class=""caption"" onclick=""this.parentNode.getElementsByClassName('card_image')[0].click();""><b>{info.albumArtist}</b><br><br>{info.albumTitle}</figcaption>";
                 html += @"</figure>";
                 html += @"<div class=""card_content"">";
                 html += $@"<p class=""card_text"">{info.albumTitle}</p> ";
