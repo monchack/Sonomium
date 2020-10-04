@@ -637,6 +637,7 @@ namespace Sonomium
             string cardMinSize = "160px";
             string albumArtSize = "15vw";
             string albumArtMinSize = "150px";
+            string fontsize = "9pt";
             
             switch (getAlbumArtSize())
             {
@@ -659,6 +660,7 @@ namespace Sonomium
                 cardMinSize = "80px";
                 albumArtSize = "15vw";
                 albumArtMinSize = "80px";
+                fontsize = "10pt";
                 break;
 
                 case 3:
@@ -666,6 +668,7 @@ namespace Sonomium
                 cardMinSize = "80px";
                 albumArtSize = "16vw";
                 albumArtMinSize = "80px";
+                fontsize = "10pt";
                 break;
             }
 
@@ -673,9 +676,10 @@ namespace Sonomium
             html += $@".cardx {{ width: {cardSize}; min-width: {cardMinSize}; height: 0px; background: #fff; border-width: 0px; float: left; text-align: center; }}";
 
             html += $@".highlight {{position: relative; width: {albumArtSize};margin: 0;}}";
-            html += @".caption{ display: none;  border-radius: 0 0 5px 5px; font-family: 'Segoe UI Semibold' ;font-size: 9pt;  position: absolute;bottom: -60px;left: 0;z-index: 2;width: 100%;background: rgba(255,255,255,.6);-webkit-transition: .3s;transition: .3s;} ";
+            html += $@".caption {{ display: none; animation: captionAnime 1s linear; border-radius: 0 0 5px 5px; font-family: 'Segoe UI Semibold' ;font-size: {fontsize};  position: absolute;bottom: -60px;left: 0;z-index: 2;width: 100%; background:rgba(255,255,255,0.5);}} ";
             html += @".highlight:active  figcaption { display:inline; bottom: 0;}";
             html += @".highlight:hover  figcaption { display:inline; bottom: 0;}";
+            html += @"@keyframes  captionAnime { 90% { color : black; background:rgba(255, 255, 255, 0.50) } 50% { color : rgba(0,0,0,0.6); background:rgba(255, 255, 255, 0.4) } 0% { color : rgba(0,0,0,0); background:rgba(255, 255, 255, 0) }}";
 
             if (getAlbumArtResolution() == 1)
             {
