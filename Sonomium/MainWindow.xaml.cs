@@ -730,6 +730,7 @@ namespace Sonomium
                 string s = info.filePath.Remove(n);   //   最後の / の出現位置までをキープして、残りは削除
                 string imageCacheFileName = @"./Temp/ImageCache/" + System.IO.Path.GetFileName(s) + ".jpg";
                 string s2 = info.albumTitle.Replace("'", @"\'");
+                s2 = s2.Replace(@"""", "&quot;");
                 string s3= info.albumArtist.Replace("'", @"\'"); 
 
                 html += $@"<section class=""card"" id=""{info.albumArtist}""  style=""display : inline-block;"">" + "\r\n";
