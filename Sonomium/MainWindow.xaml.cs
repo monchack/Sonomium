@@ -631,8 +631,7 @@ namespace Sonomium
             html += @"<style>";
             html += @"body { overscroll-behavior : none; } ";
             html += @".wrapper { z-index:0; position: relative; display: flex; flex-wrap : wrap ;  flex-direction: row; justify-content: space-between; }";
-
-            
+     
 
             string cardSize = "16vw";
             string cardMinSize = "160px";
@@ -662,7 +661,7 @@ namespace Sonomium
                 cardMinSize = "80px";
                 albumArtSize = "15vw";
                 albumArtMinSize = "80px";
-                fontsize = "10pt";
+                fontsize = "11pt";
                 break;
 
                 case 3:
@@ -670,7 +669,7 @@ namespace Sonomium
                 cardMinSize = "80px";
                 albumArtSize = "16vw";
                 albumArtMinSize = "80px";
-                fontsize = "11pt";
+                fontsize = "12pt";
                 break;
             }
 
@@ -678,7 +677,7 @@ namespace Sonomium
             html += $@".cardx {{ width: {cardSize}; min-width: {cardMinSize}; height: 0px; background: #fff; border-width: 0px; float: left; text-align: center; }}";
 
             html += $@".highlight {{position: relative; width: {albumArtSize};margin: 0;}}";
-            html += $@".caption {{ display: none; font-family:  ""Calibri"", ""Yu Gothic"", ""Segoe UI Semibold""; animation: captionAnime 1s linear; line-height:1.5; border-radius: 0 0 5px 5px; font-size: {fontsize};  position: absolute;bottom: -60px;left: 0;z-index: 2;width: 100%; background:rgba(255,255,255,0.6);}} ";
+            html += $@".caption {{ display: none; font-family: Arial, ""BIZ UDPGothic"", ""Segoe UI"";  animation: captionAnime 1s linear; line-height:1.5; border-radius: 0 0 5px 5px; font-size: {fontsize};  position: absolute;bottom: -60px;left: 0;z-index: 2;width: 100%; background:rgba(255,255,255,0.6);}} ";
             html += @".highlight:active  figcaption { display:inline; bottom: 0;}";
             html += @".highlight:hover  figcaption { display:inline; bottom: 0;}";
             html += @"@keyframes  captionAnime { 90% { color : black; background:rgba(255, 255, 255, 0.55) } 50% { color : rgba(0,0,0,0.6); background:rgba(255, 255, 255, 0.4) } 0% { color : rgba(0,0,0,0); background:rgba(255, 255, 255, 0) }}";
