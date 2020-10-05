@@ -677,7 +677,7 @@ namespace Sonomium
             html += $@".cardx {{ width: {cardSize}; min-width: {cardMinSize}; height: 0px; background: #fff; border-width: 0px; float: left; text-align: center; }}";
 
             html += $@".highlight {{position: relative; width: {albumArtSize};margin: 0;}}";
-            html += $@".caption {{ display: none; font-family: Arial, ""BIZ UDPGothic"", ""Segoe UI"";  animation: captionAnime 1s linear; line-height:1.5; border-radius: 0 0 5px 5px; font-size: {fontsize};  position: absolute;bottom: -60px;left: 0;z-index: 2;width: 100%; background:rgba(255,255,255,0.6);}} ";
+            html += $@".caption {{ display: none; font-family: Arial, ""BIZ UDPGothic"", ""Segoe UI"";  animation: captionAnime 1s linear; line-height:1.5; border-radius: 0 0 5px 5px; font-size: {fontsize};  user-select: none; position: absolute;bottom: -60px;left: 0;z-index: 2;width: 100%; background:rgba(255,255,255,0.6);}} ";
             html += @".highlight:active  figcaption { display:inline; bottom: 0;}";
             html += @".highlight:hover  figcaption { display:inline; bottom: 0;}";
             html += @"@keyframes  captionAnime { 90% { color : black; background:rgba(255, 255, 255, 0.55) } 50% { color : rgba(0,0,0,0.6); background:rgba(255, 255, 255, 0.4) } 0% { color : rgba(0,0,0,0); background:rgba(255, 255, 255, 0) }}";
@@ -693,7 +693,7 @@ namespace Sonomium
 
             html += @".card_content { padding: 5pt 0px 8pt 0px;  }";
             html += @".card-title { font-size: 20px; margin-bottom: 40px; text-align: center; color: #333;}";
-            html += @".card_text { color: #777; height:26pt;  font-size: 12px;   text-align: left; margin: 0vw 0.5vw 0 0;  overflow : hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2; }";
+            html += @".card_text { color: #777; user-select: none; height:26pt;  font-size: 12px;   text-align: left; margin: 0vw 0.5vw 0 0;  overflow : hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2; }";
             html += @"</style>";
             html += @"</head>";
             html += @"<body>";
