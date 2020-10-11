@@ -629,7 +629,7 @@ namespace Sonomium
             UpdatePlayerUI();
         }
 
-        private static string GetAlbumCacheImageFilePathFromOriginalFilePath(string filePath)
+        public static string GetAlbumCacheImageFilePathFromOriginalFilePath(string filePath)
         {
             string pathAndName = "";
             pathAndName = filePath;
@@ -771,7 +771,7 @@ namespace Sonomium
 
             html += @"<script type=""text/javascript"">";
             html += @"var lastDownload=Date.now();";
-            html += @"function reload(e) { if (Date.now() < lastDownload + 10000) e.src=e.src; }";
+            html += @"function reload(e) { if (Date.now() < lastDownload + 15000) e.src=e.src; }";
             html += @"function reload2(e) { e.onload=""""; e.src=e.src; }";
             html += @"function startImageLoadTimer(e) { setTimeout( reload,1500, e); }"; //1.5sec ごとにリトライ
             html += @"function finalImageLoad(e)  { setTimeout( reload2,8000, e); lastDownload=Date.now();  }"; // 8sec後に念のため再読み込み

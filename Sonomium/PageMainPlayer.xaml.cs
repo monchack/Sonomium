@@ -79,53 +79,8 @@ namespace Sonomium
             }
         }
 
-        private BitmapImage getAlbumImage(string uri)
-        {
-            if (uri == "")
-            {
-                return null;
-            }
-            string ip = mainWindow.getIp();
-
-            int n = uri.LastIndexOf('/');
-            string s = uri.Remove(n);   //   最後の / の出現位置までをキープして、残りは削除
-            string fileName = System.IO.Path.GetFileName(s) + ".jpg";
-            string imageCacheFileName = MainWindow.GetImageCacheDirectory() + fileName;
-            s = s.Replace("=", "%3D");
-            //Uri sourceUri = new Uri(@"http://" + ip + @"/albumart?path=/mnt/" + s);
-
-            if (!File.Exists(imageCacheFileName))
-            {
-                return null;
-            }
-            else
-            {
-                try
-                {
-                    BitmapImage bitmap = new BitmapImage();
-                    bitmap.BeginInit();
-                    bitmap.DownloadCompleted += (sender, args) =>
-                    {
-                        albumImages.Items.Refresh();
-                    };
-                    bitmap.UriSource = new Uri(@"file://" + imageCacheFileName);
-                    bitmap.EndInit();
-                    return bitmap;
-                }
-                catch
-                {
-                    // // キャッシュにファイルはあったが、bitmap作成に失敗
-                }
-            }
-            return null;
-        }
-
         private void ArtistList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            cancellationSource.Cancel();
-            cancellationSource = new CancellationTokenSource();
-            //CancellationToken token = source.Token;
-
             albumList.Clear();
             albumImages.Items.Clear();
             mainWindow.setCursoredArtist(artistList.SelectedItem.ToString());
@@ -138,14 +93,14 @@ namespace Sonomium
             var albums = mainWindow.GetCursoredArtistAlbums();
             foreach (var x in albums)
             {
-                BitmapImage bmp = getAlbumImage(x.filePath);
+                string path = MainWindow.GetAlbumCacheImageFilePathFromOriginalFilePath(x.filePath);
+                BitmapImage bmp = mainWindow.getBitmapImageFromFileName(path);
                 albumImages.Items.Add(new CardItem() { AlbumImage = bmp, AlbumTitle = x.albumTitle, AlbumCardWidth = size1, AlbumImageWidth = size2, AlbumImageHeight = size2 });
             }
         }
 
         private void AlbumImages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
             if (albumImages.SelectedItem == null) return;
 
             string artist = artistList.SelectedItem.ToString();
@@ -156,7 +111,6 @@ namespace Sonomium
             mainWindow.setSelectedAlbumImage(ci.AlbumImage);
             mainWindow.setSelectedAlbum(s);
 
-            //mainWindow.addSelectedAlbuomToQue(3, false);
             mainWindow.Button_Current_Click(null, null);
         }
 
