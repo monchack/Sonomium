@@ -46,9 +46,9 @@
                 </Button>
             <Grid Height="32pt" DockPanel.Dock="Bottom" />
             <StackPanel DockPanel.Dock="Bottom">
-                    <Button HorizontalAlignment="Left"  VerticalAlignment="Top" BorderThickness="0" Background="Transparent" Margin="14pt, 0pt, 0pt, 4pt" Click="SelectNowPlayed_Click" >
+                    <Button x:Name="buttonGetServerPlaying" HorizontalAlignment="Left"  VerticalAlignment="Top" BorderThickness="0" Background="Transparent" Margin="14pt, 0pt, 0pt, 4pt" Click="SelectNowPlayed_Click" >
                         <Button.Content>
-                            <TextBlock Text="{x:Static properties:Resources.PageCurrent_SelectNowPlayed}"  FontFamily="Segoe UI Semibold" FontSize="14pt" VerticalAlignment="Center" Foreground="#404040" TextWrapping="Wrap"/>
+                            <TextBlock Text="{x:Static properties:Resources.PageCurrent_SelectNowPlayed}"  FontFamily="Segoe UI Semibold" FontSize="12pt" VerticalAlignment="Center" Foreground="#404040" TextWrapping="Wrap"/>
                         </Button.Content>
                     </Button>
                 

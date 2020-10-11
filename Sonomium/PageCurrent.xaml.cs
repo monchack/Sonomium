@@ -109,8 +109,10 @@ namespace Sonomium
         private async void SelectNowPlayed_Click(object sender, RoutedEventArgs e)
         {
             (string artist, string album, string title) v;
+            buttonGetServerPlaying.IsEnabled = false;
             v = await Task.Run(()=>MainWindow.GetVolumioStatusSync(mainWindow.getIp(), true));
             update_artist_album(v);
+            buttonGetServerPlaying.IsEnabled = true;
         }
     }
 }
