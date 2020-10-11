@@ -1000,7 +1000,7 @@ namespace Sonomium
             _sendMpd(getIp(), "seekcur +15", false);
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             readTask = Task.Run(() => CreateAlbumDb(getIp(), this));
 
@@ -1009,6 +1009,14 @@ namespace Sonomium
             pageSettings = new PageSettings(this);
             pageTracks = new PageCurrent(this);
             cancellationSource = new CancellationTokenSource();
+
+            (string artist, string album, string title) v;
+            v = await Task.Run(() => MainWindow.GetVolumioStatusSync(getIp(), true));
+            setSelectedAlbum(v.album);
+            setSelectedArtist(v.artist);
+            string imageFileName = GetAlbumCacheImageFilePathAndName(v.artist, v.album);
+            BitmapImage bmp = getBitmapImageFromFileName(imageFileName);
+            setSelectedAlbumImage(bmp);
         }
     }
 }
