@@ -24,10 +24,8 @@ namespace Sonomium
     /// </summary>
     /// 
 
-    class ArtistAndAlbum
+    class ActionFromWebView
     {
-        public string albumTitle { get; set; }
-        public string albumArtist { get; set; }
         public string action { get; set; }
         public string id { get; set; }
     }
@@ -44,7 +42,7 @@ namespace Sonomium
         private void onWebViewImageClicked(object sender, CoreWebView2WebMessageReceivedEventArgs e)
         {
             string jsonString = e.TryGetWebMessageAsString();
-            ArtistAndAlbum aa = JsonSerializer.Deserialize<ArtistAndAlbum>(jsonString);
+            ActionFromWebView aa = JsonSerializer.Deserialize<ActionFromWebView>(jsonString);
 
             if (aa.action == "click")
             {

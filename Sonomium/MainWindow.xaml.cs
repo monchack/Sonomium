@@ -809,7 +809,7 @@ namespace Sonomium
 
                 html += @"<figure class=""highlight"">";
 
-                html += $@"<img class=""card_image"" onload=""finalImageLoad(this)"" onerror=""startImageLoadTimer(this)"" src=""{imageCacheFileName}"" alt=""""  onclick=""onImageClick('{s2}', '{s3}', '{dbHash}')"" >" + "\r\n";
+                html += $@"<img class=""card_image"" onload=""finalImageLoad(this)"" onerror=""startImageLoadTimer(this)"" src=""{imageCacheFileName}"" alt=""""  onclick=""onImageClick('{s2}', '{dbHash}')"" >" + "\r\n";
                 html += $@"<figcaption class=""caption"" onclick=""this.parentNode.getElementsByClassName('card_image')[0].click();""><b>{info.albumArtist}</b><br><br>{info.albumTitle}</figcaption>";
                 html += @"</figure>";
                 html += @"<div class=""card_content"">";
@@ -832,7 +832,7 @@ namespace Sonomium
 
             html += @"<script type=""text/javascript"">";
             html += @"function set_board_artist(name) {var board = document.getElementById('board_artist'); board.textContent =name; } ";
-            html += @"function onImageClick(albumTitle, albumArtist, hash) { set_board_artist(albumArtist); window.chrome.webview.postMessage( JSON.stringify({albumTitle:albumTitle, albumArtist:albumArtist, action:'click', id:hash}) ); }" + "\r\n";
+            html += @"function onImageClick(albumArtist, hash) { set_board_artist(albumArtist); window.chrome.webview.postMessage( JSON.stringify({action:'click', id:hash}) ); }" + "\r\n";
             html += @"</script>";
 
             html += @"</body>";
