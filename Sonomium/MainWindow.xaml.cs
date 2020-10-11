@@ -59,6 +59,9 @@ namespace Sonomium
         private string selectedAlbum = "";
         private string selectedArtist = "";
         private string cursoredArtist = "";
+        private string playedAlbum = "";
+        private string playedArtist = "";
+        private string playedTitle = "";
         private BitmapImage selectedAlbumImage;
         private int albumArtSize = 0;
         private AlbumDb albumDb;
@@ -143,6 +146,9 @@ namespace Sonomium
         public AlbumDb getAlbumDb() { return albumDb; }
         public void setAlbumArtResolution(int resolution) {  albumArtResolution = resolution;}
         public int getAlbumArtResolution() {  return albumArtResolution; }
+        public string getPlayedArtist() { return playedArtist; }
+        public string getPlayedAlbum() { return playedAlbum; }
+        public string getPlayedTitle() { return playedTitle; }
         
         public string GetTrackListFilePathAndName()
         {
@@ -324,7 +330,7 @@ namespace Sonomium
             return resp;
         }
 
-        static async Task WaitAndGetVolumioStatus(string ip, bool wait, MainWindow window)
+        public static async Task WaitAndGetVolumioStatus(string ip, bool wait, MainWindow window)
         {
             string s="";
             await Task.Run(() =>
@@ -336,6 +342,18 @@ namespace Sonomium
             window.CurrentArtist.Text = vs.artist;
             window.CurrentTitle.Text = vs.title;
             window.CurrentAlbum.Text = vs.album;
+            window.playedArtist = vs.artist;
+            window.playedAlbum = vs.album;
+            window.playedTitle = vs.title;
+        }
+
+        public static (string artist, string album, string title) GetVolumioStatusSync(string ip, bool wait)
+        {
+            string s = "";
+            if (wait == true) Thread.Sleep(1000);
+            s = GetRestApi(ip, "getstate");
+            VolumioState vs = JsonSerializer.Deserialize<VolumioState>(s);
+            return (vs.artist, vs.album, vs.title);
         }
 
         static void CreateAlbumDb(string ip, MainWindow window)
@@ -478,6 +496,21 @@ namespace Sonomium
             window.generateHtml();
         }
 
+        public List<TrackInfo> GetAlbumTracks((string artist, string album)v)
+        {
+            List<TrackInfo> list = new List<TrackInfo>();
+
+            var tracks = from e in trackDb.list
+                         where e.albumArtist == v.artist
+                         where e.albumTitle == v.album
+                         select e;
+            foreach (var x in tracks)
+            {
+                list.Add(x);
+            }
+            return list;
+        }
+
         public List<TrackInfo> GetCurrentAlbumTracks()
         {
             List<TrackInfo> list = new List<TrackInfo>();
@@ -540,6 +573,11 @@ namespace Sonomium
         }
 
         public void UpdatePlayerUI()
+        {
+            Task t = WaitAndGetVolumioStatus(getIp(), true, this);
+        }
+
+        public void UpdatePlayedArtistAndAlbum()
         {
             Task t = WaitAndGetVolumioStatus(getIp(), true, this);
         }
@@ -677,7 +715,7 @@ namespace Sonomium
             html += $@".cardx {{ width: {cardSize}; min-width: {cardMinSize}; height: 0px; background: #fff; border-width: 0px; float: left; text-align: center; }}";
 
             html += $@".highlight {{position: relative; width: {albumArtSize};margin: 0;}}";
-            html += $@".caption {{ display: none; font-family: Arial, ""BIZ UDPGothic"", ""Segoe UI"";  animation: captionAnime 1s linear; line-height:1.5; border-radius: 0 0 5px 5px; font-size: {fontsize};  user-select: none; position: absolute;bottom: -60px;left: 0;z-index: 2;width: 100%; background:rgba(255,255,255,0.6);}} ";
+            html += $@".caption {{ display: none; font-family: ""Segoe UI Semibold"", ""BIZ UDPGothic"", ""Segoe UI"";  animation: captionAnime 1s linear; line-height:1.5; border-radius: 0 0 5px 5px; font-size: {fontsize};  user-select: none; position: absolute;bottom: -60px;left: 0;z-index: 2;width: 100%; background:rgba(255,255,255,0.6);}} ";
             html += @".highlight:active  figcaption { display:inline; bottom: 0;}";
             html += @".highlight:hover  figcaption { display:inline; bottom: 0;}";
             html += @"@keyframes  captionAnime { 90% { color : black; background:rgba(255, 255, 255, 0.55) } 50% { color : rgba(0,0,0,0.6); background:rgba(255, 255, 255, 0.4) } 0% { color : rgba(0,0,0,0); background:rgba(255, 255, 255, 0) }}";
