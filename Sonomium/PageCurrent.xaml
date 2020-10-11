@@ -10,54 +10,54 @@
       Title="PageCurrent">
 
     <DockPanel >
-        <StackPanel Orientation="Vertical" Background="#F0F0F0" Width="280pt" DockPanel.Dock="Left" >
-            <Image x:Name="albumImage"  Margin="40pt,20pt,40pt,16pt"   Width="200pt" Height="200pt"  />
-            <TextBlock x:Name="albumTitle" FontFamily="Segoe UI Semibold" FontSize="12pt" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#808080" TextWrapping="Wrap" />
-            <TextBlock x:Name="albumArtist" FontFamily="Segoe UI Semibold" FontSize="12pt" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#808080" />
-            <Grid Height="20pt" />
-            <Button FontSize="18pt" HorizontalAlignment="Left"  VerticalAlignment="Top" BorderThickness="0" Background="Transparent" Margin="14pt, 4pt, 40pt, 0pt" Click="Button_PlayNow_Click">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Grid Height="4pt" />
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="&#xE8D6;" FontFamily="Segoe MDL2 Assets" FontSize="18pt" VerticalAlignment="Center" Foreground="#404040" />
-                            <StackPanel Width="12pt" />
-                            <TextBlock Text="{x:Static properties:Resources.PageCurrent_PlayNow}" FontFamily="Segoe UI Semibold" FontSize="14pt" VerticalAlignment="Center" Foreground="#404040"  />
-                            <Grid Width="6pt" />
-                        </StackPanel>
-                        <Grid Height="4pt" />
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-            <Grid Height="4pt" />
-            <Button HorizontalAlignment="Left"  VerticalAlignment="Top" BorderThickness="0" Background="Transparent" Margin="14pt, 0pt, 0pt, 4pt" Click="Button_PlayLater_Click" >
-                <Button.Content>
-                    <StackPanel Orientation="Vertical" >
-                        <Grid Height="4pt" />
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="&#xED0E;" FontFamily="Segoe MDL2 Assets" FontSize="18pt" VerticalAlignment="Center" Foreground="#404040" />
-                            <StackPanel Width="12pt" />
-                            <TextBlock Text="{x:Static properties:Resources.PageCurrent_PlayLater}"  FontFamily="Segoe UI Semibold" FontSize="14pt" VerticalAlignment="Center" Foreground="#404040" />
-                            <Grid Width="6pt" />
-                        </StackPanel>
-                        <Grid Height="4pt" />
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-            <StackPanel>
-                <Button HorizontalAlignment="Left"  VerticalAlignment="Top" BorderThickness="0" Background="Transparent" Margin="14pt, 0pt, 0pt, 4pt" Click="SelectNowPlayed_Click" >
+        <DockPanel Background="#F0F0F0" Width="280pt" DockPanel.Dock="Left" LastChildFill="True">
+                <Image x:Name="albumImage"  Margin="40pt,20pt,40pt,16pt"   Width="200pt" Height="200pt" DockPanel.Dock="Top" />
+                <TextBlock x:Name="albumTitle" FontFamily="Segoe UI Semibold" FontSize="12pt" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#808080" TextWrapping="Wrap" DockPanel.Dock="Top" />
+                <TextBlock x:Name="albumArtist" FontFamily="Segoe UI Semibold" FontSize="12pt" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#808080" DockPanel.Dock="Top" />
+                <Grid Height="20pt" DockPanel.Dock="Top" />
+                <Button FontSize="18pt" HorizontalAlignment="Left"  VerticalAlignment="Top" BorderThickness="0" Background="Transparent" Margin="14pt, 4pt, 40pt, 0pt" Click="Button_PlayNow_Click" DockPanel.Dock="Top" >
                     <Button.Content>
-                        <TextBlock Text="{x:Static properties:Resources.PageCurrent_SelectNowPlayed}"  FontFamily="Segoe UI Semibold" FontSize="14pt" VerticalAlignment="Center" Foreground="#404040" TextWrapping="Wrap"/>
+                        <StackPanel Orientation="Vertical">
+                            <Grid Height="4pt" />
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE8D6;" FontFamily="Segoe MDL2 Assets" FontSize="18pt" VerticalAlignment="Center" Foreground="#404040" />
+                                <StackPanel Width="12pt" />
+                                <TextBlock Text="{x:Static properties:Resources.PageCurrent_PlayNow}" FontFamily="Segoe UI Semibold" FontSize="14pt" VerticalAlignment="Center" Foreground="#404040"  />
+                                <Grid Width="6pt" />
+                            </StackPanel>
+                            <Grid Height="4pt" />
+                        </StackPanel>
                     </Button.Content>
                 </Button>
-                <Grid Height="32pt" >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="129*"/>
-                        <ColumnDefinition Width="245*"/>
-                    </Grid.ColumnDefinitions>
-                </Grid>
+                <Grid Height="4pt" DockPanel.Dock="Top" />
+                <Button HorizontalAlignment="Left"  VerticalAlignment="Top" BorderThickness="0" Background="Transparent" Margin="14pt, 0pt, 0pt, 4pt" Click="Button_PlayLater_Click"  DockPanel.Dock="Top" >
+                    <Button.Content>
+                        <StackPanel Orientation="Vertical" >
+                            <Grid Height="4pt" />
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xED0E;" FontFamily="Segoe MDL2 Assets" FontSize="18pt" VerticalAlignment="Center" Foreground="#404040" />
+                                <StackPanel Width="12pt" />
+                                <TextBlock Text="{x:Static properties:Resources.PageCurrent_PlayLater}"  FontFamily="Segoe UI Semibold" FontSize="14pt" VerticalAlignment="Center" Foreground="#404040" />
+                                <Grid Width="6pt" />
+                            </StackPanel>
+                            <Grid Height="4pt" />
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+            <Grid Height="32pt" DockPanel.Dock="Bottom" />
+            <StackPanel DockPanel.Dock="Bottom">
+                    <Button HorizontalAlignment="Left"  VerticalAlignment="Top" BorderThickness="0" Background="Transparent" Margin="14pt, 0pt, 0pt, 4pt" Click="SelectNowPlayed_Click" >
+                        <Button.Content>
+                            <TextBlock Text="{x:Static properties:Resources.PageCurrent_SelectNowPlayed}"  FontFamily="Segoe UI Semibold" FontSize="14pt" VerticalAlignment="Center" Foreground="#404040" TextWrapping="Wrap"/>
+                        </Button.Content>
+                    </Button>
+                
+
+
+
             </StackPanel>
-        </StackPanel>
+            <Grid DockPanel.Dock="Top" />
+        </DockPanel>
         <ListView x:Name="trackList" Margin="8pt,8pt, 0pt,8pt" DockPanel.Dock="Top" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectedValuePath="TrackFile" BorderThickness="0" FontFamily="Segoe UI" FontSize="14pt"   Loaded="Page_Loaded" SelectionChanged="TrackList_SelectionChanged" >
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
