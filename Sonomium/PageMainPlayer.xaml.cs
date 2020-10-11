@@ -90,7 +90,7 @@ namespace Sonomium
             int n = uri.LastIndexOf('/');
             string s = uri.Remove(n);   //   最後の / の出現位置までをキープして、残りは削除
             string fileName = System.IO.Path.GetFileName(s) + ".jpg";
-            string imageCacheFileName = mainWindow.GetImageCacheDirectory() + fileName;
+            string imageCacheFileName = MainWindow.GetImageCacheDirectory() + fileName;
             s = s.Replace("=", "%3D");
             //Uri sourceUri = new Uri(@"http://" + ip + @"/albumart?path=/mnt/" + s);
 

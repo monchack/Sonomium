@@ -41,6 +41,7 @@ namespace Sonomium
         public string albumTitle { get; set; }
         public string filePath { get; set; }
         public string albumArtist { get; set; }
+        public string albumCacheImagePath { get; set; }
     };
 
     public class AlbumDb
@@ -171,7 +172,7 @@ namespace Sonomium
             return s;
         }
 
-        public string GetImageCacheDirectory()
+        public static string GetImageCacheDirectory()
         {
             string s = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             s += "\\Sonomium\\Temp\\ImageCache\\";
@@ -471,6 +472,7 @@ namespace Sonomium
                         info.albumArtist = b;
                         info.albumTitle = d;
                         info.filePath = x;
+                        info.albumCacheImagePath = GetAlbumCacheImageFilePathFromOriginalFilePath(x);
                         window.albumDb.list.Add(info);
                         ++i;
                         break;
@@ -490,6 +492,7 @@ namespace Sonomium
                 {
                 }
             }
+
             //// db ができたので、bitmap のコピーと html　作成を開始
             //Task t = Task.Run(() => downloadImages(window.albumDb, window.getIp(), window.GetImageCacheDirectory(), window.cancellationSource.Token));
             window.downloadImages();
@@ -606,6 +609,18 @@ namespace Sonomium
             else PostRestApi(getIp(), "addToQueue", postData);
 
             UpdatePlayerUI();
+        }
+
+        private static string GetAlbumCacheImageFilePathFromOriginalFilePath(string filePath)
+        {
+            string pathAndName = "";
+            pathAndName = filePath;
+            int n = pathAndName.LastIndexOf('/');
+            string s = pathAndName.Remove(n);   //   最後の / の出現位置までをキープして、残りは削除
+            string fileName = System.IO.Path.GetFileName(s) + ".jpg";
+            string imageCacheFileName = GetImageCacheDirectory() + fileName;
+
+            return imageCacheFileName;
         }
 
         public string GetAlbumCacheImageFilePathAndName(string artistName, string albumName)
@@ -741,7 +756,7 @@ namespace Sonomium
             html += @"function reload(e) { if (Date.now() < lastDownload + 10000) e.src=e.src; }";
             html += @"function reload2(e) { e.onload=""""; e.src=e.src; }";
             html += @"function startImageLoadTimer(e) { setTimeout( reload,1500, e); }"; //1.5sec ごとにリトライ
-            html += @"function finalImageLoad(e)  { setTimeout( reload2,5000, e); lastDownload=Date.now();  }"; // 5sec後に念のため再読み込み
+            html += @"function finalImageLoad(e)  { setTimeout( reload2,8000, e); lastDownload=Date.now();  }"; // 8sec後に念のため再読み込み
             
             html += @"function test(artist_display) {";
             html += @"var cards = document.getElementsByClassName('card');";
@@ -941,24 +956,23 @@ namespace Sonomium
             {
                 string path = info.filePath;
 
-
                 int n = path.LastIndexOf('/');
                 string s = path.Remove(n);   //   最後の / の出現位置までをキープして、残りは削除
-                string fileName = System.IO.Path.GetFileName(s) + ".jpg";
-                //string imageCacheFileName = GetImageCacheDirectory() + fileName;
-                string imageCacheFileName = localCachePath + fileName;
                 s = s.Replace("=", "%3D");
+                
                 Uri sourceUri = new Uri(@"http://" + ip + @"/albumart?path=/mnt/" + s);
+                string imageCacheFileName = info.albumCacheImagePath;
 
                 try
                 {
+                    
                     if (File.Exists(imageCacheFileName)) continue;
+                    
                 }
                 catch
                 {
                     continue;
                 }
-
                 downloadFile(sourceUri, imageCacheFileName, token);
                 Thread.Sleep(10);
             }
@@ -1012,11 +1026,11 @@ namespace Sonomium
 
             (string artist, string album, string title) v;
             v = await Task.Run(() => MainWindow.GetVolumioStatusSync(getIp(), true));
-            setSelectedAlbum(v.album);
-            setSelectedArtist(v.artist);
-            string imageFileName = GetAlbumCacheImageFilePathAndName(v.artist, v.album);
-            BitmapImage bmp = getBitmapImageFromFileName(imageFileName);
-            setSelectedAlbumImage(bmp);
+            //setSelectedAlbum(v.album);
+            //setSelectedArtist(v.artist);
+            //string imageFileName = GetAlbumCacheImageFilePathAndName(v.artist, v.album);
+            //BitmapImage bmp = getBitmapImageFromFileName(imageFileName);
+            //setSelectedAlbumImage(bmp);
         }
     }
 }
