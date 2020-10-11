@@ -906,11 +906,12 @@ namespace Sonomium
             UpdatePlayerUI();
         }
 
-        private async static void downloadFile(Uri sourceUri, string outputFilePath, CancellationToken token)
+        private async static void downloadFile(Uri sourceUri, string outputFilePath, string tmpFileName, CancellationToken token)
         {
             HttpClient client = new HttpClient();
             client.Timeout = TimeSpan.FromMilliseconds(10000);
             HttpResponseMessage res = null;
+            bool isCopied = false;
 
             for (int i = 0; i < 10; ++i)
             {
@@ -927,7 +928,7 @@ namespace Sonomium
                 FileStream fileStream = null;
                 try
                 {
-                    using (fileStream = File.Create(outputFilePath))
+                    using (fileStream = File.Create(tmpFileName))
                     {
                         Stream httpStream;
                         try
@@ -944,7 +945,9 @@ namespace Sonomium
                                     Thread.Sleep(200);
                                     continue;
                                 }
+                                isCopied = true;
                                 break;
+
                             } // using
                         }
                         catch
@@ -959,6 +962,10 @@ namespace Sonomium
                     Thread.Sleep(200);
                     continue;
                 }
+            }
+            if (isCopied)
+            {
+                await Task.Run(() => System.IO.File.Move(tmpFileName, outputFilePath));
             }
         }
 
@@ -992,7 +999,9 @@ namespace Sonomium
                 {
                     continue;
                 }
-                downloadFile(sourceUri, imageCacheFileName, token);
+                //GetImageCacheDirectory
+                string tmpFile = System.IO.Path.GetTempFileName();
+                downloadFile(sourceUri, imageCacheFileName, tmpFile, token);
                 Thread.Sleep(10);
             }
         }
