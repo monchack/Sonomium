@@ -499,6 +499,24 @@ namespace Sonomium
             window.generateHtml();
         }
 
+        public (string artist, string album) getAlbumArtistAndNameById(string id)
+        {
+            //int n = Convert.ToInt32(id);
+            int n = Int32.Parse(id, System.Globalization.NumberStyles.HexNumber);
+            var albums = from e in albumDb.list
+                         where e.GetHashCode() == n
+                         select e;
+            string artist = "";
+            string album = "";
+            foreach (var x in albums)
+            {
+                artist = x.albumArtist;
+                album = x.albumTitle;
+                break;
+            }
+            return (artist, album);
+        }
+
         public List<TrackInfo> GetAlbumTracks((string artist, string album)v)
         {
             List<TrackInfo> list = new List<TrackInfo>();
@@ -779,6 +797,7 @@ namespace Sonomium
 
             foreach (AlbumInfo info in db.list)
             {
+                string dbHash = info.GetHashCode().ToString("X8");
                 int n = info.filePath.LastIndexOf('/');
                 string s = info.filePath.Remove(n);   //   最後の / の出現位置までをキープして、残りは削除
                 string imageCacheFileName = @"./Temp/ImageCache/" + System.IO.Path.GetFileName(s) + ".jpg";
@@ -790,7 +809,7 @@ namespace Sonomium
 
                 html += @"<figure class=""highlight"">";
 
-                html += $@"<img class=""card_image"" onload=""finalImageLoad(this)"" onerror=""startImageLoadTimer(this)"" src=""{imageCacheFileName}"" alt=""""  onclick=""onImageClick('{s2}', '{s3}')"" >" + "\r\n";
+                html += $@"<img class=""card_image"" onload=""finalImageLoad(this)"" onerror=""startImageLoadTimer(this)"" src=""{imageCacheFileName}"" alt=""""  onclick=""onImageClick('{s2}', '{s3}', '{dbHash}')"" >" + "\r\n";
                 html += $@"<figcaption class=""caption"" onclick=""this.parentNode.getElementsByClassName('card_image')[0].click();""><b>{info.albumArtist}</b><br><br>{info.albumTitle}</figcaption>";
                 html += @"</figure>";
                 html += @"<div class=""card_content"">";
@@ -813,7 +832,7 @@ namespace Sonomium
 
             html += @"<script type=""text/javascript"">";
             html += @"function set_board_artist(name) {var board = document.getElementById('board_artist'); board.textContent =name; } ";
-            html += @"function onImageClick(albumTitle, albumArtist) { set_board_artist(albumArtist); window.chrome.webview.postMessage( JSON.stringify({albumTitle:albumTitle, albumArtist:albumArtist}) ); }" + "\r\n";
+            html += @"function onImageClick(albumTitle, albumArtist, hash) { set_board_artist(albumArtist); window.chrome.webview.postMessage( JSON.stringify({albumTitle:albumTitle, albumArtist:albumArtist, action:'click', id:hash}) ); }" + "\r\n";
             html += @"</script>";
 
             html += @"</body>";

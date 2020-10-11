@@ -28,6 +28,8 @@ namespace Sonomium
     {
         public string albumTitle { get; set; }
         public string albumArtist { get; set; }
+        public string action { get; set; }
+        public string id { get; set; }
     }
 
     public partial class PageAlbumsWebView : Page
@@ -43,15 +45,19 @@ namespace Sonomium
         {
             string jsonString = e.TryGetWebMessageAsString();
             ArtistAndAlbum aa = JsonSerializer.Deserialize<ArtistAndAlbum>(jsonString);
-            string s = aa.albumArtist;
 
-            mainWindow.setSelectedArtist(aa.albumArtist);
-            mainWindow.setSelectedAlbum(aa.albumTitle);
+            if (aa.action == "click")
+            {
+                (string artistFromId, string albumFromId) = mainWindow.getAlbumArtistAndNameById(aa.id);
 
-            string imageFileName = mainWindow.GetAlbumCacheImageFilePathAndName(aa.albumArtist, aa.albumTitle);
-            BitmapImage bmp = mainWindow.getBitmapImageFromFileName(imageFileName);
-            mainWindow.setSelectedAlbumImage(bmp);
-            mainWindow.Button_Current_Click(null, null);
+                mainWindow.setSelectedArtist(artistFromId);
+                mainWindow.setSelectedAlbum(albumFromId);
+
+                string imageFileName = mainWindow.GetAlbumCacheImageFilePathAndName(artistFromId, albumFromId);
+                BitmapImage bmp = mainWindow.getBitmapImageFromFileName(imageFileName);
+                mainWindow.setSelectedAlbumImage(bmp);
+                mainWindow.Button_Current_Click(null, null);
+            }
         }
 
         public PageAlbumsWebView(MainWindow _mainWindow)
