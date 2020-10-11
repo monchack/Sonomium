@@ -784,15 +784,16 @@ namespace Sonomium
             #if !DEBUG
             html += @"window.onload = function() {  document.body.oncontextmenu = function () { return false;  }  }";
             #else
-            html += @"window.onload = function() {  }";
+            html += @"window.onload = function() { }";
             #endif
             html += @"</script>";
 
  
             html += @"<div class=""wrapper"">" + "\r\n";
 
-
-            html += @"<div id=""board_artist"" style=""display:none; position:fixed; z-index:10; top:0 ;""><font size=""24pt"" color=white>test</font></div>";
+            html += @"<div style=""background : linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.3)); width: 100%; height: 5pt; position:fixed; z-index:10; top:0 ;""></div>";
+            html += @"<div style=""background : linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0)); width: 100%; height: 11pt; position:fixed; z-index:10; top:5pt ;""></div>";
+            html += @"<div id=""board_artist"" style=""display:none; position:fixed; z-index:20; top:0 ;""><font size=""24pt"" color=white>test</font></div>";
 
 
             foreach (AlbumInfo info in db.list)
