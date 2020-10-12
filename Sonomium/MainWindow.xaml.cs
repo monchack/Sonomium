@@ -791,8 +791,8 @@ namespace Sonomium
  
             html += @"<div class=""wrapper"">" + "\r\n";
 
-            html += @"<div style=""background : linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.2)); width: 100%; height: 6pt; position:fixed; z-index:10; top:0; pointer-events: none; ""></div>";
-            html += @"<div style=""background : linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0)); width: 100%; height: 48pt; position:fixed; z-index:10; top:6pt; pointer-events: none ""></div>";
+            html += @"<div style=""background : linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.2)); width: 100%; height: 5pt; position:fixed; z-index:10; top:0; pointer-events: none; ""></div>";
+            html += @"<div style=""background : linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0)); width: 100%; height: 2pt; position:fixed; z-index:10; top:5pt; pointer-events: none ""></div>";
             html += @"<div id=""board_artist"" style=""display:none; position:fixed; z-index:20; top:0 ;""><font size=""24pt"" color=white>test</font></div>";
 
 
