@@ -348,13 +348,20 @@ namespace Sonomium
             window.playedTitle = vs.title;
         }
 
-        public static (string artist, string album, string title) GetVolumioStatusSync(string ip, bool wait)
+        public static (string artist, string album, string title)? GetVolumioStatusSync(string ip, bool wait)
         {
             string s = "";
             if (wait == true) Thread.Sleep(1000);
             s = GetRestApi(ip, "getstate");
-            VolumioState vs = JsonSerializer.Deserialize<VolumioState>(s);
-            return (vs.artist, vs.album, vs.title);
+            try
+            {
+                VolumioState vs = JsonSerializer.Deserialize<VolumioState>(s);
+                return (vs.artist, vs.album, vs.title);
+            }
+            catch
+            {
+            }
+            return null;
         }
 
         static void CreateAlbumDb(string ip, MainWindow window)
@@ -1054,7 +1061,7 @@ namespace Sonomium
             pageTracks = new PageCurrent(this);
             cancellationSource = new CancellationTokenSource();
 
-            (string artist, string album, string title) v;
+            (string artist, string album, string title)? v;
             v = await Task.Run(() => MainWindow.GetVolumioStatusSync(getIp(), true));
             //setSelectedAlbum(v.album);
             //setSelectedArtist(v.artist);
