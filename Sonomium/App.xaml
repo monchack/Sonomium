@@ -3,8 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Sonomium"
              xmlns:properties="clr-namespace:Sonomium.Properties"
+             xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <properties:Resources x:Key="resources" />
+        <wv2:CoreWebView2CreationProperties x:Key="a" />
     </Application.Resources>
 </Application>

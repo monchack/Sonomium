@@ -12,7 +12,7 @@
       Title="PageAlbumsWebView">
 
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-            <wv2:WebView2 Name="webView" Source =""   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="Hidden" />
-        </Grid>
+        <wv2:WebView2 Name="webView" CreationProperties="{StaticResource a}" />
+    </Grid>
 
 </Page>
