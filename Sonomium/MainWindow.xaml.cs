@@ -759,15 +759,15 @@ namespace Sonomium
             html += @".highlight:active  figcaption { display:inline; bottom: 0;}";
             html += @".highlight:hover  figcaption { display:inline; bottom: 0;}";
             html += @"@keyframes  captionAnime { 90% { color : black; background:rgba(255, 255, 255, 0.55) } 50% { color : rgba(0,0,0,0.6); background:rgba(255, 255, 255, 0.4) } 0% { color : rgba(0,0,0,0); background:rgba(255, 255, 255, 0) }}";
-            html += @".card:hover img{ opacity: 0.6; transition-duration: 0.3s;  filter: blur(2px) ; }";
+            html += @".card:hover img{  transition-duration: 0.3s;  filter: blur(2px) ; }";
 
             if (getAlbumArtResolution() == 1)
             {
-                html += $@".card_image {{ border-radius: 5px 5px 5px 5px;   background: #000; width: {albumArtSize}; min-width: {albumArtMinSize}; height: {albumArtSize}; min-height: {albumArtMinSize}; box-shadow: 3pt 3pt 5pt gray ;}}";
+                html += $@".card_image {{ border-radius: 5px 5px 5px 5px; width: {albumArtSize}; min-width: {albumArtMinSize}; height: {albumArtSize}; min-height: {albumArtMinSize}; box-shadow: 3pt 3pt 5pt gray ;}}";
             }
             else
             {
-                html += $@".card_image {{width:{albumArtSize} ;  background: #000; min-width: {albumArtMinSize}; height: {albumArtSize}; min-height: {albumArtMinSize}; }}";
+                html += $@".card_image {{width:{albumArtSize} ; min-width: {albumArtMinSize}; height: {albumArtSize}; min-height: {albumArtMinSize}; }}";
             }
 
             html += @".card_content { padding: 5pt 0px 8pt 0px;  }";
