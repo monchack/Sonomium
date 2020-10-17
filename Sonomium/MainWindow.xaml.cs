@@ -840,8 +840,8 @@ namespace Sonomium
             html += @"#menu {  position: fixed; top: 0; right: -340px; width: 300px;  height: 100%;  padding: 20px; transition: left .5s, right .5s; background-color: rgba(86, 86, 86, .7); z-index:20; }";
             html += @".toggle { font-size: 50px; cursor: pointer;}";
             html += @".toggle:hover  { text-decoration: underline; }";
-            html += @"#open2  {  display: none;}";
-            html += @"#open2:checked + #menu  {  right: 0;}";
+            html += @"#open_optional  {  display: none;}";
+            html += @"#open_optional:checked + #menu  {  right: 0;}";
 
 
             html += @"</style>";
@@ -857,6 +857,7 @@ namespace Sonomium
             
             html += @"function do_select() {var x = document.getElementsByClassName('card');[].forEach.call(x, function(v) {   }); }";
 
+            html += @"function close_optional(){document.getElementById(""open_optional"").click();}";
             html += @"function test(genre_index) {";
             html += @"var cards = document.getElementsByClassName('card');";
             html += @"var len = cards.length;";
@@ -878,15 +879,15 @@ namespace Sonomium
 
             ////test
             ////test
-            html += @"<input id=""open2"" type=""checkbox"">";
+            html += @"<input id=""open_optional"" type=""checkbox"">";
             html += @"<div id = ""menu"" >";
             html += @"<nav>";
             html += @"<ul>";
             int n = 0;
-            html += @"<li onclick=""test(-1)"" >ALL</li>";
+            html += @"<li onclick=""test(-1); close_optional();"" >ALL</li>";
             foreach (var x in genreList)
             {
-                if (x !="")  html += $@"<li onclick=""test({n});"" >{x}</li>";
+                if (x !="")  html += $@"<li onclick=""test({n}); close_optional();"" >{x}</li>";
                 ++n;
             }
             html += @"</ul>";

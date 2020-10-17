@@ -83,7 +83,7 @@ namespace Sonomium
 
         public void onGenreClick()
         {
-            webView.ExecuteScriptAsync(@"document.getElementById(""open2"").click();");
+            webView.ExecuteScriptAsync(@"document.getElementById(""open_optional"").click();");
         }
     }
 }
