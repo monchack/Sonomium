@@ -48,7 +48,7 @@
             <StackPanel DockPanel.Dock="Bottom">
                     <Button x:Name="buttonGetServerPlaying" HorizontalAlignment="Left"  VerticalAlignment="Top" BorderThickness="0" Background="Transparent" Margin="14pt, 0pt, 0pt, 4pt" Click="SelectNowPlayed_Click" >
                         <Button.Content>
-                            <TextBlock Text="{x:Static properties:Resources.PageCurrent_SelectNowPlayed}"  FontFamily="Segoe UI Semibold" FontSize="12pt" VerticalAlignment="Center" Foreground="#404040" TextWrapping="Wrap"/>
+                            <TextBlock Padding="2pt" Text="{x:Static properties:Resources.PageCurrent_SelectNowPlayed}"  FontFamily="Segoe UI Semibold" FontSize="12pt" VerticalAlignment="Center" Foreground="#404040" TextWrapping="Wrap"/>
                         </Button.Content>
                     </Button>
                 

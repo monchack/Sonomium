@@ -119,6 +119,8 @@
                 <DockPanel  DockPanel.Dock="Top">
                     <Grid DockPanel.Dock="Left" Width="22pt" />
                     <Grid Height="8pt"  DockPanel.Dock="Top" />
+                    <TextBlock  Text="SONOMIUM for Windows"  FontFamily="Segoe UI" FontSize="14pt" DockPanel.Dock="Top" Foreground="#404040" />
+                    <Grid Height="4pt"  DockPanel.Dock="Top" />
                     <TextBlock  Text="Version 1.3.5"  FontFamily="Segoe UI" FontSize="14pt" DockPanel.Dock="Top" Foreground="#404040" />
                     <Grid Height="4pt"  DockPanel.Dock="Top" />
                     <TextBlock  Text="© 2020 Monchack Audio. All rights reserved."  FontFamily="Segoe UI" FontSize="14pt" DockPanel.Dock="Top" Foreground="#404040" />
