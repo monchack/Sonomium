@@ -80,5 +80,10 @@ namespace Sonomium
             Uri uri = new Uri(fileName);
             webView.Source = uri;
         }
+
+        public void onGenreClick()
+        {
+            webView.ExecuteScriptAsync(@"document.getElementById(""open2"").click();");
+        }
     }
 }

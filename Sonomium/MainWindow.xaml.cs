@@ -28,6 +28,7 @@ namespace Sonomium
         public string albumArtist { get; set; }
         public string trackTitle { get; set; }
         public int length { get; set; }
+        public string genre { get; set; }
     };
 
     public class TrackDb
@@ -42,6 +43,8 @@ namespace Sonomium
         public string filePath { get; set; }
         public string albumArtist { get; set; }
         public string albumCacheImagePath { get; set; }
+        public List<string> genreList { get; set; }
+        public int genreIndex { get; set; }
     };
 
     public class AlbumDb
@@ -150,7 +153,8 @@ namespace Sonomium
         public string getPlayedArtist() { return playedArtist; }
         public string getPlayedAlbum() { return playedAlbum; }
         public string getPlayedTitle() { return playedTitle; }
-        
+        public List<string> genreList { get; set; }
+
         public string GetTrackListFilePathAndName()
         {
             string s = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -396,6 +400,7 @@ namespace Sonomium
             string lastArtist = "";
             string lastFilePath = "";
             string lastTrackTitle = "";
+            string lastGenre = "";
             int lastTime = 0;
 
             window.trackDb.list.Clear();
@@ -413,12 +418,14 @@ namespace Sonomium
                         info.filePath = lastFilePath;
                         info.trackTitle = lastTrackTitle;
                         info.length = lastTime;
+                        info.genre = lastGenre;
                         window.trackDb.list.Add(info);
                     }
                     lastArtist = "";
                     lastAlbum = "";
                     lastTrackTitle = "";
                     lastFilePath = "";
+                    lastGenre = "";
 
                     string file = line.Replace("file: ", "");
                     lastFilePath = file;
@@ -447,6 +454,11 @@ namespace Sonomium
                     int n = Int32.Parse(time);
                     lastTime = n;
                 }
+                if (line.Contains("Genre: "))
+                {
+                    string genre = line.Replace("Genre: ", "");
+                    lastGenre = genre;
+                }
             }
             if (lastArtist != "" && lastAlbum != "")
             {
@@ -455,20 +467,34 @@ namespace Sonomium
                 info.albumTitle = lastAlbum;
                 info.filePath = lastFilePath;
                 info.length = lastTime;
+                info.genre = lastGenre;
                 info.trackTitle = lastTrackTitle;
                 window.trackDb.list.Add(info);
             }
+            /// ここで 全track情報がセットされた
 
+            /// art: 全アーティスト名リスト
             var art = (from b in window.trackDb.list
                       select b.albumArtist).Distinct();
 
             foreach (var b in art)
             {
+                /// alb: そのアーティストの全アルバムリスト
                 var alb = (from c in window.trackDb.list
                            where c.albumArtist == b
                            select c.albumTitle).Distinct();
+
                 foreach (var d in alb)
                 {
+                    //トラックリストからアルバム中に多い順に並んだジャンルリストを得る
+                    var albTracks = from e in window.trackDb.list
+                                 where e.albumArtist == b
+                                 where e.albumTitle == d
+                                 select (e);
+                    List<string> a = window.GetSortedGenreList(albTracks.ToList());
+
+
+                    // filess: そのアルバムの全ファイル
                     var filess = from e in window.trackDb.list
                                  where e.albumArtist == b
                                  where e.albumTitle == d
@@ -479,6 +505,7 @@ namespace Sonomium
                         info.albumArtist = b;
                         info.albumTitle = d;
                         info.filePath = x;
+                        info.genreList = a;
                         info.albumCacheImagePath = GetAlbumCacheImageFilePathFromOriginalFilePath(x);
                         window.albumDb.list.Add(info);
                         ++i;
@@ -500,10 +527,31 @@ namespace Sonomium
                 }
             }
 
+            /// 全トラック中にでてくるgenreのリスト作成し、頻出度順に並べる
+            var tracks = from e in window.trackDb.list
+                         select (e);
+            window.genreList = window.GetSortedGenreList(tracks.ToList());
+
+            //// 各アルバムの代表genre が、全genre頻出度リストの何番目かをセット
+            foreach (var x in window.albumDb.list)
+            {
+                if (x.genreList.Count == 0)
+                {
+                    x.genreIndex = -1;
+                }
+                else
+                {
+                    int n = window.genreList.IndexOf(x.genreList[0]);
+                    x.genreIndex = n;
+                }
+            }
+
             //// db ができたので、bitmap のコピーと html　作成を開始
             //Task t = Task.Run(() => downloadImages(window.albumDb, window.getIp(), window.GetImageCacheDirectory(), window.cancellationSource.Token));
             window.downloadImages();
             window.generateHtml();
+
+
         }
 
         public (string artist, string album) getAlbumArtistAndNameById(string id)
@@ -522,6 +570,17 @@ namespace Sonomium
                 break;
             }
             return (artist, album);
+        }
+
+        public List<string> GetSortedGenreList(List<TrackInfo> tracks)
+        {
+            List<string> genreList = new List<string>();
+            var x = tracks.GroupBy(b => b.genre).Select(c => new { genre = c.Key.ToString(), count = c.Count() }).OrderByDescending(d => d.count).ToList();
+            foreach (var s in x)
+            {
+                if (s.genre!="") genreList.Add(s.genre);
+            }
+            return genreList;
         }
 
         public List<TrackInfo> GetAlbumTracks((string artist, string album)v)
@@ -698,13 +757,14 @@ namespace Sonomium
         {
             string html = "";
             AlbumDb db = getAlbumDb();
+            List<string> genreList = this.genreList;// GetGenreList();
 
             string fileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             fileName += "\\Sonomium\\albums.html";
 
             html += @"<html>";
             html += @"<head>";
-
+            html += @"<link rel = ""stylesheet"" href = ""https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"" />";
             html += @"<title></title>";
             html += @"<style>";
             html += @"body { overscroll-behavior : none; } ";
@@ -773,6 +833,17 @@ namespace Sonomium
             html += @".card_content { padding: 5pt 0px 8pt 0px;  }";
             html += @".card-title { font-size: 20px; margin-bottom: 40px; text-align: center; color: #333;}";
             html += @".card_text { color: #777; user-select: none; height:26pt;  font-size: 12px;   text-align: left; margin: 0vw 0.5vw 0 0;  overflow : hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2; }";
+
+            ///test style
+            html += @"ul { margin: 0; padding-left: 0;}";
+            html += @"li {list-style: none;}";
+            html += @"#menu {  position: fixed; top: 0; right: -340px; width: 300px;  height: 100%;  padding: 20px; transition: left .5s, right .5s; background-color: rgba(86, 86, 86, .7); z-index:20; }";
+            html += @".toggle { font-size: 50px; cursor: pointer;}";
+            html += @".toggle:hover  { text-decoration: underline; }";
+            html += @"#open2  {  display: none;}";
+            html += @"#open2:checked + #menu  {  right: 0;}";
+
+
             html += @"</style>";
             html += @"</head>";
             html += @"<body>";
@@ -784,10 +855,12 @@ namespace Sonomium
             html += @"function startImageLoadTimer(e) { setTimeout( reload,1500, e); }"; //1.5sec ごとにリトライ
             html += @"function finalImageLoad(e)  { setTimeout( reload2,8000, e); lastDownload=Date.now();  }"; // 8sec後に念のため再読み込み
             
-            html += @"function test(artist_display) {";
+            html += @"function do_select() {var x = document.getElementsByClassName('card');[].forEach.call(x, function(v) {   }); }";
+
+            html += @"function test(genre_index) {";
             html += @"var cards = document.getElementsByClassName('card');";
             html += @"var len = cards.length;";
-            html += @"for (var i = 0; i < len; ++i) { if (cards[i].id!=artist_display) cards[i].style.display =""none""; }";
+            html += @"for (var i = 0; i < len; ++i) {if(genre_index == -1 || cards[i].id==genre_index) cards[i].style.display =""block""; else cards[i].style.display =""none""; }";
             html += @"}";
             #if !DEBUG
             html += @"window.onload = function() {  document.body.oncontextmenu = function () { return false;  }  }";
@@ -803,18 +876,36 @@ namespace Sonomium
             html += @"<div style=""background : linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0)); width: 100%; height: 2pt; position:fixed; z-index:10; top:5pt; pointer-events: none ""></div>";
             html += @"<div id=""board_artist"" style=""display:none; position:fixed; z-index:20; top:0 ;""><font size=""24pt"" color=white>test</font></div>";
 
+            ////test
+            ////test
+            html += @"<input id=""open2"" type=""checkbox"">";
+            html += @"<div id = ""menu"" >";
+            html += @"<nav>";
+            html += @"<ul>";
+            int n = 0;
+            html += @"<li onclick=""test(-1)"" >ALL</li>";
+            foreach (var x in genreList)
+            {
+                if (x !="")  html += $@"<li onclick=""test({n});"" >{x}</li>";
+                ++n;
+            }
+            html += @"</ul>";
+            html += @"</nav>";
+            html += @"</div>";
+
+
 
             foreach (AlbumInfo info in db.list)
             {
                 string dbHash = info.GetHashCode().ToString("X8");
-                int n = info.filePath.LastIndexOf('/');
-                string s = info.filePath.Remove(n);   //   最後の / の出現位置までをキープして、残りは削除
+                int n2 = info.filePath.LastIndexOf('/');
+                string s = info.filePath.Remove(n2);   //   最後の / の出現位置までをキープして、残りは削除
                 string imageCacheFileName = @"./Temp/ImageCache/" + System.IO.Path.GetFileName(s) + ".jpg";
                 string s2 = info.albumTitle.Replace("'", @"\'");
                 s2 = s2.Replace(@"""", "&quot;");
                 string s3= info.albumArtist.Replace("'", @"\'"); 
 
-                html += $@"<section class=""card"" id=""{info.albumArtist}""  style=""display : inline-block;"">" + "\r\n";
+                html += $@"<section class=""card"" id=""{info.genreIndex}""  style=""display : inline-block;"">" + "\r\n";
 
                 html += @"<figure class=""highlight"">";
 
@@ -890,6 +981,15 @@ namespace Sonomium
             buttonArtist.BorderBrush = Brushes.Transparent;
             buttonCurrent.BorderBrush = SystemColors.HighlightBrush;
             buttonSettings.BorderBrush = Brushes.Transparent;
+        }
+
+        public void Button_Genre_Click(object sender, RoutedEventArgs e)
+        {
+            if (readTask != null) readTask.Wait();
+            if (!pageAll.IsEnabled) return;
+            Type t = pageAll.GetType();
+            System.Reflection.MethodInfo mi = t.GetMethod("onGenreClick");
+            mi.Invoke(pageAll, null);
         }
 
         private void PauseButton_Click(object sender, RoutedEventArgs e)

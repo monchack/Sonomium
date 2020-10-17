@@ -8,14 +8,14 @@
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         Closed="Window_Closed"
-        Title="SONOMIUM" Height="450" Width="800">
+        Title="SONOMIAUX" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30pt"/>
             <RowDefinition/>
             <RowDefinition Height="40pt"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0"  Orientation="Horizontal" Background="#F0F0F0" Margin="0,0,0,0">
+        <DockPanel Grid.Row="0"  DockPanel.Dock="Top" Background="#F0F0F0" Margin="0,0,0,0" HorizontalAlignment="Stretch" LastChildFill="True" >
 
             <Button x:Name="buttonMain" Margin="8pt,0,8pt,0"  BorderThickness="0,0,0,4" BorderBrush="Transparent" Background="Transparent" FontSize="12pt" FontFamily="Segoe UI Semibold" Click="Button_Main_Click" Foreground="#404040" >
                 <Button.Content>
@@ -43,17 +43,16 @@
                     </StackPanel>
                 </Button.Content>
             </Button>
-            <Button x:Name="buttonCurrent" Margin="8pt,0,8pt,0"  BorderThickness="0,0,0,4" BorderBrush="Transparent" Background="Transparent" FontSize="12pt" FontFamily="Segoe UI Semibold" Click="Button_Current_Click" Foreground="#404040" >
-                <Button.Content>
-                    <StackPanel Orientation="Horizontal">
-                        <Grid Width="4pt" />
-                        <TextBlock Text="&#xE90B;" FontFamily="Segoe MDL2 Assets" FontSize="12pt" VerticalAlignment="Center" />
-                        <StackPanel Width="4pt" />
-                        <TextBlock Text="{x:Static properties:Resources.MainWindow_Navigation_Tracks}" FontFamily="Segoe UI Semibold" FontSize="12pt" />
-                        <Grid Width="4pt" />
-                    </StackPanel>
-                </Button.Content>
+            <Button x:Name="buttonCurrent" Margin="8pt,0,8pt,0"  HorizontalAlignment="Right"  BorderThickness="0,0,0,4" BorderBrush="Transparent" Background="Transparent" FontSize="12pt" FontFamily="Segoe UI Semibold" Click="Button_Current_Click" Foreground="#404040" >
+                <StackPanel Orientation="Horizontal">
+                    <Grid Width="4pt" />
+                    <TextBlock Text="&#xE90B;" FontFamily="Segoe MDL2 Assets" FontSize="12pt" VerticalAlignment="Center" />
+                    <StackPanel Width="4pt" />
+                    <TextBlock Text="{x:Static properties:Resources.MainWindow_Navigation_Tracks}" FontFamily="Segoe UI Semibold" FontSize="12pt" />
+                    <Grid Width="4pt" />
+                </StackPanel>
             </Button>
+            
             <Button x:Name="buttonSettings" Margin="8pt,0,8pt,0"  BorderThickness="0,0,0,4" BorderBrush="Transparent" Background="Transparent" FontSize="12pt" FontFamily="Segoe UI Semibold" Click="Button_Settings_Click" Foreground="#404040" >
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
@@ -65,7 +64,20 @@
                     </StackPanel>
                 </Button.Content>
             </Button>
-        </StackPanel>
+            <Button x:Name="buttonGenre" Margin="8pt,0,16pt,0"   DockPanel.Dock="Right" BorderThickness="0,0,0,4" BorderBrush="Transparent" Background="Transparent" FontSize="12pt" FontFamily="Segoe UI Semibold" Click="Button_Genre_Click" Foreground="#404040" >
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Grid Width="4pt" />
+                            <TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="12pt" VerticalAlignment="Center" />
+                            <StackPanel Width="4pt" />
+                            <TextBlock Text="{x:Static properties:Resources.MainWindow_Navigation_Genre}" FontFamily="Segoe UI Semibold" FontSize="12pt" />
+                            <Grid Width="4pt" />
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+            <Grid  DockPanel.Dock="Left" />
+
+        </DockPanel>
         <Frame Grid.Row="1" NavigationUIVisibility="Hidden" Name="mainFrame" Margin="0,0,0,0" />
         <Grid Grid.Row="2">
             <DockPanel  Background="#F0F0F0">

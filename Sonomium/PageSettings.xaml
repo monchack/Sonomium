@@ -115,15 +115,15 @@
                 </DockPanel>                
 
                 <Grid Height="32pt" DockPanel.Dock="Top" />
-                <TextBlock Text="About SONOMIUM" DockPanel.Dock="Top"  Foreground="#1C3B61"  FontFamily="Segoe UI Semibold" FontSize="18pt" />
+                <TextBlock Text="About SONOMIAUX" DockPanel.Dock="Top"  Foreground="#1C3B61"  FontFamily="Segoe UI Semibold" FontSize="18pt" />
                 <DockPanel  DockPanel.Dock="Top">
                     <Grid DockPanel.Dock="Left" Width="22pt" />
                     <Grid Height="8pt"  DockPanel.Dock="Top" />
-                    <TextBlock  Text="SONOMIUM for Windows"  FontFamily="Segoe UI" FontSize="14pt" DockPanel.Dock="Top" Foreground="#404040" />
+                    <TextBlock  Text="SONOMIAUX for Windows"  FontFamily="Segoe UI" FontSize="14pt" DockPanel.Dock="Top" Foreground="#404040" />
                     <Grid Height="4pt"  DockPanel.Dock="Top" />
                     <TextBlock  Text="Version 1.3.5"  FontFamily="Segoe UI" FontSize="14pt" DockPanel.Dock="Top" Foreground="#404040" />
                     <Grid Height="4pt"  DockPanel.Dock="Top" />
-                    <TextBlock  Text="© 2020 Monchack Audio. All rights reserved."  FontFamily="Segoe UI" FontSize="14pt" DockPanel.Dock="Top" Foreground="#404040" />
+                    <TextBlock  Text="© 2020 AEAX. All rights reserved."  FontFamily="Segoe UI" FontSize="14pt" DockPanel.Dock="Top" Foreground="#404040" />
                     <Grid Height="36pt"  DockPanel.Dock="Top" />
                 </DockPanel>
             </DockPanel>
