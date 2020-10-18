@@ -43,7 +43,7 @@
         </Grid>
         <Grid DockPanel.Dock="Left"  >
             <Grid Margin="10pt,10pt,0pt,10pt" >
-                <ListBox x:Name="albumImages" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  ScrollViewer.HorizontalScrollBarVisibility="Disabled"  BorderThickness="0"  SelectionChanged="AlbumImages_SelectionChanged"  ItemContainerStyle="{StaticResource listbox_style}" Background="Transparent"  >
+                <ListBox x:Name="albumImages" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  ScrollViewer.HorizontalScrollBarVisibility="Disabled"  BorderThickness="0"  SelectionChanged="AlbumImages_SelectionChanged"  ItemContainerStyle="{StaticResource listbox_style}" Background="#ffffff"  >
                     <ItemsControl.ItemTemplate >
                         <DataTemplate>
                             <StackPanel Margin="12pt, 8pt, 12pt, 10pt" Width="{Binding AlbumCardWidth}" Background="White" Orientation="Vertical"  >
