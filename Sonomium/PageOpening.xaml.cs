@@ -76,6 +76,10 @@ namespace Sonomium
             html += @"</body>";
             html += @"</html>";
             webView.NavigateToString(html);// = html;
+
+            // W/A for webview2's DPI Awareness bug
+            mainWindow.Visibility = Visibility.Hidden;
+            mainWindow.Visibility = Visibility.Visible;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
