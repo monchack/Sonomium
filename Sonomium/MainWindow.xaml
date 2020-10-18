@@ -9,13 +9,13 @@
         Loaded="Window_Loaded"
         Closed="Window_Closed"
         Title="SONOMIAUX" Height="450" Width="800">
-    <Grid>
+    <Grid Background="#EDF1F5">
         <Grid.RowDefinitions>
             <RowDefinition Height="30pt"/>
             <RowDefinition/>
             <RowDefinition Height="40pt"/>
         </Grid.RowDefinitions>
-        <DockPanel Grid.Row="0"  DockPanel.Dock="Top" Background="#F0F0F0" Margin="0,0,0,0" HorizontalAlignment="Stretch" LastChildFill="True" >
+        <DockPanel Grid.Row="0" Name="navigationBar"  DockPanel.Dock="Top" Background="#F0F0F0" Margin="0,0,0,0" HorizontalAlignment="Stretch" LastChildFill="True" Visibility="Hidden"  >
 
             <Button x:Name="buttonMain" Margin="8pt,0,8pt,0"  BorderThickness="0,0,0,4" BorderBrush="Transparent" Background="Transparent" FontSize="12pt" FontFamily="Segoe UI Semibold" Click="Button_Main_Click" Foreground="#404040" >
                 <Button.Content>
@@ -79,7 +79,7 @@
 
         </DockPanel>
         <Frame Grid.Row="1" NavigationUIVisibility="Hidden" Name="mainFrame" Margin="0,0,0,0" />
-        <Grid Grid.Row="2">
+        <Grid Name="operatingBar" Grid.Row="2" Visibility="Hidden">
             <DockPanel  Background="#F0F0F0">
                 <Button Name="prevButton" Content="&#xE100;" HorizontalAlignment="Left" Background="Transparent" FontSize="14pt"
                     VerticalAlignment="Stretch" BorderThickness="0" FontFamily="Segoe UI Symbol"

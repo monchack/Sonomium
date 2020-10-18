@@ -1173,6 +1173,9 @@ namespace Sonomium
             //(string artist, string album, string title)? v;
             //v = await Task.Run(() => MainWindow.GetVolumioStatusSync(getIp(), true));
 
+            navigationBar.Visibility = Visibility.Visible;
+            operatingBar.Visibility = Visibility.Visible;
+
             navigation.Navigate(pageAll);
 
             //setSelectedAlbum(v.album);
