@@ -20,8 +20,11 @@ namespace Sonomium
     /// </summary>
     public partial class PageOpening : Page
     {
+        private MainWindow mainWindow;
+
         public PageOpening(MainWindow _mainWindow)
         {
+            mainWindow = _mainWindow;
             InitializeComponent();
         }
 
@@ -78,7 +81,6 @@ namespace Sonomium
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             InitializeAsync();
-
         }
     }
 }

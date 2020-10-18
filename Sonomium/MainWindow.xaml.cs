@@ -121,6 +121,8 @@ namespace Sonomium
             {
             }
 
+            navigation = this.mainFrame.NavigationService;
+
             // DBの初期化. load は Window_Loaded でおこなう.
 
             albumDb = new AlbumDb();
@@ -131,8 +133,7 @@ namespace Sonomium
             trackDb.list = new List<TrackInfo>();
             trackDb.num = 0;
 
-            navigation = this.mainFrame.NavigationService;
-            navigation.Navigate(new PageOpening(this));
+            //navigation = this.mainFrame.NavigationService;
         }
 
         public void setIp(string ip) { ipServer = ip; }
@@ -376,6 +377,8 @@ namespace Sonomium
             int i = 0;
             string listFile = window.GetTrackListFilePathAndName();
             bool readFromFile = false;
+
+            Thread.Sleep(3000);
 
             s = _sendMpd(ip, "listallinfo");
             if (s == "")
@@ -1156,20 +1159,22 @@ namespace Sonomium
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            readTask = Task.Run(() => CreateAlbumDb(getIp(), this));
-
             pageMain = new PageMainPlayer(this);
             pageAll = new PageAlbumsWebView(this);
             pageSettings = new PageSettings(this);
             pageTracks = new PageCurrent(this);
             pageOpening = new PageOpening(this);
+            navigation.Navigate(pageOpening);
             cancellationSource = new CancellationTokenSource();
 
-            (string artist, string album, string title)? v;
-            v = await Task.Run(() => MainWindow.GetVolumioStatusSync(getIp(), true));
+            
+            await Task.Run(() => CreateAlbumDb(getIp(), this));
 
-            readTask.Wait();
+            //(string artist, string album, string title)? v;
+            //v = await Task.Run(() => MainWindow.GetVolumioStatusSync(getIp(), true));
+
             navigation.Navigate(pageAll);
+
             //setSelectedAlbum(v.album);
             //setSelectedArtist(v.artist);
             //string imageFileName = GetAlbumCacheImageFilePathAndName(v.artist, v.album);
