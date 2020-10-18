@@ -64,11 +64,9 @@
                     </StackPanel>
                 </Button.Content>
             </Button>
-            <Button x:Name="buttonGenre" Margin="8pt,0,16pt,0"   DockPanel.Dock="Right" BorderThickness="0,0,0,4" BorderBrush="Transparent" Background="Transparent" FontSize="12pt" FontFamily="Segoe UI Semibold" Click="Button_Genre_Click" Foreground="#404040" >
+            <Button x:Name="buttonGenre" Margin="8pt,0,16pt,0"   DockPanel.Dock="Right" BorderThickness="0,0,0,0" BorderBrush="Transparent" Background="Transparent" FontSize="12pt" FontFamily="Segoe UI Semibold" Click="Button_Genre_Click" Foreground="#404040" >
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
-                            <Grid Width="4pt" />
-                            <TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="12pt" VerticalAlignment="Center" />
                             <StackPanel Width="4pt" />
                             <TextBlock Text="{x:Static properties:Resources.MainWindow_Navigation_Genre}" FontFamily="Segoe UI Semibold" FontSize="12pt" />
                             <Grid Width="4pt" />
