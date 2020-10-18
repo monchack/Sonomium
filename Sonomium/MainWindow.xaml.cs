@@ -768,13 +768,11 @@ namespace Sonomium
 
             html += @"<html>";
             html += @"<head>";
-            html += @"<link rel = ""stylesheet"" href = ""https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"" />";
             html += @"<title></title>";
             html += @"<style>";
             html += @"body { overscroll-behavior : none; } ";
             html += @".wrapper { z-index:0; position: relative; display: flex; flex-wrap : wrap ;  flex-direction: row; justify-content: space-between; }";
      
-
             string cardSize = "16vw";
             string cardMinSize = "160px";
             string albumArtSize = "15vw";
@@ -840,7 +838,7 @@ namespace Sonomium
 
             ///test style
             html += @"ul { margin: 0; padding-left: 0;}";
-            html += @"li {list-style: none;}";
+            html += @"li {list-style: none; font-family:""Segoe UI"";  font-size: 16pt; }";
             html += @"#menu {  position: fixed; top: 0; right: -340px; width: 300px;  height: 100%;  padding: 20px; transition: left .5s, right .5s; background-color: rgba(86, 86, 86, .7); z-index:20; }";
             html += @".toggle { font-size: 50px; cursor: pointer;}";
             html += @".toggle:hover  { text-decoration: underline; }";
@@ -888,6 +886,8 @@ namespace Sonomium
             html += @"<nav>";
             html += @"<ul>";
             int n = 0;
+            html += @"<li onclick=""close_optional();"" style=""font-family: 'Segoe MDL2 Assets' "" >&#xe8bb</li>";
+            html += @"<br>";
             html += @"<li onclick=""test(-1); close_optional();"" >ALL</li>";
             foreach (var x in genreList)
             {
