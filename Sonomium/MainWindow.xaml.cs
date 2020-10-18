@@ -74,6 +74,7 @@ namespace Sonomium
         private Page pageAll;
         private Page pageSettings;
         private Page pageTracks;
+        private Page pageOpening;
         private int albumArtResolution = 0;
         private Task readTask = null;
         private CancellationTokenSource cancellationSource;
@@ -131,7 +132,7 @@ namespace Sonomium
             trackDb.num = 0;
 
             navigation = this.mainFrame.NavigationService;
-            navigation.Navigate(new PageSettings(this));
+            navigation.Navigate(new PageOpening(this));
         }
 
         public void setIp(string ip) { ipServer = ip; }
@@ -1161,10 +1162,14 @@ namespace Sonomium
             pageAll = new PageAlbumsWebView(this);
             pageSettings = new PageSettings(this);
             pageTracks = new PageCurrent(this);
+            pageOpening = new PageOpening(this);
             cancellationSource = new CancellationTokenSource();
 
             (string artist, string album, string title)? v;
             v = await Task.Run(() => MainWindow.GetVolumioStatusSync(getIp(), true));
+
+            readTask.Wait();
+            navigation.Navigate(pageAll);
             //setSelectedAlbum(v.album);
             //setSelectedArtist(v.artist);
             //string imageFileName = GetAlbumCacheImageFilePathAndName(v.artist, v.album);
