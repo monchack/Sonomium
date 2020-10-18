@@ -957,6 +957,7 @@ namespace Sonomium
             buttonArtist.BorderBrush = Brushes.Transparent;
             buttonCurrent.BorderBrush = Brushes.Transparent;
             buttonSettings.BorderBrush = Brushes.Transparent;
+            buttonGenre.Visibility = Visibility.Visible;
         }
 
         private void Button_Artist_Click(object sender, RoutedEventArgs e)
@@ -967,6 +968,7 @@ namespace Sonomium
             buttonArtist.BorderBrush = SystemColors.HighlightBrush;
             buttonCurrent.BorderBrush = Brushes.Transparent;
             buttonSettings.BorderBrush = Brushes.Transparent;
+            buttonGenre.Visibility = Visibility.Hidden;
         }
 
         private void Button_Settings_Click(object sender, RoutedEventArgs e)
@@ -976,6 +978,7 @@ namespace Sonomium
             buttonArtist.BorderBrush = Brushes.Transparent;
             buttonCurrent.BorderBrush = Brushes.Transparent;
             buttonSettings.BorderBrush = SystemColors.HighlightBrush;
+            buttonGenre.Visibility = Visibility.Hidden;
         }
 
         public void Button_Current_Click(object sender, RoutedEventArgs e)
@@ -986,6 +989,7 @@ namespace Sonomium
             buttonArtist.BorderBrush = Brushes.Transparent;
             buttonCurrent.BorderBrush = SystemColors.HighlightBrush;
             buttonSettings.BorderBrush = Brushes.Transparent;
+            buttonGenre.Visibility = Visibility.Hidden;
         }
 
         public void Button_Genre_Click(object sender, RoutedEventArgs e)
@@ -1177,6 +1181,8 @@ namespace Sonomium
             operatingBar.Visibility = Visibility.Visible;
 
             navigation.Navigate(pageAll);
+            pageAll.Visibility = Visibility.Hidden;
+            pageAll.Visibility = Visibility.Visible;
 
             //setSelectedAlbum(v.album);
             //setSelectedArtist(v.artist);
