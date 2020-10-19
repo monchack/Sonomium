@@ -30,7 +30,16 @@ namespace Sonomium
 
         async void InitializeAsync()
         {
-            await webView.EnsureCoreWebView2Async(null);
+            try
+            {
+                await webView.EnsureCoreWebView2Async(null);
+            }
+            catch
+            {
+                // Edge is not installed.
+                webView.Visibility = Visibility.Hidden;
+                return;
+            }
             string html = "";
             html += @"<html>";
             html += @"<head>";
@@ -80,6 +89,7 @@ namespace Sonomium
             // W/A for webview2's DPI Awareness bug
             mainWindow.Visibility = Visibility.Hidden;
             mainWindow.Visibility = Visibility.Visible;
+            mainWindow.Activate();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
