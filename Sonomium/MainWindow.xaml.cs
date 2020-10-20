@@ -429,7 +429,8 @@ namespace Sonomium
                     lastAlbum = "";
                     lastTrackTitle = "";
                     lastFilePath = "";
-                    lastGenre = "";
+                    System.Resources.ResourceManager resource = Properties.Resources.ResourceManager;
+                    lastGenre = resource.GetString("HTML_GenreUnspecfied");
 
                     string file = line.Replace("file: ", "");
                     lastFilePath = file;
@@ -848,7 +849,7 @@ namespace Sonomium
 
             html += @"</style>";
             html += @"</head>";
-            html += @"<body>";
+            html += @"<body onselectstart=""return false;"" >";
 
             html += @"<script type=""text/javascript"">";
             html += @"var lastDownload=Date.now();";
