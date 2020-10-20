@@ -864,7 +864,7 @@ namespace Sonomium
             html += @"function test(genre_index) {";
             html += @"var cards = document.getElementsByClassName('card');";
             html += @"var len = cards.length;";
-            html += @"for (var i = 0; i < len; ++i) {if(genre_index == -1 || cards[i].id == genre_index) cards[i].style.display =""block""; else cards[i].style.display =""none""; }";
+            html += @"for (var i = 0; i < len; ++i) {if(genre_index == -1 || cards[i].id == genre_index) cards[i].parentNode.style.display =""block""; else cards[i].parentNode.style.display =""none""; }";
             html += @"}";
             #if !DEBUG
             html += @"window.onload = function() {  document.body.oncontextmenu = function () { return false;  }  }";
@@ -911,7 +911,7 @@ namespace Sonomium
                 string s2 = info.albumTitle.Replace("'", @"\'");
                 s2 = s2.Replace(@"""", "&quot;");
                 string s3= info.albumArtist.Replace("'", @"\'"); 
-                html += $@"<section class=""card_group"" id=""{hash}"" >";
+                html += $@"<div class=""card_group"" id=""{hash}""  >";
                 html += $@"<section class=""card"" id=""{info.genreIndex}""  style=""display : inline-block;"">" + "\r\n";
 
                 html += @"<figure class=""highlight"">";
@@ -925,7 +925,7 @@ namespace Sonomium
                 html += @"</div>";
                 
                 html += @"</section>" + "\r\n";
-                html += @"</section>" + "\r\n";
+                html += @"</div>" + "\r\n";
             }
             for (int i = 0; i < 6; ++i)
             {
