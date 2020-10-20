@@ -15,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Web.WebView2.Core;
+using System.Text.Json;
 
 namespace Sonomium
 {
@@ -44,6 +46,8 @@ namespace Sonomium
             albumList = new List<string>();
             albumTimeList = new List<int>();
             cancellationSource = new CancellationTokenSource();
+            this.webView.WebMessageReceived += onWebViewImageClicked;
+            this.webView.NavigationCompleted += onWebViewNavigationCompleted;
         }
 
         private void init_artist_list()
@@ -55,6 +59,12 @@ namespace Sonomium
             {
                 artistList.Items.Add(c);
             }
+        }
+
+        async void InitializeAsync()
+        {
+            await webView.EnsureCoreWebView2Async(null);
+            await webView.ExecuteScriptAsync(@"var cards = document.getElementsByClassName('card_group');var len = cards.length;for (var i = 0; i < len; ++i){ cards[i].style.display =""none"";} ");
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -77,12 +87,18 @@ namespace Sonomium
                     }
                 }
             }
-        }
+
+            string fileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            fileName += "\\Sonomium\\albums.html";
+            Uri uri = new Uri(fileName);
+            webView.Source = uri;
+          }
 
         private void ArtistList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             albumList.Clear();
-            albumImages.Items.Clear();
+            //albumImages.Items.Clear();
+            webView.ExecuteScriptAsync(@"var cards = document.getElementsByClassName('card_group');var len = cards.length;for (var i = 0; i < len; ++i){ cards[i].style.display =""none"";} ");
             mainWindow.setCursoredArtist(artistList.SelectedItem.ToString());
 
             int size1 = 160;
@@ -91,16 +107,44 @@ namespace Sonomium
             size1 = size2 = size_table[mainWindow.getAlbumArtSize()];
 
             var albums = mainWindow.GetCursoredArtistAlbums();
+            int n = albums[0].albumArtist.GetHashCode();
             foreach (var x in albums)
             {
                 string path = MainWindow.GetAlbumCacheImageFilePathFromOriginalFilePath(x.filePath);
                 BitmapImage bmp = mainWindow.getBitmapImageFromFileName(path);
-                albumImages.Items.Add(new CardItem() { AlbumImage = bmp, AlbumTitle = x.albumTitle, AlbumCardWidth = size1, AlbumImageWidth = size2, AlbumImageHeight = size2 });
+                //albumImages.Items.Add(new CardItem() { AlbumImage = bmp, AlbumTitle = x.albumTitle, AlbumCardWidth = size1, AlbumImageWidth = size2, AlbumImageHeight = size2 });
+                webView.ExecuteScriptAsync($@"var cards = document.getElementsByClassName('card_group');var len = cards.length;for (var i = 0; i < len; ++i){{ if (cards[i].id == {n} ) cards[i].style.display =""block"";}} ");
+            }
+        }
+
+        private void onWebViewNavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
+        {
+            webView.ExecuteScriptAsync(@"var cards = document.getElementsByClassName('card_group');var len = cards.length;for (var i = 0; i < len; ++i){ cards[i].style.display =""none"";} ");
+            webView.Visibility = Visibility.Visible;
+        }
+
+        private void onWebViewImageClicked(object sender, CoreWebView2WebMessageReceivedEventArgs e)
+        {
+            string jsonString = e.TryGetWebMessageAsString();
+            ActionFromWebView aa = JsonSerializer.Deserialize<ActionFromWebView>(jsonString);
+
+            if (aa.action == "click")
+            {
+                (string artistFromId, string albumFromId) = mainWindow.getAlbumArtistAndNameById(aa.id);
+
+                mainWindow.setSelectedArtist(artistFromId);
+                mainWindow.setSelectedAlbum(albumFromId);
+
+                string imageFileName = mainWindow.GetAlbumCacheImageFilePathAndName(artistFromId, albumFromId);
+                BitmapImage bmp = mainWindow.getBitmapImageFromFileName(imageFileName);
+                mainWindow.setSelectedAlbumImage(bmp);
+                mainWindow.Button_Current_Click(null, null);
             }
         }
 
         private void AlbumImages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            /*
             if (albumImages.SelectedItem == null) return;
 
             string artist = artistList.SelectedItem.ToString();
@@ -112,6 +156,7 @@ namespace Sonomium
             mainWindow.setSelectedAlbum(s);
 
             mainWindow.Button_Current_Click(null, null);
+            */
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)

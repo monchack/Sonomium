@@ -859,11 +859,12 @@ namespace Sonomium
             
             html += @"function do_select() {var x = document.getElementsByClassName('card');[].forEach.call(x, function(v) {   }); }";
 
+            html += @"function all_clear(){var cards = document.getElementsByClassName('card');var len = cards.length;for (var i = 0; i < len; ++i){ cards[i].style.display =""none"";} }";
             html += @"function close_optional(){document.getElementById(""open_optional"").click();}";
             html += @"function test(genre_index) {";
             html += @"var cards = document.getElementsByClassName('card');";
             html += @"var len = cards.length;";
-            html += @"for (var i = 0; i < len; ++i) {if(genre_index == -1 || cards[i].id==genre_index) cards[i].style.display =""block""; else cards[i].style.display =""none""; }";
+            html += @"for (var i = 0; i < len; ++i) {if(genre_index == -1 || cards[i].id == genre_index) cards[i].style.display =""block""; else cards[i].style.display =""none""; }";
             html += @"}";
             #if !DEBUG
             html += @"window.onload = function() {  document.body.oncontextmenu = function () { return false;  }  }";
@@ -902,6 +903,7 @@ namespace Sonomium
 
             foreach (AlbumInfo info in db.list)
             {
+                int hash = info.albumArtist.GetHashCode();
                 string dbHash = info.GetHashCode().ToString("X8");
                 int n2 = info.filePath.LastIndexOf('/');
                 string s = info.filePath.Remove(n2);   //   最後の / の出現位置までをキープして、残りは削除
@@ -909,7 +911,7 @@ namespace Sonomium
                 string s2 = info.albumTitle.Replace("'", @"\'");
                 s2 = s2.Replace(@"""", "&quot;");
                 string s3= info.albumArtist.Replace("'", @"\'"); 
-
+                html += $@"<section class=""card_group"" id=""{hash}"" >";
                 html += $@"<section class=""card"" id=""{info.genreIndex}""  style=""display : inline-block;"">" + "\r\n";
 
                 html += @"<figure class=""highlight"">";
@@ -922,6 +924,7 @@ namespace Sonomium
                 html += $@"<p class=""card_text"">{info.albumTitle}</p> ";
                 html += @"</div>";
                 
+                html += @"</section>" + "\r\n";
                 html += @"</section>" + "\r\n";
             }
             for (int i = 0; i < 6; ++i)
