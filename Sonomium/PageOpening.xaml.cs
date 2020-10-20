@@ -36,7 +36,7 @@ namespace Sonomium
             }
             catch
             {
-                // Edge is not installed.
+                // Edge Runtime is not installed.
                 webView.Visibility = Visibility.Hidden;
                 return;
             }
@@ -85,11 +85,6 @@ namespace Sonomium
             html += @"</body>";
             html += @"</html>";
             webView.NavigateToString(html);// = html;
-
-            // W/A for webview2's DPI Awareness bug
-            mainWindow.Visibility = Visibility.Hidden;
-            mainWindow.Visibility = Visibility.Visible;
-            mainWindow.Activate();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
