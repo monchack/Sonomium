@@ -12,5 +12,6 @@
 
     <Grid>
         <wv2:WebView2 Name="webView" CreationProperties="{StaticResource a}" />
+        <TextBlock HorizontalAlignment="Center" Height="105"  TextWrapping="Wrap" Text="Install Microsoft Edge Runtime.&#10;To use this software, Microsoft Edge Runtime is required.&#10;" VerticalAlignment="Center" Width="471" FontFamily="Segoe UI Semibold" FontSize="24" TextAlignment="Center" />
     </Grid>
 </Page>
