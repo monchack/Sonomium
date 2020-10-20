@@ -9,7 +9,7 @@
       d:DesignHeight="600" d:DesignWidth="800"
       Title="PageCurrent">
 
-    <DockPanel >
+    <DockPanel Background="White">
         <DockPanel Background="#F0F0F0" Width="280pt" DockPanel.Dock="Left" LastChildFill="True">
                 <Image x:Name="albumImage"  Margin="40pt,20pt,40pt,16pt"   Width="200pt" Height="200pt" DockPanel.Dock="Top" />
                 <TextBlock x:Name="albumTitle" FontFamily="Segoe UI Semibold" FontSize="12pt" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#808080" TextWrapping="Wrap" DockPanel.Dock="Top" />
