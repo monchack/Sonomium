@@ -771,8 +771,10 @@ namespace Sonomium
             html += @"<head>";
             html += @"<title></title>";
             html += @"<style>";
-            html += @"body { overscroll-behavior : none; } ";
-            html += @".wrapper { z-index:0; position: relative; display: flex; flex-wrap : wrap ;  flex-direction: row; justify-content: space-between; }";
+            html += @"body { overscroll-behavior : none; margin:0 0 0 0;overflow-x:hidden; overflow-y:hidden;  } ";
+            html += @".super_container { scroll-snap-type: x mandatory; overflow:auto;   display:flex;  width:100vw;height:auto; }";
+            html += @".sub_container {scroll-snap-align: start; flex:none; width:100%; height:100vh; overflow:visible; overflow-x:hidden; overflow-y:scroll; }";
+            html += @".wrapper2 {z-index:0; position: relative; display: flex; flex-wrap : wrap ;  flex-direction: row; justify-content: space-between; overflow:visible; overflow-x:hidden;overflow-y:hidden; }";
      
             string cardSize = "16vw";
             string cardMinSize = "160px";
@@ -873,8 +875,10 @@ namespace Sonomium
             html += @"window.onload = function() { }";
             #endif
             html += @"</script>";
+            html += @"<div class=""super_container"">";
+            html += @"<div class=""sub_container"">";
 
- 
+
             html += @"<div class=""wrapper"">" + "\r\n";
 
             html += @"<div style=""background : linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.2)); width: 100%; height: 5pt; position:fixed; z-index:10; top:0; pointer-events: none; ""></div>";
@@ -900,7 +904,11 @@ namespace Sonomium
             html += @"</nav>";
             html += @"</div>";
 
+            //カードの冒頭の空白
+            html += @"<div style=""width:100vw; height:10pt;display : inline-block;"" ></div>";
 
+            //左右の余白
+            html += @"<div class=""wrapper2"" style=""padding: 0 5pt 0 12pt; "">";
 
             foreach (AlbumInfo info in db.list)
             {
@@ -938,7 +946,15 @@ namespace Sonomium
                 html += @"</section>";
             }
 
+            //左右の余白
             html += @"</div>";
+
+            html += @"</div>"; //wrapper
+            html += @"</div>"; // sub_container
+            html += @"<section class=""sub_container""><h1>Genre</h1></section>";
+
+            html += @"</div>"; // super_container
+
 
             html += @"<script type=""text/javascript"">";
             html += @"function set_board_artist(name) {var board = document.getElementById('board_artist'); board.textContent =name; } ";
