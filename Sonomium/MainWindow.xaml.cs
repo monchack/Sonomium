@@ -912,8 +912,11 @@ namespace Sonomium
             }
             html += @"};"; html += "\r\n";
 
-            html += @"function resetArtistList(genre) {"; html += "\r\n";
-            html += $@"console.log(""genre selected : "" + genre);";
+            html += @"function resetArtistList(element) {"; html += "\r\n";
+            html += @"genre = element.options[element.selectedIndex].text;";
+            html += @"type = element.options[element.selectedIndex].value;";
+            html += $@"console.log(""genre selected : "" + genre + "" : "" + type);";
+            html += @"if (type=='0') {allGenreSelected(); return;}";
             html += @"let x = document.getElementById('artistListForGenre');"; html += "\r\n";
             html += @"var length = x.options.length;for (i = 0; i < length; i++) {  x.options[0].remove(); }";
             html += @"artist_for_genre_tbl[genre].forEach( s => {"; html += "\r\n";
@@ -1045,11 +1048,11 @@ namespace Sonomium
             html += @"<div style=""position: relative; top:8pt; left:20pt; display:inline-block;"">";
             html += @"<div style=""font-family:Segoe UI Semibold; font-size:18pt;color:#1C3B61;position: relative; top:0pt; left:0pt;  display:block;"">Genre</div>";
             
-            html += @"<select class=""list_box_2"" "" size=60 name=""genre_name"" style=""position: relative; top:20pt; width: 240pt; height:85%;"" >";
-            html += $@"<option class=""option_list"" onclick=""allGenreSelected()"">[All genre]</option>";
+            html += @"<select class=""list_box_2"" onchange=""resetArtistList(this)"" size=60 name=""genre_name"" style=""position: relative; top:20pt; width: 240pt; height:85%;"" >";
+            html += $@"<option class=""option_list"" value='0' "">[All genre]</option>";
             foreach (var x in genreList)
             {
-                html += $@"<option class=""option_list"" onclick=""resetArtistList(this.value)"">{x}</option>";
+                html += $@"<option class=""option_list"" value='1' "">{x}</option>";
             }
             html += @"</select>";
             html += @"</div>";

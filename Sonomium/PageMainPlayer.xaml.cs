@@ -61,12 +61,6 @@ namespace Sonomium
             }
         }
 
-        async void InitializeAsync()
-        {
-            await webView.EnsureCoreWebView2Async(null);
-            await webView.ExecuteScriptAsync(@"var cards = document.getElementsByClassName('card_group');var len = cards.length;for (var i = 0; i < len; ++i){ cards[i].style.display =""none"";} ");
-        }
-
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (artistList.Items.Count == 0)
@@ -100,11 +94,6 @@ namespace Sonomium
             //albumImages.Items.Clear();
             webView.ExecuteScriptAsync(@"var cards = document.getElementsByClassName('card_group');var len = cards.length;for (var i = 0; i < len; ++i){ cards[i].style.display =""none"";} ");
             mainWindow.setCursoredArtist(artistList.SelectedItem.ToString());
-
-            int size1 = 160;
-            int size2 = 160;
-            int [] size_table = { 132, 160, 196, 240};
-            size1 = size2 = size_table[mainWindow.getAlbumArtSize()];
 
             var albums = mainWindow.GetCursoredArtistAlbums();
             int n = albums[0].albumArtist.GetHashCode();
@@ -140,23 +129,6 @@ namespace Sonomium
                 mainWindow.setSelectedAlbumImage(bmp);
                 mainWindow.Button_Current_Click(null, null);
             }
-        }
-
-        private void AlbumImages_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            /*
-            if (albumImages.SelectedItem == null) return;
-
-            string artist = artistList.SelectedItem.ToString();
-            mainWindow.setSelectedArtist(artist);
-
-            CardItem ci = (CardItem)albumImages.SelectedItem;
-            string s = ci.AlbumTitle;
-            mainWindow.setSelectedAlbumImage(ci.AlbumImage);
-            mainWindow.setSelectedAlbum(s);
-
-            mainWindow.Button_Current_Click(null, null);
-            */
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)

@@ -44,7 +44,7 @@
         </Grid>
         <Grid DockPanel.Dock="Left"  >
             <Grid Margin="0pt,0pt,0pt,0pt" >
-                <wv2:WebView2 Name="webView" CreationProperties="{StaticResource a}" Visibility="Hidden" />
+                <wv2:WebView2 Name="webView" CreationProperties="{StaticResource a}" Margin="0" Visibility="Hidden"  />
             </Grid>
         </Grid>
     </DockPanel>
