@@ -378,7 +378,7 @@ namespace Sonomium
             string listFile = window.GetTrackListFilePathAndName();
             bool readFromFile = false;
 
-            Thread.Sleep(3000);
+            //Thread.Sleep(3000);
 
             s = _sendMpd(ip, "listallinfo");
             if (s == "")
@@ -577,6 +577,23 @@ namespace Sonomium
             return (artist, album);
         }
 
+        public List<string> GetArtistList()
+        {
+            List<string> artist_list = new List<string>();
+            var art = (from b in trackDb.list
+                       select b.albumArtist).Distinct(); // artistの重複を除去
+            return art.ToList();
+        }
+
+        public List<string> GetArtistListForGenre(string genre)
+        {
+            List<string> artist_list = new List<string>();
+            var art = (from b in trackDb.list
+                where b.genre == genre
+                select b.albumArtist).Distinct(); // artistの重複を除去
+            return art.ToList();
+        }
+
         public List<string> GetSortedGenreList(List<TrackInfo> tracks)
         {
             List<string> genreList = new List<string>();
@@ -772,10 +789,14 @@ namespace Sonomium
             html += @"<title></title>";
             html += @"<style>";
             html += @"body { overscroll-behavior : none; margin:0 0 0 0;overflow-x:hidden; overflow-y:hidden;  } ";
-            html += @".super_container { scroll-snap-type: x mandatory; overflow:auto;   display:flex;  width:100vw;height:auto; }";
-            html += @".sub_container {scroll-snap-align: start; flex:none; width:100%; height:100vh; overflow:visible; overflow-x:hidden; overflow-y:scroll; }";
+            html += @".super_container { scroll-snap-type: x mandatory; overflow:auto;   display:flex;  width:100vw;height:auto;  scroll-behavior: smooth;}";
+            html += @".sub_container {scroll-snap-align: start; flex:none; width:100%; height:100vh; overflow:visible; overflow-x:visible; overflow-y:scroll; }";
             html += @".wrapper2 {z-index:0; position: relative; display: flex; flex-wrap : wrap ;  flex-direction: row; justify-content: space-between; overflow:visible; overflow-x:hidden;overflow-y:hidden; }";
-     
+            html += @".option_list {font-family: ""Segoe UI"", ""BIZ UDPGothic"", ""Segoe UI"";font-size: 14pt;margin: 2pt 0 2pt 0; }";
+            html += @".option_list:checked { background-color: red;}";
+            html += @"option:checked  { background-color: red;}";
+
+
             string cardSize = "16vw";
             string cardMinSize = "160px";
             string albumArtSize = "15vw";
@@ -816,8 +837,8 @@ namespace Sonomium
                 break;
             }
 
-            html += $@".card {{ font-family:  ""Segoe UI""; width: {cardSize}; min-width: {cardMinSize}; background: #fff; border-width: 0px; float: left; text-align: center; }}";
-            html += $@".cardx {{ width: {cardSize}; min-width: {cardMinSize}; height: 0px; background: #fff; border-width: 0px; float: left; text-align: center; }}";
+            html += $@".card {{ font-family:  ""Segoe UI""; width: {cardSize}; min-width: {cardMinSize}; background: #fff; border-width: 0px; float: left; text-align: center; }}";html += "\r\n";
+            html += $@".cardx {{ width: {cardSize}; min-width: {cardMinSize}; height: 0px; background: #fff; border-width: 0px; float: left; text-align: center; }}"; ; html += "\r\n";
 
             html += $@".highlight {{position: relative; width: {albumArtSize};margin: 0;}}";
             html += $@".caption {{ display: none; font-family: ""Segoe UI Semibold"", ""BIZ UDPGothic"", ""Segoe UI"";   pointer-events: none; animation: captionAnime 0.8s linear; line-height:1.5; border-radius: 0 0 5px 5px; font-size: {fontsize};  user-select: none; position: absolute;bottom: -60px;left: 0;z-index: 2;width: 100%; background:rgba(255,255,255,0.6);}} ";
@@ -847,6 +868,8 @@ namespace Sonomium
             html += @".toggle:hover  { text-decoration: underline; }";
             html += @"#open_optional  {  display: none;}";
             html += @"#open_optional:checked + #menu  {  right: 0;}";
+            html += @".list_box_2 { border: 0; background:transparent; outline: none; padding: 8pt 16pt 8pt 12pt; border-radius: 8pt; box-shadow: inset 8pt 8pt 12pt #D8DBDF, inset -8pt -8pt 12pt #FFFFFF;  }";
+
 
 
             html += @"</style>";
@@ -854,16 +877,78 @@ namespace Sonomium
             html += @"<body onselectstart=""return false;"" >";
 
             html += @"<script type=""text/javascript"">";
-            html += @"var lastDownload=Date.now();";
-            html += @"function reload(e) { if (Date.now() < lastDownload + 15000) e.src=e.src; }";
-            html += @"function reload2(e) { e.onload=""""; e.src=e.src; }";
-            html += @"function startImageLoadTimer(e) { setTimeout( reload,1500, e); }"; //1.5sec ごとにリトライ
-            html += @"function finalImageLoad(e)  { setTimeout( reload2,8000, e); lastDownload=Date.now();  }"; // 8sec後に念のため再読み込み
+            html += @"var lastDownload=Date.now();"; html += "\r\n";
+            html += @"function reload(e) { if (Date.now() < lastDownload + 15000) e.src=e.src; } 
+                function reload2(e) { e.onload=""""; e.src=e.src; }
+                function startImageLoadTimer(e) { setTimeout( reload,1500, e); }"; //1.5sec ごとにリトライ
+            html += @"function finalImageLoad(e) { setTimeout( reload2,8000, e); lastDownload=Date.now(); }"; // 8sec後に念のため再読み込み
             
-            html += @"function do_select() {var x = document.getElementsByClassName('card');[].forEach.call(x, function(v) {   }); }";
+            //html += @"function do_select() {var x = document.getElementsByClassName('card');[].forEach.call(x, function(v) {   }); }";
 
-            html += @"function all_clear(){var cards = document.getElementsByClassName('card');var len = cards.length;for (var i = 0; i < len; ++i){ cards[i].style.display =""none"";} }";
-            html += @"function close_optional(){document.getElementById(""open_optional"").click();}";
+            html += @"function all_clear(){var cards = document.getElementsByClassName('card');var len = cards.length;for (var i = 0; i < len; ++i){ cards[i].style.display =""none"";} }"; html += "\r\n";
+            html += @"function close_optional(){document.getElementById(""open_optional"").click(); window.location.href=""#p2""; }"; html += "\r\n";
+
+            ////genre から artist を表示し直す
+            html += @"const artist_for_genre_tbl = {"; html += "\r\n";
+            foreach (var x in genreList)
+            {
+                List<string> a = GetArtistListForGenre(x);
+                html += $@"""{x}"" : ["; html += "\r\n";
+                foreach (var y in a)
+                {
+                    string s = y.Replace("'", @"\'"); html += "\r\n";
+                    html += $@"""{s}"",";
+                }
+                html += @"],"; html += "\r\n";
+            }
+            html += @"};"; html += "\r\n";
+
+            List<string> artistList = GetArtistList();
+            html += @"const artist_hash_tbl = {"; html += "\r\n";
+            foreach (var x in artistList)
+            {
+                string s = x.Replace("'", @"\'"); html += "\r\n";
+                html += $@"""{s}"" : [{x.GetHashCode().ToString()}],"; html += "\r\n";
+            }
+            html += @"};"; html += "\r\n";
+
+            html += @"function resetArtistList(genre) {"; html += "\r\n";
+            html += $@"console.log(""genre selected : "" + genre);";
+            html += @"let x = document.getElementById('artistListForGenre');"; html += "\r\n";
+            html += @"var length = x.options.length;for (i = 0; i < length; i++) {  x.options[0].remove(); }";
+            html += @"artist_for_genre_tbl[genre].forEach( s => {"; html += "\r\n";
+            html += @"let option = document.createElement('option');"; html += "\r\n";
+            html += @"option.innerHTML = s;"; html += "\r\n";
+            html += @"option.className=""option_list"";"; html += "\r\n";
+            html += @"x.appendChild(option);  "; html += "\r\n";
+            html += @"});"; html += "\r\n";
+            html += @"}"; html += "\r\n";
+
+            html += @"function artist_selected(artist) {";
+            html += @"var s = artist_hash_tbl[artist];";
+            html += $@"console.log(""artist selected: ""+ artist+ "" : "" + s);";
+            html += @"var cards = document.getElementsByClassName('card_group');var len = cards.length;for (var i = 0; i < len; ++i){ if (cards[i].id == s ) cards[i].style.display =""block""; else cards[i].style.display=""none"";}";
+            html += @"}"; html += "\r\n";
+
+            ///allgenre
+            html += @"function allGenreSelected() {";
+            html += $@"console.log(""all genre selected"");";
+            html += @"var cards = document.getElementsByClassName('card_group');var len = cards.length;for (var i = 0; i < len; ++i){ cards[i].style.display=""block"";}";
+            html += @"let x = document.getElementById('artistListForGenre');"; html += "\r\n";
+            html += @"var length = x.options.length;for (i = 0; i < length; i++) {  x.options[0].remove(); }";
+            artistList = GetArtistList();
+            html += @"var option;";
+            foreach (var x in artistList)
+            {
+                html += @"option = document.createElement('option');"; html += "\r\n";
+                string s = x.Replace("'", @"\'"); html += "\r\n";
+                html += $@"option.innerHTML = '{s}';"; html += "\r\n";
+                html += @"option.className=""option_list"";"; html += "\r\n";
+                html += @"x.appendChild(option);  "; html += "\r\n";
+            }
+            html += $@"console.log(""all genre selected : end"");";
+            html += @"}"; html += "\r\n";
+
             html += @"function test(genre_index) {";
             html += @"var cards = document.getElementsByClassName('card');";
             html += @"var len = cards.length;";
@@ -875,12 +960,13 @@ namespace Sonomium
             html += @"window.onload = function() { }";
             #endif
             html += @"</script>";
-            html += @"<div class=""super_container"">";
-            html += @"<div class=""sub_container"">";
+            html += @"<div class=""super_container"" >";
+            html += @"<div class=""sub_container"" >";
 
+            html += @"<div style=""position:sticky; z-index:10; top:50%; pointer-events: none; "">A</div>";
+            html += @"<div class=""wrapper""  >" + "\r\n";
 
-            html += @"<div class=""wrapper"">" + "\r\n";
-
+            
             html += @"<div style=""background : linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.2)); width: 100%; height: 5pt; position:fixed; z-index:10; top:0; pointer-events: none; ""></div>";
             html += @"<div style=""background : linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0)); width: 100%; height: 2pt; position:fixed; z-index:10; top:5pt; pointer-events: none ""></div>";
             html += @"<div id=""board_artist"" style=""display:none; position:fixed; z-index:20; top:0 ;""><font size=""24pt"" color=white>test</font></div>";
@@ -894,7 +980,7 @@ namespace Sonomium
             int n = 0;
             html += @"<li onclick=""close_optional();"" style=""font-family: 'Segoe MDL2 Assets' "" >&#xe8bb</li>";
             html += @"<br>";
-            html += @"<li onclick=""test(-1); close_optional();"" >ALL</li>";
+            html += @"<li onclick=""test(-1); close_optional();"" ><a href=""#p2"">ALL</a></li>";
             foreach (var x in genreList)
             {
                 if (x !="")  html += $@"<li onclick=""test({n}); close_optional();"" >{x}</li>";
@@ -905,10 +991,10 @@ namespace Sonomium
             html += @"</div>";
 
             //カードの冒頭の空白
-            html += @"<div style=""width:100vw; height:10pt;display : inline-block;"" ></div>";
+            html += @"<div style=""width:100vw; height:0pt;display : inline-block;"" ></div>";
 
             //左右の余白
-            html += @"<div class=""wrapper2"" style=""padding: 0 5pt 0 12pt; "">";
+            html += @"<div class=""wrapper2"" style=""padding: 0 8pt 0 13pt;"" id=""wrapper2""  >";
 
             foreach (AlbumInfo info in db.list)
             {
@@ -951,7 +1037,31 @@ namespace Sonomium
 
             html += @"</div>"; //wrapper
             html += @"</div>"; // sub_container
-            html += @"<section class=""sub_container""><h1>Genre</h1></section>";
+            html += @"<section class=""sub_container"" id=""p2""  style=""overflow-y:hidden;  display:inline-block; background-color:#EDF1F5;"" >";
+
+            ////////////////// pag2
+            //////////////////
+            ///
+            html += @"<div style=""position: relative; top:8pt; left:20pt; display:inline-block;"">";
+            html += @"<div style=""font-family:Segoe UI Semibold; font-size:18pt;color:#1C3B61;position: relative; top:0pt; left:0pt;  display:block;"">Genre</div>";
+            
+            html += @"<select class=""list_box_2"" "" size=60 name=""genre_name"" style=""position: relative; top:20pt; width: 240pt; height:85%;"" >";
+            html += $@"<option class=""option_list"" onclick=""allGenreSelected()"">[All genre]</option>";
+            foreach (var x in genreList)
+            {
+                html += $@"<option class=""option_list"" onclick=""resetArtistList(this.value)"">{x}</option>";
+            }
+            html += @"</select>";
+            html += @"</div>";
+
+            html += @"<div style=""position: relative; top:8pt; left:80pt; display:inline-block;"">";
+            html += @"<div style=""font-family:Segoe UI Semibold; font-size:18pt;color:#1C3B61;position: relative; top:0pt; left:0pt;  display:block;"">Artist</div>";
+            html += @"<select class=""list_box_2"" id=""artistListForGenre"" onchange=""artist_selected(this.value)""  size=60 name=""artist_name"" style=""position: relative; top:20pt; left:0pt; width: 280pt; height:85%;"" >";
+            html += @"</select>";
+            html += @"</div>";
+
+
+            html += @"</section>";
 
             html += @"</div>"; // super_container
 
