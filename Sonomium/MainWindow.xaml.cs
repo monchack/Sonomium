@@ -935,7 +935,7 @@ namespace Sonomium
 
             html += @".card_content { padding: 5pt 0px 8pt 0px;  }";
             html += @".card-title { font-size: 20px; margin-bottom: 40px; text-align: center; color: #333;}";
-            html += @".card_text { color: #777; user-select: none; height:26pt;  font-size: 12px;   text-align: left; margin: 0vw 0.5vw 0 0;  overflow : hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2; }";
+            html += @".card_text { color: #777; user-select: none; height:26pt;  font-size: 12px;   text-align: left; margin: 0vw 0.5vw 0 0.5vw;  overflow : hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2; }";
 
             ///test style
             html += @"ul { margin: 0; padding-left: 0;}";
