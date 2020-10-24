@@ -903,6 +903,7 @@ namespace Sonomium
             }
             html += @"};"; html += "\r\n";
 
+            /// artist ハッシュテーブル
             List<string> artistList = GetArtistList();
             html += @"const artist_hash_tbl = {"; html += "\r\n";
             foreach (var x in artistList)
@@ -917,6 +918,7 @@ namespace Sonomium
             html += @"type = element.options[element.selectedIndex].value;";
             html += $@"console.log(""genre selected : "" + genre + "" : "" + type);";
             html += @"if (type=='0') {allGenreSelected(); return;}";
+            html += @"show_all_albums_for_genre(genre);";
             html += @"let x = document.getElementById('artistListForGenre');"; html += "\r\n";
             html += @"var length = x.options.length;for (i = 0; i < length; i++) {  x.options[0].remove(); }";
             html += @"artist_for_genre_tbl[genre].forEach( s => {"; html += "\r\n";
@@ -932,6 +934,15 @@ namespace Sonomium
             html += $@"console.log(""artist selected: ""+ artist+ "" : "" + s);";
             html += @"var cards = document.getElementsByClassName('card_group');var len = cards.length;for (var i = 0; i < len; ++i){ if (cards[i].id == s ) cards[i].style.display =""block""; else cards[i].style.display=""none"";}";
             html += @"}"; html += "\r\n";
+
+            html += @"function show_all_albums_for_genre(genre) {"; // clear all  first
+            html += @"var cards = document.getElementsByClassName('card_group');var len = cards.length;for (var i = 0; i < len; ++i){ cards[i].style.display=""none"";}";
+            html += @"artist_for_genre_tbl[genre].forEach( s => {"; html += "\r\n";
+            html += @"var x = artist_hash_tbl[s];";
+            html += @"var cards = document.getElementsByClassName('card_group');var len = cards.length;for (var i = 0; i < len; ++i){ if (cards[i].id == x) cards[i].style.display =""block""; }";
+            html += @"});"; html += "\r\n";
+            html += @"}";
+
 
             ///allgenre
             html += @"function allGenreSelected() {";
@@ -1045,10 +1056,10 @@ namespace Sonomium
             ////////////////// pag2
             //////////////////
             ///
-            html += @"<div style=""position: relative; top:8pt; left:20pt; display:inline-block;"">";
+            html += @"<div style=""position: relative; top:10pt; left:20pt; display:inline-block;"">";
             html += @"<div style=""font-family:Segoe UI Semibold; font-size:18pt;color:#1C3B61;position: relative; top:0pt; left:0pt;  display:block;"">Genre</div>";
             
-            html += @"<select class=""list_box_2"" onchange=""resetArtistList(this)"" size=60 name=""genre_name"" style=""position: relative; top:20pt; width: 240pt; height:85%;"" >";
+            html += @"<select class=""list_box_2"" onchange=""resetArtistList(this)"" size=60 name=""genre_name"" style=""position: relative; top:12pt; width: 240pt; height:85%;"" >";
             html += $@"<option class=""option_list"" value='0' "">[All genre]</option>";
             foreach (var x in genreList)
             {
@@ -1057,9 +1068,9 @@ namespace Sonomium
             html += @"</select>";
             html += @"</div>";
 
-            html += @"<div style=""position: relative; top:8pt; left:80pt; display:inline-block;"">";
+            html += @"<div style=""position: relative; top:10pt; left:80pt; display:inline-block;"">";
             html += @"<div style=""font-family:Segoe UI Semibold; font-size:18pt;color:#1C3B61;position: relative; top:0pt; left:0pt;  display:block;"">Artist</div>";
-            html += @"<select class=""list_box_2"" id=""artistListForGenre"" onchange=""artist_selected(this.value)""  size=60 name=""artist_name"" style=""position: relative; top:20pt; left:0pt; width: 280pt; height:85%;"" >";
+            html += @"<select class=""list_box_2"" id=""artistListForGenre"" onchange=""artist_selected(this.value)""  size=60 name=""artist_name"" style=""position: relative; top:12pt; left:0pt; width: 280pt; height:85%;"" >";
             html += @"</select>";
             html += @"</div>";
 
