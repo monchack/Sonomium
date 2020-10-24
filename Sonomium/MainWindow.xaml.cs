@@ -1086,7 +1086,7 @@ namespace Sonomium
             //html += @"<div style=""width:100vw; height:0pt;display : inline-block;"" ></div>";
 
             //左右の余白
-            html += @"<div class=""wrapper2"" style=""padding: 4pt 18pt 0 13pt;"" id=""wrapper2""  >";
+            html += @"<div class=""wrapper2"" style=""padding: 4pt 21pt 0 12pt;"" id=""wrapper2""  >";
 
             html += htmlForCards();
             /*
@@ -1133,11 +1133,12 @@ namespace Sonomium
             html += @"</div>"; //wrapper
             html += @"</div>"; // sub_container
             html += @"<section class=""sub_container"" id=""p2""  style=""overflow-y:hidden;  display:inline-block; background-color:#EDF1F5;"" >";
+            html += @"<div style=""position:sticky; z-index:10; top:50%; left:3pt; pointer-events: none; box-shadow: rgb(210, 210, 210) 4pt 4pt 6pt inset, rgb(255, 255, 255) -4pt -4pt 6pt inset; border-radius: 50%; height: 13pt; width: 13pt; background-color: rgb(255, 255, 255);  ""></div>";
 
             ////////////////// pag2
             //////////////////
             ///
-            html += @"<div style=""position: relative; top:10pt; left:20pt; display:inline-block;"">";
+            html += @"<div style=""position: relative; top:10pt; left:23pt; display:inline-block;"">";
             html += @"<div style=""font-family:Segoe UI Semibold; font-size:18pt;color:#1C3B61;position: relative; top:0pt; left:0pt;  display:block;"">Genre</div>";
             
             html += @"<select class=""list_box_2"" onchange=""resetArtistList(this)"" size=60 name=""genre_name"" style=""position: relative; top:12pt; width: 260pt; height:85%;"" >";
@@ -1151,7 +1152,7 @@ namespace Sonomium
 
             html += @"<div style=""position: relative; top:10pt; left:80pt; display:inline-block;"">";
             html += @"<div style=""font-family:Segoe UI Semibold; font-size:18pt;color:#1C3B61;position: relative; top:0pt; left:0pt;  display:block;"">Artist</div>";
-            html += @"<select class=""list_box_2"" id=""artistListForGenre"" onchange=""artist_selected(this.value)""  size=60 name=""artist_name"" style=""position: relative; top:12pt; left:0pt; width: 340pt; height:85%;"" >";
+            html += @"<select class=""list_box_2"" id=""artistListForGenre"" onchange=""artist_selected(this.value)""  size=60 name=""artist_name"" style=""position: relative; top:12pt; left:0pt; width: 380pt; height:85%;"" >";
             html += @"</select>";
             html += @"</div>";
 
