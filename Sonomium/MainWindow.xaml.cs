@@ -811,7 +811,7 @@ namespace Sonomium
                 html += @"</section>" + "\r\n";
                 html += @"</div>" + "\r\n";
             }
-            for (int i = 0; i < 6; ++i)
+            for (int i = 0; i < 8; ++i)
             {
                 html += $@"<section class=""{cardx_class_name}"" id=""c{i}"" name=""c{i}"" height=""0px"">";
                 html += @"<div class=""card-content"">";
