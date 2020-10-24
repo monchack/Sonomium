@@ -116,10 +116,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PageMainPlayer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="PageOpening.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -135,9 +131,6 @@
     </Compile>
     <Compile Include="PageCurrent.xaml.cs">
       <DependentUpon>PageCurrent.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PageMainPlayer.xaml.cs">
-      <DependentUpon>PageMainPlayer.xaml</DependentUpon>
     </Compile>
     <Compile Include="PageOpening.xaml.cs">
       <DependentUpon>PageOpening.xaml</DependentUpon>

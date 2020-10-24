@@ -70,7 +70,7 @@ namespace Sonomium
         private int albumArtSize = 0;
         private AlbumDb albumDb;
         private TrackDb trackDb; 
-        private Page pageMain;
+        //private Page pageMain;
         private Page pageAll;
         private Page pageSettings;
         private Page pageTracks;
@@ -935,12 +935,13 @@ namespace Sonomium
             html += @"var cards = document.getElementsByClassName('card_group');var len = cards.length;for (var i = 0; i < len; ++i){ if (cards[i].id == s ) cards[i].style.display =""block""; else cards[i].style.display=""none"";}";
             html += @"}"; html += "\r\n";
 
-            html += @"function show_all_albums_for_genre(genre) {"; // clear all  first
-            html += @"var cards = document.getElementsByClassName('card_group');var len = cards.length;for (var i = 0; i < len; ++i){ cards[i].style.display=""none"";}";
+            html += @"function show_all_albums_for_genre(genre) {";
+            html += @"var array = new Array();";
             html += @"artist_for_genre_tbl[genre].forEach( s => {"; html += "\r\n";
-            html += @"var x = artist_hash_tbl[s];";
-            html += @"var cards = document.getElementsByClassName('card_group');var len = cards.length;for (var i = 0; i < len; ++i){ if (cards[i].id == x) cards[i].style.display =""block""; }";
+            html += @"var x = artist_hash_tbl[s]; array.push(String(x));";
             html += @"});"; html += "\r\n";
+            html += @"console.log('array:', array);";
+            html += @"var cards = document.getElementsByClassName('card_group');var len = cards.length;for (var i = 0; i < len; ++i){ if (array.includes(cards[i].id)) {cards[i].style.display =""block""; console.log('OK: ' + cards[i].id);} else cards[i].style.display=""none""; }";
             html += @"}";
 
 
@@ -1102,17 +1103,6 @@ namespace Sonomium
             buttonCurrent.BorderBrush = Brushes.Transparent;
             buttonSettings.BorderBrush = Brushes.Transparent;
             //buttonGenre.Visibility = Visibility.Visible;
-        }
-
-        private void Button_Artist_Click(object sender, RoutedEventArgs e)
-        {
-            if (readTask != null) readTask.Wait();
-            navigation.Navigate(pageMain);
-            buttonMain.BorderBrush = Brushes.Transparent;
-            //buttonArtist.BorderBrush = SystemColors.HighlightBrush;
-            buttonCurrent.BorderBrush = Brushes.Transparent;
-            buttonSettings.BorderBrush = Brushes.Transparent;
-            //buttonGenre.Visibility = Visibility.Hidden;
         }
 
         private void Button_Settings_Click(object sender, RoutedEventArgs e)
@@ -1307,7 +1297,7 @@ namespace Sonomium
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            pageMain = new PageMainPlayer(this);
+            //pageMain = new PageMainPlayer(this);
             pageAll = new PageAlbumsWebView(this);
             pageSettings = new PageSettings(this);
             pageTracks = new PageCurrent(this);
