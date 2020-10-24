@@ -792,7 +792,7 @@ namespace Sonomium
             html += @".super_container { scroll-snap-type: x mandatory; overflow:auto;   display:flex;  width:100vw;height:auto;  scroll-behavior: smooth;}";
             html += @".sub_container {scroll-snap-align: start; flex:none; width:100%; height:100vh; overflow:visible; overflow-x:visible; overflow-y:scroll; }";
             html += @".wrapper2 {z-index:0; position: relative; display: flex; flex-wrap : wrap ;  flex-direction: row; justify-content: space-between; overflow:visible; overflow-x:hidden;overflow-y:hidden; }";
-            html += @".option_list {font-family: ""Segoe UI"", ""BIZ UDPGothic"", ""Segoe UI"";font-size: 14pt;margin: 2pt 0 2pt 0; }";
+            html += @".option_list {font-family: ""Segoe UI"", ""BIZ UDPGothic"", ""Segoe UI"";font-size: 14pt;margin: 3pt 0 3pt 0; }";
             html += @".option_list:checked { background-color: red;}";
             html += @"option:checked  { background-color: red;}";
 
@@ -978,7 +978,7 @@ namespace Sonomium
             html += @"<div class=""super_container"" >";
             html += @"<div class=""sub_container"" >";
 
-            html += @"<div style=""position:sticky; z-index:10; top:50%; pointer-events: none; "">A</div>";
+            html += @"<div style=""position:sticky; z-index:10; top:50%; left:calc(100% - 20pt); pointer-events: none; box-shadow: rgb(210, 210, 210) 4pt 4pt 6pt inset, rgb(255, 255, 255) -4pt -4pt 6pt inset; border-radius: 50%; height: 13pt; width: 13pt; background-color: rgb(255, 255, 255);  ""></div>";
             html += @"<div class=""wrapper""  >" + "\r\n";
 
             
@@ -1006,10 +1006,10 @@ namespace Sonomium
             html += @"</div>";
 
             //カードの冒頭の空白
-            html += @"<div style=""width:100vw; height:0pt;display : inline-block;"" ></div>";
+            //html += @"<div style=""width:100vw; height:0pt;display : inline-block;"" ></div>";
 
             //左右の余白
-            html += @"<div class=""wrapper2"" style=""padding: 0 8pt 0 13pt;"" id=""wrapper2""  >";
+            html += @"<div class=""wrapper2"" style=""padding: 4pt 18pt 0 13pt;"" id=""wrapper2""  >";
 
             foreach (AlbumInfo info in db.list)
             {
@@ -1060,7 +1060,7 @@ namespace Sonomium
             html += @"<div style=""position: relative; top:10pt; left:20pt; display:inline-block;"">";
             html += @"<div style=""font-family:Segoe UI Semibold; font-size:18pt;color:#1C3B61;position: relative; top:0pt; left:0pt;  display:block;"">Genre</div>";
             
-            html += @"<select class=""list_box_2"" onchange=""resetArtistList(this)"" size=60 name=""genre_name"" style=""position: relative; top:12pt; width: 240pt; height:85%;"" >";
+            html += @"<select class=""list_box_2"" onchange=""resetArtistList(this)"" size=60 name=""genre_name"" style=""position: relative; top:12pt; width: 260pt; height:85%;"" >";
             html += $@"<option class=""option_list"" value='0' "">[All genre]</option>";
             foreach (var x in genreList)
             {
@@ -1071,7 +1071,7 @@ namespace Sonomium
 
             html += @"<div style=""position: relative; top:10pt; left:80pt; display:inline-block;"">";
             html += @"<div style=""font-family:Segoe UI Semibold; font-size:18pt;color:#1C3B61;position: relative; top:0pt; left:0pt;  display:block;"">Artist</div>";
-            html += @"<select class=""list_box_2"" id=""artistListForGenre"" onchange=""artist_selected(this.value)""  size=60 name=""artist_name"" style=""position: relative; top:12pt; left:0pt; width: 280pt; height:85%;"" >";
+            html += @"<select class=""list_box_2"" id=""artistListForGenre"" onchange=""artist_selected(this.value)""  size=60 name=""artist_name"" style=""position: relative; top:12pt; left:0pt; width: 340pt; height:85%;"" >";
             html += @"</select>";
             html += @"</div>";
 
