@@ -775,6 +775,52 @@ namespace Sonomium
             await Task.Run(() => CopyImageFile(albumDb, getIp(), GetImageCacheDirectory(), cancellationSource.Token));
         }
 
+        public string htmlForCards()
+        {
+            string html = "";
+            AlbumDb db = getAlbumDb();
+            int n = getAlbumArtSize();
+
+            string card_class_name = "card_" + n.ToString();
+            string cardx_class_name = "cardx_" + n.ToString();
+            string img_class_name = "card_image_" + n.ToString();
+            string highlight_class_name = "highlight_" + n.ToString();
+
+            foreach (AlbumInfo info in db.list)
+            {
+                int hash = info.albumArtist.GetHashCode();
+                string dbHash = info.GetHashCode().ToString("X8");
+                int n2 = info.filePath.LastIndexOf('/');
+                string s = info.filePath.Remove(n2);   //   最後の / の出現位置までをキープして、残りは削除
+                string imageCacheFileName = @"./Temp/ImageCache/" + System.IO.Path.GetFileName(s) + ".jpg";
+                string s2 = info.albumTitle.Replace("'", @"\'");
+                s2 = s2.Replace(@"""", "&quot;");
+                string s3 = info.albumArtist.Replace("'", @"\'");
+                html += $@"<div class=""card_group"" id=""{hash}""  >";
+                html += $@"<section class=""{card_class_name}"" id=""{info.genreIndex}""  style=""display : inline-block;"">" + "\r\n";
+
+                html += $@"<figure class=""{highlight_class_name}"">";
+
+                html += $@"<img class=""{img_class_name}"" onload=""finalImageLoad(this)"" onerror=""startImageLoadTimer(this)"" src=""{imageCacheFileName}"" alt=""""  onclick=""onImageClick('{s2}', '{dbHash}')"" draggable=""false"" >" + "\r\n";
+                html += $@"<figcaption class=""caption"" ><b>{info.albumArtist}</b><br><br>{info.albumTitle}</figcaption>";
+                html += @"</figure>";
+                html += @"<div class=""card_content"">";
+                html += $@"<p class=""card_text"">{info.albumTitle}</p> ";
+                html += @"</div>";
+
+                html += @"</section>" + "\r\n";
+                html += @"</div>" + "\r\n";
+            }
+            for (int i = 0; i < 6; ++i)
+            {
+                html += $@"<section class=""{cardx_class_name}"" id=""c{i}"" name=""c{i}"" height=""0px"">";
+                html += @"<div class=""card-content"">";
+                html += @"</div>";
+                html += @"</section>";
+            }
+            return html;
+        }
+
         public string generateHtml()
         {
             string html = "";
@@ -838,22 +884,53 @@ namespace Sonomium
             }
 
             html += $@".card {{ font-family:  ""Segoe UI""; width: {cardSize}; min-width: {cardMinSize}; background: #fff; border-width: 0px; float: left; text-align: center; }}";html += "\r\n";
+            html += $@".card_0 {{ font-family:  ""Segoe UI""; width: 11vw; min-width: {cardMinSize}; background: #fff; border-width: 0px; float: left; text-align: center; }}"; html += "\r\n";
+            html += $@".card_1 {{ font-family:  ""Segoe UI""; width: 13vw; min-width: {cardMinSize}; background: #fff; border-width: 0px; float: left; text-align: center; }}"; html += "\r\n";
+            html += $@".card_2 {{ font-family:  ""Segoe UI""; width: 15vw; min-width: {cardMinSize}; background: #fff; border-width: 0px; float: left; text-align: center; }}"; html += "\r\n";
+            html += $@".card_3 {{ font-family:  ""Segoe UI""; width: 17vw; min-width: {cardMinSize}; background: #fff; border-width: 0px; float: left; text-align: center; }}"; html += "\r\n";
+
             html += $@".cardx {{ width: {cardSize}; min-width: {cardMinSize}; height: 0px; background: #fff; border-width: 0px; float: left; text-align: center; }}"; ; html += "\r\n";
+            html += $@".cardx_0 {{ width: 11vw; min-width: {cardMinSize}; height: 0px; background: #fff; border-width: 0px; float: left; text-align: center; }}"; ; html += "\r\n";
+            html += $@".cardx_1 {{ width: 13vw; min-width: {cardMinSize}; height: 0px; background: #fff; border-width: 0px; float: left; text-align: center; }}"; ; html += "\r\n";
+            html += $@".cardx_2 {{ width: 15vw; min-width: {cardMinSize}; height: 0px; background: #fff; border-width: 0px; float: left; text-align: center; }}"; ; html += "\r\n";
+            html += $@".cardx_3 {{ width: 17vw; min-width: {cardMinSize}; height: 0px; background: #fff; border-width: 0px; float: left; text-align: center; }}"; ; html += "\r\n";
 
             html += $@".highlight {{position: relative; width: {albumArtSize};margin: 0;}}";
+            html += $@".highlight_0 {{position: relative; width: 11vw;margin: 0;}}";
+            html += $@".highlight_1 {{position: relative; width: 13vw;margin: 0;}}";
+            html += $@".highlight_2 {{position: relative; width: 15vw;margin: 0;}}";
+            html += $@".highlight_3 {{position: relative; width: 17vw;margin: 0;}}";
+
             html += $@".caption {{ display: none; font-family: ""Segoe UI Semibold"", ""BIZ UDPGothic"", ""Segoe UI"";   pointer-events: none; animation: captionAnime 0.8s linear; line-height:1.5; border-radius: 0 0 5px 5px; font-size: {fontsize};  user-select: none; position: absolute;bottom: -60px;left: 0;z-index: 2;width: 100%; background:rgba(255,255,255,0.6);}} ";
             html += @".highlight:active  figcaption { display:inline; bottom: 0;}";
             html += @".highlight:hover  figcaption { display:inline; bottom: 0;}";
+            html += @".highlight_0:active  figcaption { display:inline; bottom: 0;}";
+            html += @".highlight_0:hover  figcaption { display:inline; bottom: 0;}";
+            html += @".highlight_1:active  figcaption { display:inline; bottom: 0;}";
+            html += @".highlight_1:hover  figcaption { display:inline; bottom: 0;}";
+            html += @".highlight_2:active  figcaption { display:inline; bottom: 0;}";
+            html += @".highlight_2:hover  figcaption { display:inline; bottom: 0;}";
+            html += @".highlight_3:active  figcaption { display:inline; bottom: 0;}";
+            html += @".highlight_3:hover  figcaption { display:inline; bottom: 0;}";
+
             html += @"@keyframes  captionAnime { 90% { color : black; background:rgba(255, 255, 255, 0.55) } 50% { color : rgba(0,0,0,0.6); background:rgba(255, 255, 255, 0.4) } 0% { color : rgba(0,0,0,0); background:rgba(255, 255, 255, 0) }}";
             html += @".card:hover img{  transition-duration: 0.3s;  filter: blur(2px) ; }";
 
             if (getAlbumArtResolution() == 1)
             {
                 html += $@".card_image {{ border-radius: 5px 5px 5px 5px; width: {albumArtSize}; min-width: {albumArtMinSize}; height: {albumArtSize}; min-height: {albumArtMinSize}; box-shadow: 3pt 3pt 5pt gray ;}}";
+                html += $@".card_image_0 {{ border-radius: 5px 5px 5px 5px; width: 10vw; min-width: {albumArtMinSize}; height: 10vw; min-height: {albumArtMinSize}; box-shadow: 3pt 3pt 5pt gray ;}}";
+                html += $@".card_image_1 {{ border-radius: 5px 5px 5px 5px; width: 12vw; min-width: {albumArtMinSize}; height: 12vw; min-height: {albumArtMinSize}; box-shadow: 3pt 3pt 5pt gray ;}}";
+                html += $@".card_image_2 {{ border-radius: 5px 5px 5px 5px; width: 14vw; min-width: {albumArtMinSize}; height: 15vw; min-height: {albumArtMinSize}; box-shadow: 3pt 3pt 5pt gray ;}}";
+                html += $@".card_image_3 {{ border-radius: 5px 5px 5px 5px; width: 16vw; min-width: {albumArtMinSize}; height: 16vw; min-height: {albumArtMinSize}; box-shadow: 3pt 3pt 5pt gray ;}}";
             }
             else
             {
                 html += $@".card_image {{width:{albumArtSize} ; min-width: {albumArtMinSize}; height: {albumArtSize}; min-height: {albumArtMinSize}; }}";
+                html += $@".card_image_0 {{width:10vw; min-width: {albumArtMinSize}; height: 10vw; min-height: {albumArtMinSize}; }}";
+                html += $@".card_image_1 {{width:12vw; min-width: {albumArtMinSize}; height: 12vw; min-height: {albumArtMinSize}; }}";
+                html += $@".card_image_2 {{width:15vw; min-width: {albumArtMinSize}; height: 14vw; min-height: {albumArtMinSize}; }}";
+                html += $@".card_image_3 {{width:16vw; min-width: {albumArtMinSize}; height: 16vw; min-height: {albumArtMinSize}; }}";
             }
 
             html += @".card_content { padding: 5pt 0px 8pt 0px;  }";
@@ -1011,6 +1088,8 @@ namespace Sonomium
             //左右の余白
             html += @"<div class=""wrapper2"" style=""padding: 4pt 18pt 0 13pt;"" id=""wrapper2""  >";
 
+            html += htmlForCards();
+            /*
             foreach (AlbumInfo info in db.list)
             {
                 int hash = info.albumArtist.GetHashCode();
@@ -1046,6 +1125,7 @@ namespace Sonomium
                 html += @"</div>";
                 html += @"</section>";
             }
+            */
 
             //左右の余白
             html += @"</div>";
@@ -1132,6 +1212,13 @@ namespace Sonomium
             if (!pageAll.IsEnabled) return;
             Type t = pageAll.GetType();
             System.Reflection.MethodInfo mi = t.GetMethod("onGenreClick");
+            mi.Invoke(pageAll, null);
+        }
+
+        public void onCardSizeChanged()
+        {
+            Type t = pageAll.GetType();
+            System.Reflection.MethodInfo mi = t.GetMethod("onCardSizeChanged");
             mi.Invoke(pageAll, null);
         }
 

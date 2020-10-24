@@ -66,11 +66,13 @@ namespace Sonomium
 
         private void ButtonAlbumArt_Checked(object sender, RoutedEventArgs e)
         {
+            int n = mainWindow.getAlbumArtSize();
             if (buttonAlbumArtSmall.IsChecked == true) { mainWindow.setAlbumArtSize(0); }
             else if (buttonAlbumArtLarge.IsChecked == true) { mainWindow.setAlbumArtSize(2); }
             else if (buttonAlbumArtXLarge.IsChecked == true) { mainWindow.setAlbumArtSize(3); }
             else mainWindow.setAlbumArtSize(1);
-            //mainWindow.generateHtml();
+
+            if (n != mainWindow.getAlbumArtSize()) mainWindow.onCardSizeChanged();
         }
 
         private void ConnectivityTest_Click(object sender, RoutedEventArgs e)
