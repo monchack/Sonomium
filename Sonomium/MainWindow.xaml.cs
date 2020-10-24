@@ -1098,10 +1098,10 @@ namespace Sonomium
             if (readTask != null) readTask.Wait();
             navigation.Navigate(pageAll);
             buttonMain.BorderBrush = SystemColors.HighlightBrush; //Brushes.Black;
-            buttonArtist.BorderBrush = Brushes.Transparent;
+            //buttonArtist.BorderBrush = Brushes.Transparent;
             buttonCurrent.BorderBrush = Brushes.Transparent;
             buttonSettings.BorderBrush = Brushes.Transparent;
-            buttonGenre.Visibility = Visibility.Visible;
+            //buttonGenre.Visibility = Visibility.Visible;
         }
 
         private void Button_Artist_Click(object sender, RoutedEventArgs e)
@@ -1109,20 +1109,20 @@ namespace Sonomium
             if (readTask != null) readTask.Wait();
             navigation.Navigate(pageMain);
             buttonMain.BorderBrush = Brushes.Transparent;
-            buttonArtist.BorderBrush = SystemColors.HighlightBrush;
+            //buttonArtist.BorderBrush = SystemColors.HighlightBrush;
             buttonCurrent.BorderBrush = Brushes.Transparent;
             buttonSettings.BorderBrush = Brushes.Transparent;
-            buttonGenre.Visibility = Visibility.Hidden;
+            //buttonGenre.Visibility = Visibility.Hidden;
         }
 
         private void Button_Settings_Click(object sender, RoutedEventArgs e)
         {
             navigation.Navigate(pageSettings);
             buttonMain.BorderBrush = Brushes.Transparent;
-            buttonArtist.BorderBrush = Brushes.Transparent;
+            //buttonArtist.BorderBrush = Brushes.Transparent;
             buttonCurrent.BorderBrush = Brushes.Transparent;
             buttonSettings.BorderBrush = SystemColors.HighlightBrush;
-            buttonGenre.Visibility = Visibility.Hidden;
+            //buttonGenre.Visibility = Visibility.Hidden;
         }
 
         public void Button_Current_Click(object sender, RoutedEventArgs e)
@@ -1130,10 +1130,10 @@ namespace Sonomium
             if (readTask != null) readTask.Wait();
             navigation.Navigate(pageTracks);
             buttonMain.BorderBrush = Brushes.Transparent;
-            buttonArtist.BorderBrush = Brushes.Transparent;
+            //buttonArtist.BorderBrush = Brushes.Transparent;
             buttonCurrent.BorderBrush = SystemColors.HighlightBrush;
             buttonSettings.BorderBrush = Brushes.Transparent;
-            buttonGenre.Visibility = Visibility.Hidden;
+            //buttonGenre.Visibility = Visibility.Hidden;
         }
 
         public void Button_Genre_Click(object sender, RoutedEventArgs e)
