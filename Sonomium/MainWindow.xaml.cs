@@ -1183,7 +1183,6 @@ namespace Sonomium
             //buttonArtist.BorderBrush = Brushes.Transparent;
             buttonCurrent.BorderBrush = Brushes.Transparent;
             buttonSettings.BorderBrush = Brushes.Transparent;
-            //buttonGenre.Visibility = Visibility.Visible;
         }
 
         private void Button_Settings_Click(object sender, RoutedEventArgs e)
