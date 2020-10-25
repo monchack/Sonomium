@@ -378,8 +378,6 @@ namespace Sonomium
             string listFile = window.GetTrackListFilePathAndName();
             bool readFromFile = false;
 
-            //Thread.Sleep(3000);
-
             s = _sendMpd(ip, "listallinfo");
             if (s == "")
             {
