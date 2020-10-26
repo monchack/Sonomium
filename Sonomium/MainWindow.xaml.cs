@@ -923,6 +923,10 @@ namespace Sonomium
 
             html += @"@keyframes  captionAnime { 90% { color : black; background:rgba(255, 255, 255, 0.55) } 50% { color : rgba(0,0,0,0.6); background:rgba(255, 255, 255, 0.4) } 0% { color : rgba(0,0,0,0); background:rgba(255, 255, 255, 0) }}";
             html += @".card:hover img{  transition-duration: 0.3s;  filter: blur(2px) ; }";
+            html += @".card_0:hover img{  transition-duration: 0.3s;  filter: blur(2px) ; }";
+            html += @".card_1:hover img{  transition-duration: 0.3s;  filter: blur(2px) ; }";
+            html += @".card_2:hover img{  transition-duration: 0.3s;  filter: blur(2px) ; }";
+            html += @".card_3:hover img{  transition-duration: 0.3s;  filter: blur(2px) ; }";
 
             if (getAlbumArtResolution() == 1)
             {
