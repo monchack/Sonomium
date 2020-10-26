@@ -958,8 +958,17 @@ namespace Sonomium
             html += @"#open_optional  {  display: none;}";
             html += @"#open_optional:checked + #menu  {  right: 0;}";
             html += @".list_box_2 { border: 0; background:transparent; outline: none; padding: 8pt 16pt 8pt 12pt; border-radius: 8pt; box-shadow: inset 8pt 8pt 12pt #D8DBDF, inset -8pt -8pt 12pt #FFFFFF;  }";
-
-
+            html += @"@media(orientation: landscape){";
+            html += @".second_page_wrapper { display:inline-block; width:100%; }";
+            html += @".second_page_element_1 { top:10pt; left:23pt; width: 25%; height: 90%; }";
+            html += @".second_page_element_2 { top:10pt; left:80pt; width: 40%; height: 90%; }";
+            html += @"}";
+            html += @"@media(orientation: portrait){";
+            html += @".second_page_wrapper { display:block; }";
+            html += @".second_page_element_1 { top:10pt; left: 36pt; height: 30%; width: 90%; }";
+            html += @".second_page_element_2 { top:35pt; left: 36pt; height: 55%; width: 90%; }";
+            html += @"}";
+            //landscape portrait
 
             html += @"</style>";
             html += @"</head>";
@@ -1146,14 +1155,15 @@ namespace Sonomium
             html += @"</div>"; // sub_container
             html += @"<section class=""sub_container"" id=""p2""  style=""overflow-y:hidden;  display:inline-block; background-color:#EDF1F5;"" >";
             html += @"<div style=""position:sticky; z-index:10; top:50%; left:3pt; pointer-events: none; box-shadow: rgb(210, 210, 210) 4pt 4pt 6pt inset, rgb(255, 255, 255) -4pt -4pt 6pt inset; border-radius: 50%; height: 13pt; width: 13pt; background-color: rgb(255, 255, 255);  ""></div>";
+            html += @"<div class=""second_page_wrapper"" >";
 
             ////////////////// pag2
             //////////////////
             ///
-            html += @"<div style=""position: relative; top:10pt; left:23pt; display:inline-block;"">";
+            html += @"<div class=""second_page_element_1"" style=""position: relative; display:inline-block;"">";
             html += @"<div style=""font-family:Segoe UI Semibold; font-size:18pt;color:#1C3B61;position: relative; top:0pt; left:0pt;  display:block;"">Genre</div>";
             
-            html += @"<select class=""list_box_2"" onchange=""resetArtistList(this)"" size=60 name=""genre_name"" style=""position: relative; top:12pt; width: 260pt; height:85%;"" >";
+            html += @"<select class=""list_box_2"" onchange=""resetArtistList(this)"" size=60 name=""genre_name"" style=""position: relative; top:8pt; width: 100%; height:80%;"" >";
             html += $@"<option class=""option_list"" value='0' "">[All genre]</option>";
             foreach (var x in genreList)
             {
@@ -1162,13 +1172,13 @@ namespace Sonomium
             html += @"</select>";
             html += @"</div>";
 
-            html += @"<div style=""position: relative; top:10pt; left:80pt; display:inline-block;"">";
+            html += @"<div class=""second_page_element_2"" style=""position: relative;  display:inline-block;"">";
             html += @"<div style=""font-family:Segoe UI Semibold; font-size:18pt;color:#1C3B61;position: relative; top:0pt; left:0pt;  display:block;"">Artist</div>";
-            html += @"<select class=""list_box_2"" id=""artistListForGenre"" onchange=""artist_selected(this.value)""  size=60 name=""artist_name"" style=""position: relative; top:12pt; left:0pt; width: 380pt; height:85%;"" >";
+            html += @"<select class=""list_box_2"" id=""artistListForGenre"" onchange=""artist_selected(this.value)""  size=60 name=""artist_name"" style=""position: relative; top:8pt; left:0pt; width: 100%; height:80%;"" >";
             html += @"</select>";
             html += @"</div>";
 
-
+            html += @"</div>"; //second_page_wrapper
             html += @"</section>";
 
             html += @"</div>"; // super_container
