@@ -773,6 +773,16 @@ namespace Sonomium
             await Task.Run(() => CopyImageFile(albumDb, getIp(), GetImageCacheDirectory(), cancellationSource.Token));
         }
 
+        private string convertToJavaScriptHtmlString(string org)
+        {
+            string s = "";
+            s = org.Replace("'", @"\'");
+            s = s.Replace(@"""", "&quot;");
+            s = s.Replace("`", @"\`");
+            s = s.Replace("\\", "\\\\");
+            return s;
+        }
+
         public string htmlForCards()
         {
             string html = "";
@@ -919,7 +929,7 @@ namespace Sonomium
                 html += $@".card_image {{ border-radius: 5px 5px 5px 5px; width: {albumArtSize}; min-width: {albumArtMinSize}; height: {albumArtSize}; min-height: {albumArtMinSize}; box-shadow: 3pt 3pt 5pt gray ;}}";
                 html += $@".card_image_0 {{ border-radius: 5px 5px 5px 5px; width: 10vw; min-width: {albumArtMinSize}; height: 10vw; min-height: {albumArtMinSize}; box-shadow: 3pt 3pt 5pt gray ;}}";
                 html += $@".card_image_1 {{ border-radius: 5px 5px 5px 5px; width: 12vw; min-width: {albumArtMinSize}; height: 12vw; min-height: {albumArtMinSize}; box-shadow: 3pt 3pt 5pt gray ;}}";
-                html += $@".card_image_2 {{ border-radius: 5px 5px 5px 5px; width: 14vw; min-width: {albumArtMinSize}; height: 15vw; min-height: {albumArtMinSize}; box-shadow: 3pt 3pt 5pt gray ;}}";
+                html += $@".card_image_2 {{ border-radius: 5px 5px 5px 5px; width: 14vw; min-width: {albumArtMinSize}; height: 14vw; min-height: {albumArtMinSize}; box-shadow: 3pt 3pt 5pt gray ;}}";
                 html += $@".card_image_3 {{ border-radius: 5px 5px 5px 5px; width: 16vw; min-width: {albumArtMinSize}; height: 16vw; min-height: {albumArtMinSize}; box-shadow: 3pt 3pt 5pt gray ;}}";
             }
             else
